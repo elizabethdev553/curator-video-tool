@@ -1,9 +1,9 @@
 import React from 'react'
-
+import RegisterComponent from '../../components/auth/Register'
 export default function Register() {
   return (
-    <section>
-    Register Page
-  </section>
+    <div>
+      <RegisterComponent />
+    </div>
   )
 }

@@ -1,9 +1,10 @@
 import React from 'react'
+import LoginComponent  from '../../components/auth/Login'
 
 export default function Login() {
   return (
-    <section>
-      Login Page
-    </section>
-  )
+    <div>
+        <LoginComponent />
+    </div>
+  );
 }
