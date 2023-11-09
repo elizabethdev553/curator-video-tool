@@ -23,13 +23,14 @@ type FieldType = {
 
 const VideoCheck = () => {
   const [videoDetail, setVideoDetail] = useState<Assignment>();
+  const [msg, setMsg] = useState('');
   const { id } = useParams();
 
   useEffect(() => {
     getVideoDetail(id);
   }, [id]);
 
-  console.log(videoDetail, 'SSSSSSSSSSSSS');
+
   async function getVideoDetail(video_id: String | undefined) {
     try {
       const response = await axios.get(`http://localhost:5000/api/curator/check/${video_id}`, {
@@ -45,15 +46,24 @@ const VideoCheck = () => {
     }
   }
 
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-    // if(selectList!==undefined && curator !== undefined && selectList.length>0 && curator )
-    // sendVideoList(selectList, curator);
-  };
+  async function saveDescriptionResult(description:String, video_id: String | undefined) {
+    let data = {description, video_id}
+    try {
+      const response = await axios.post('http://localhost:5000/api/curator/check/description', data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const sendVideoListResponse = response.data;
+      setMsg(sendVideoListResponse.Success)
+    } catch (error) {
+      console.log(error, 'Fetch Description Error');
+    }
+  }
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    // descriptionResult(valus);
+    saveDescriptionResult(values.description, id);
 
   };
 
@@ -102,6 +112,7 @@ const VideoCheck = () => {
                   <Button size="large" htmlType="submit">
                     Save
                   </Button>
+                  <Link to='/curator-panel' className="btn btn-primary">Close</Link>
                 </Form.Item>
               </Col>
               <Col span={12}>

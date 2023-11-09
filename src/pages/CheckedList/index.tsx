@@ -1,72 +1,83 @@
-import React, { useEffect } from 'react';
-import { Avatar, Checkbox, List, Radio, Space, Button } from 'antd';
-// import { uploadList } from '../../actions/CuratorList';
+import React, { useEffect, useState, Fragment } from 'react';
+import axios from 'axios';
+import type { ColumnsType } from 'antd/es/table';
+import { Divider, Table, Select } from 'antd';
 
-const data = [
+import Spinner from '../layout/Spinner';
+
+interface VideoDetail {
+
+  key: string;
+  video_title: string;
+  video_link: string;
+  video_owner_handle: string;
+  video_curator: string;
+  video_check_description: string;
+}
+
+const columns: ColumnsType<VideoDetail> = [
   {
-    video_title: 'Title 1',
-    key: '1400',
-    video_link: 'https://nodelefrog.store/distributor/api/v1/assets/675456',
-    video_owner_handle: 'contributor1',
-    video_channel_id: 'dev1',
-    video_createdAt: '20223-11-5'
+    title: 'key',
+    dataIndex: 'key',
   },
   {
-    video_title: 'Title 2',
-    key: '1414',
-    video_link: 'https://nodelefrog.store/distributor/api/v1/assets/675456',
-    video_owner_handle: 'contributor2',
-    video_channel_id: 'dev1',
-    video_createdAt: '20223-11-4'
+    title: 'video_title',
+    dataIndex: 'video_title',
   },
   {
-    video_title: 'Title 3',
-    key: '5600',
-    video_link: 'https://nodelefrog.store/distributor/api/v1/assets/675456',
-    video_owner_handle: 'contributor3',
-    video_channel_id: 'dev2',
-    video_createdAt: '20223-11-5'
+    title: 'video_link',
+    dataIndex: 'video_link',
   },
   {
-    video_title: 'Title 4',
-    key: '9824',
-    video_link: 'https://nodelefrog.store/distributor/api/v1/assets/675456',
-    video_owner_handle: 'contributor4',
-    video_channel_id: 'dev3',
-    video_createdAt: '20223-11-5'
-  }
+    title: 'video_owner_handle',
+    dataIndex: 'video_owner_handle',
+  },
+  {
+    title: 'video_curator',
+    dataIndex: 'video_curator',
+  },
+  {
+    title: 'video_check_description',
+    dataIndex: 'video_check_description',
+  },
 ];
+
 const CheckedList=()=> {
 
-  const onSubmit = () => {
-    console.log("sdfffffff");
-    // uploadList(data);
-  };
+  const [checkedList, setCheckedList] = useState<VideoDetail[]>()
+
+  useEffect(() => {
+    getCheckedList();
+  }, []);
+
+  console.log(checkedList, "CheckedList")
+
+  async function getCheckedList() {
+    try {
+      const response = await axios.get('http://localhost:5000/api/leader/checked-list', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const checkedListTmp = response.data;
+      setCheckedList(checkedListTmp);
+      // Do something with the user data
+    } catch (error) {
+      console.log(error, 'Fetch UnCheckedList Error');
+    }
+  }
+
+
   return (
     <section className="container">
       <h1 className="large text-primary">Checked List</h1>
-      <form className="form" onSubmit={onSubmit}>
-        <List
-          pagination={{ position: 'bottom', align: 'center' }}
-          dataSource={data}
-          renderItem={(item, index) => (
-            <List.Item>
-              <Checkbox />
-              <List.Item.Meta
-                title={item.video_title}
-                description={
-                  <a target="_blank" href={item.video_link}>
-                    {item.video_link}
-                  </a>
-                }
-              />
-            </List.Item>
-          )}
-        />
-
-        <input type="submit" className="btn btn-primary" value="Send" />
+      <Divider />
+      
+      <Table
         
-      </form>
+        columns={columns}
+        dataSource={checkedList}
+      />
     </section>
   )
 }

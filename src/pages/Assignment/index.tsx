@@ -2,7 +2,6 @@ import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import type { ColumnsType } from 'antd/es/table';
 import { Divider, Table, Select } from 'antd';
-const { Option } = Select;
 
 import Spinner from '../layout/Spinner';
 
