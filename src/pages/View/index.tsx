@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
-
+import { Divider, Table, Select, Button, Card, Form, Input, Col, Row } from 'antd';
 import {
   Channels,
   CouncilSelect,
@@ -11,34 +10,46 @@ import './view.css';
 import { useSelectedCouncil } from '@/store';
 
 let flag = false;
-const View=()=> {
+const View = () => {
   // const { council, setCouncil } = useSelectedCouncil();
   const [key, setkey] = useState('');
   const [showVideo, setShowVideo] = useState(false);
-  
+
   const handleButtonClick = () => {
-  let  video =<video controls src="https://distributor.adovrn.xyz/distributor/api/v1/assets/${key}" />
-  setShowVideo(true);
+    // let video = <video controls src="https://distributor.adovrn.xyz/distributor/api/v1/assets/${key}" />;
+    setShowVideo(true);
   };
 
   return (
-    <div style={{ backgroundColor: 'black' }} className='view-video'>
-      <h1>Video Check Panel</h1>
-      <input
-        type="text"
-        placeholder="Input video id"
-        onChange={(e) => {setkey(e.target.value)}}
-        value={key}
-        id="key"
-        
-      ></input>
-      <button type="button" className="btn btn-primary" onClick={handleButtonClick}>
-        Ok
-      </button>
-      <Row className='justify-content-center'>
-      {showVideo && <video style={{ width: '800px', height: '600px' }} src={`https://distributor.adovrn.xyz/distributor/api/v1/assets/${key}`} controls></video>}
+    <section className="view_video">
+      <Row>
+        <Col>
+          <Input
+            type="text"
+            placeholder="Input video id"
+            onChange={(e) => {
+              setkey(e.target.value);
+            }}
+            value={key}
+            id="key"
+          ></Input>
+        </Col>
+        <Col>
+          <Button type="primary" className="btn btn-primary" onClick={handleButtonClick}>
+            Ok
+          </Button>
+        </Col>
       </Row>
-    </div>
+
+      <Row>
+        {showVideo && (
+          <video
+            src={`https://distributor.adovrn.xyz/distributor/api/v1/assets/${key}`}
+            controls
+          ></video>
+        )}
+      </Row>
+    </section>
   );
-}
-export default View
+};
+export default View;

@@ -14,7 +14,7 @@ const Video = require('../../models/Video');
 // @route    GET api/assignment/
 // @desc     Get all unassignment videos
 // @access   Private
-router.get('/', async (req, res) => {
+router.get('/assignment', async (req, res) => {
   try {
     const video_lists = await Video.find({})
     // .populate('user', ['name', 'avatar']);
@@ -121,7 +121,7 @@ router.get('/curator-list', async (req, res) => {
 });
 
 
-router.post('/send-video-list', async (req, res) => {
+router.post('/assignment/send-video-list', async (req, res) => {
   try {
     console.log(req.body, "REQ.BODEY")
     await Promise.all(req.body.selectList.map(async (item) => {

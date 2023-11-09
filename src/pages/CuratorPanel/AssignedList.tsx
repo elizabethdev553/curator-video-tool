@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
+import {Link} from 'react-router-dom'
 import axios from 'axios';
 import type { ColumnsType } from 'antd/es/table';
 import { Divider, Table, Select } from 'antd';
@@ -7,7 +8,6 @@ const { Option } = Select;
 import Spinner from '../layout/Spinner';
 
 interface Assignment {
-
   key: string;
   video_title: string;
   video_link: string;
@@ -23,108 +23,79 @@ const columns: ColumnsType<Assignment> = [
   {
     title: 'key',
     dataIndex: 'key',
-   
   },
   {
     title: 'video_title',
     dataIndex: 'video_title',
-  
   },
   {
     title: 'video_link',
     dataIndex: 'video_link',
-    
   },
   {
     title: 'video_owner_handle',
     dataIndex: 'video_owner_handle',
-  
   },
   {
     title: 'video_curator',
     dataIndex: 'video_curator',
-  
   },
 ];
-
-const Assignment = () => {
-
+let member_id: String = 'goldwolf';
+const CuratorPanel = () => {
   const [assignment, setAssignment] = useState<Assignment[]>();
-  const [curatorList, setCuratorList] = useState<CuratorList[]>();
-  const [selectList, setSelectList] = useState<Assignment[]>();
-  const [curator, setCurator] = useState<CuratorList>();
+  // const [curatorList, setCuratorList] = useState<CuratorList[]>();
+  const [selectList, setSelectList] = useState<Assignment>();
   const [msg, setMsg] = useState('');
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   useEffect(() => {
-    getUnCheckedList();
-    getCuratorList();
+    getUnCheckedList(member_id);
   }, [msg]);
 
-  async function getUnCheckedList() {
+  async function getUnCheckedList(member_id: String) {
     try {
-      const response = await axios.get('http://localhost:5000/api/leader/assignment', {
+      const response = await axios.get(`http://localhost:5000/api/curator/${member_id}`, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      const assignmentList = response.data;
-      setAssignment(assignmentList);
+      const taskTmp = response.data;
+      setAssignment(taskTmp);
       // Do something with the user data
     } catch (error) {
       console.log(error, 'Fetch UnCheckedList Error');
     }
   }
-
-  async function getCuratorList() {
-    try {
-      const response = await axios.get('http://localhost:5000/api/leader/curator-list', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const curatorListTmp = response.data;
-      setCuratorList(curatorListTmp);
-     
-    } catch (error) {
-      console.log(error, 'Fetch CuratorList Error');
-    }
-  }
-
+console.log(selectList)
   // const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
   //   console.log('selectedRowKeys changed: ', newSelectedRowKeys);
   //   setSelectedRowKeys(newSelectedRowKeys);
   // };
 
-  const onChange = (value: CuratorList) => {
-    console.log(`selected ${value}`);
-    setCurator(value);
-  };
-  
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       setSelectedRowKeys([]);
-      setSelectList(selectedRows);
-    }
+      setSelectList(selectedRows[0]);
+    },
   };
 
-  
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-    if(selectList!==undefined && curator !== undefined && selectList.length>0 && curator )
-    sendVideoList(selectList, curator);
-  };
+  // const onSubmit = (e: any) => {
+  //   e.preventDefault();
+  //   if(selectList!==undefined && selectList.length > 0  )
+  //   console.log(selectList, "WWWWWWWWWWW")
+  // };
 
-  async function sendVideoList(selectList:Assignment[], curator:CuratorList) {
+  async function sendVideoList(selectList: Assignment[], curator: CuratorList) {
     try {
-      let data = {selectList, curator}
+      let data = { selectList, curator };
       const response = await axios.post('http://localhost:5000/api/leader/assignment/send-video-list', data, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       const sendVideoListResponse = response.data;
-      setMsg(sendVideoListResponse.Success)
+      setMsg(sendVideoListResponse.Success);
     } catch (error) {
       console.log(error, 'Fetch CuratorList Error');
     }
@@ -132,38 +103,29 @@ const Assignment = () => {
 
   return (
     <section className="container">
-      {assignment==undefined || assignment.length < 1 || curatorList === undefined ? (
+      {assignment == undefined || assignment.length < 1 ? (
         <Spinner />
       ) : (
         <Fragment>
-          <h1 className="large text-primary">Assignment</h1>
-          <form className="form" onSubmit={onSubmit}>
-            <Divider />
-
+          <h1 className="large text-primary">Curator Panel</h1>
+          <Divider />
+          {/* <form className="form" onSubmit={onSubmit}> */}
             <Table
               rowSelection={{
-                type: 'checkbox',
+                type: 'radio',
                 ...rowSelection,
               }}
               columns={columns}
               dataSource={assignment}
             />
-
-            <Select
-              placeholder="Select a person"
-              optionFilterProp="children"
-              onChange={onChange}
-              options={curatorList.map((item: CuratorList) => {
-                return { value: item.handle, label: item.handle };
-              })}
-            />
-
-            <input type="submit" className="btn btn-primary" value="Send" />
-          </form>
+            {selectList? <Link to={`/curator-panel/check/${selectList.key}`} className="btn btn-primary">Check</Link>
+            : ''}
+            
+          {/* </form> */}
         </Fragment>
       )}
     </section>
   );
 };
 
-export default Assignment;
+export default CuratorPanel;
