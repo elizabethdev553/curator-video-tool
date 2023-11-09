@@ -1,0 +1,39 @@
+query GetElectedCouncils(
+  $where: ElectedCouncilWhereInput
+  $orderBy: [ElectedCouncilOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
+  electedCouncils(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    ...ElectedCouncilFields
+    __typename
+  }
+}
+
+fragment ElectedCouncilFields on ElectedCouncil {
+  id
+  electedAtBlock
+  endedAtBlock
+  electedAtTime
+  endedAtTime
+  electedAtNetwork
+  endedAtNetwork
+  councilElections {
+    cycleId
+  }
+
+  councilMembers {
+    ...CouncilMemberFields
+  }
+}
+
+fragment CouncilMemberFields on CouncilMember {
+  id
+  member {
+    councilMembers {
+      __typename
+    }
+  }
+  unpaidReward
+  stake
+}

@@ -1,0 +1,172 @@
+fragment WorkingGroupMetadataFields on WorkingGroupMetadata {
+  about
+  description
+  status
+  statusMessage
+}
+
+fragment WorkerFields on Worker {
+  id
+  runtimeId
+
+  group {
+    id
+    name
+  }
+  status {
+    __typename
+  }
+  applicationId
+  isLead
+  rewardPerBlock
+  missingRewardAmount
+  stake
+}
+
+fragment SpendingRewardFields on RewardPaidEvent {
+  createdAt
+  deletedAt
+  amount
+  worker {
+    membership {
+      handle
+    }
+  }
+}
+
+fragment SpendingBudgetFields on BudgetSpendingEvent {
+  createdAt
+  deletedAt
+  amount
+}
+
+fragment HireOpeningFillFields on OpeningFilledEvent {
+  createdAt
+  deletedAt
+  workersHired {
+    membership {
+      handle
+    }
+  }
+}
+
+fragment FireTerminatedWorkerFields on TerminatedWorkerEvent {
+  createdAt
+  deletedAt
+  worker {
+    membership {
+      handle
+    }
+  }
+}
+
+fragment FireWorkeredExitedFields on WorkerExitedEvent {
+  createdAt
+  deletedAt
+  worker {
+    membership {
+      handle
+    }
+  }
+}
+
+fragment SlashStakeFields on StakeSlashedEvent {
+  createdAt
+  deletedAt
+  worker {
+    membership {
+      handle
+    }
+  }
+}
+
+fragment WorkingGroupFields on WorkingGroup {
+  id
+  name
+  budget
+  metadata {
+    ...WorkingGroupMetadataFields
+  }
+  workers {
+    stake
+    missingRewardAmount
+  }
+  rewardpaideventgroup {
+    ...SpendingRewardFields
+  }
+  budgetspendingeventgroup {
+    ...SpendingBudgetFields
+  }
+  openingfilledeventgroup {
+    ...HireOpeningFillFields
+  }
+  terminatedworkereventgroup {
+    ...FireTerminatedWorkerFields
+  }
+  workerexitedeventgroup {
+    ...FireWorkeredExitedFields
+  }
+  stakeslashedeventgroup {
+    ...SlashStakeFields
+  }
+  leader {
+    membershipId
+    isActive
+    membership {
+      handle
+    }
+  }
+}
+
+fragment RewardPaidEventFields on RewardPaidEvent {
+  id
+  amount
+  rewardAccount
+  createdAt
+  groupId
+  group {
+    leader {
+      membership {
+        handle
+      }
+    }
+  }
+}
+
+query GetWorkingGroups(
+  $where: WorkingGroupWhereInput
+  $orderBy: [WorkingGroupOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
+  workingGroups(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    ...WorkingGroupFields
+  }
+}
+
+query GetWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
+  workers(where: $where, offset: $offset, limit: $limit) {
+    ...WorkerFields
+  }
+}
+
+query GetRewards($where: RewardPaidEventWhereInput) {
+  rewardPaidEvents(where: $where, limit: 10000) {
+    ...RewardPaidEventFields
+  }
+}
+
+query GetBudgetSpending($where: BudgetSpendingEventWhereInput) {
+  budgetSpendingEvents(where: $where) {
+    amount
+    createdAt
+    groupId
+    group {
+      leader {
+        membership {
+          handle
+        }
+      }
+    }
+  }
+}
