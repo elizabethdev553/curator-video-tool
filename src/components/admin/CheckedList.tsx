@@ -2,8 +2,8 @@ import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import type { ColumnsType } from 'antd/es/table';
 import { Divider, Table, Select } from 'antd';
-
-import Spinner from '../../components/layout/Spinner';
+import api from '../../utils/api'
+// import Spinner from '../../components/layout/Spinner';
 
 interface VideoDetail {
 
@@ -54,7 +54,7 @@ const CheckedList=()=> {
 
   async function getCheckedList() {
     try {
-      const response = await axios.get('http://localhost:5000/api/leader/checked-list', {
+      const response = await api.get('/leader/checked-list', {
         headers: {
           'Content-Type': 'application/json',
         },

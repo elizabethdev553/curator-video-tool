@@ -38,12 +38,11 @@ router.post(
 
     try {
       let member = await Member.findOne({ email });
-      console.log(member, "MEMber")
 
       if (!member) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'Invalid Credentials' }] });
+          .json({ errors: [{ msg: 'You were not registered by Leader.' }] });
       }
 
       const isMatch = await bcrypt.compare(password, member.password);
@@ -51,12 +50,12 @@ router.post(
       if (!isMatch) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'Invalid Credentials' }] });
+          .json({ errors: [{ msg: 'Invalid Password.' }] });
       }
 
       const payload = {
         member: {
-          id: member.id
+          id: member._id
         }
       };
 
