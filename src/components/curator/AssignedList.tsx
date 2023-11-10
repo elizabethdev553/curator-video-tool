@@ -6,6 +6,7 @@ import { Divider, Table, Select } from 'antd';
 const { Option } = Select;
 
 import Spinner from '../../components/layout/Spinner';
+import api from '../../utils/api'
 
 interface Assignment {
   key: string;
@@ -43,10 +44,18 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_check_description',
   },
 ];
-let member_id: String = 'goldwolf';
-const CuratorPanel = () => {
+
+interface AuthProps {
+  auth: {
+    isAuthenticated: boolean;
+    user:any
+  };
+}
+
+const AssignedList:React.FC<AuthProps> = ({auth}) => {
   const [assignment, setAssignment] = useState<Assignment[]>();
   const [selectList, setSelectList] = useState<Assignment>();
+  let member_id: String = auth.user.handle;
   useEffect(() => {
     getUnCheckedList(member_id);
   }, []);
@@ -54,7 +63,7 @@ const CuratorPanel = () => {
   console.log(assignment, "assingment")
   async function getUnCheckedList(member_id: String) {
     try {
-      const response = await axios.get(`http://localhost:5000/api/curator/${member_id}`, {
+      const response = await api.get(`/curator/${member_id}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -101,4 +110,4 @@ const CuratorPanel = () => {
   );
 };
 
-export default CuratorPanel;
+export default AssignedList;

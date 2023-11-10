@@ -1,39 +1,38 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './auth.css';
+import React, { useState, ChangeEvent, FormEvent} from 'react';
+import { Link, Navigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { login } from '../../actions/auth';
 
-const LoginComponent = () => {
+interface LoginProps {
+  login: (email: string, password: string) => void;
+  isAuthenticated?: boolean;
+  user:any
+}
+
+
+const Login: React.FC<LoginProps> = ({ login, isAuthenticated, user }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const navigate = useNavigate();
 
   const { email, password } = formData;
 
-  const onChange = (e: any) =>
+  const onChange = (e:ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async (e: any) => {
+  const onSubmit = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth',  formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if(response.status == 200){
-        console.log("response=>>>>", response.data);
-        localStorage.setItem("authData", response.data);
-        navigate('/');
-      }
-      
-      // Do something with the user data
-    } catch (error) {
-      console.log(error, 'Fetch CuratorList Error');
-    }
+    login(email, password);
   };
+
+  if (isAuthenticated&&user) {
+    if(user.handle === 'goldwolf')
+    return <Navigate to="/checked-list" />;
+    else
+    return  <Navigate to="/assigned-list" />;
+  }
 
   return (
     <section className="container">
@@ -49,7 +48,6 @@ const LoginComponent = () => {
             name="email"
             value={email}
             onChange={onChange}
-            required
           />
         </div>
         <div className="form-group">
@@ -60,17 +58,22 @@ const LoginComponent = () => {
             value={password}
             onChange={onChange}
             minLength={6}
-            required
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Login" />
       </form>
-      <p className="my-1">
-        Don't have an account? <Link to="/register">Sign Up</Link>
-      </p>
     </section>
   );
 };
 
-export default LoginComponent; 
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
 
+const mapStateToProps = (state:any) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  user:state.auth.user,
+});
+
+export default connect(mapStateToProps, { login })(Login);
