@@ -1,7 +1,7 @@
 {
-  "name": "devconnector",
+  "name": "Video Check",
   "version": "1.0.0",
-  "description": "Social network for developers",
+  "description": "This project is a video checking project.",
   "main": "server.js",
   "scripts": {
     "start": "node server",
@@ -10,7 +10,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
-  "author": "Brad Traversy",
+  "author": "Josh Groban",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.0",

@@ -15,7 +15,7 @@
     "format:write": "yarn format --write",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Josh Groban",
   "license": "ISC",
   "devDependencies": {
     "@graphql-codegen/cli": "2.16.5",
