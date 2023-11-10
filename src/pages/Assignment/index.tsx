@@ -1,12 +1,9 @@
-import React, { useEffect, useState, Fragment, ChangeEvent } from 'react';
-// import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import Spinner from '../layout/Spinner';
-import { Avatar, Checkbox, List, Space, Button, Radio, Divider, Table, Select } from 'antd';
-const { Option } = Select;
+import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
-
 import type { ColumnsType } from 'antd/es/table';
+import { Divider, Table, Select } from 'antd';
+
+import Spinner from '../layout/Spinner';
 
 interface Assignment {
 
@@ -25,31 +22,32 @@ const columns: ColumnsType<Assignment> = [
   {
     title: 'key',
     dataIndex: 'key',
-    // render: (text: string) => <a>{text}</a>,
+   
   },
   {
     title: 'video_title',
     dataIndex: 'video_title',
-    // render: (text: string) => <a>{text}</a>,
+  
   },
   {
     title: 'video_link',
     dataIndex: 'video_link',
-    // render: (text: string) => <a>{text}</a>,
+    
   },
   {
     title: 'video_owner_handle',
     dataIndex: 'video_owner_handle',
-    // render: (text: string) => <a>{text}</a>,
+  
   },
   {
     title: 'video_curator',
     dataIndex: 'video_curator',
-    // render: (text: string) => <a>{text}</a>,
+  
   },
 ];
 
 const Assignment = () => {
+
   const [assignment, setAssignment] = useState<Assignment[]>();
   const [curatorList, setCuratorList] = useState<CuratorList[]>();
   const [selectList, setSelectList] = useState<Assignment[]>();
@@ -63,9 +61,8 @@ const Assignment = () => {
 
   async function getUnCheckedList() {
     try {
-      const response = await axios.get('http://localhost:5000/api/assignment', {
+      const response = await axios.get('http://localhost:5000/api/leader/assignment', {
         headers: {
-          // 'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
         },
       });
@@ -79,54 +76,48 @@ const Assignment = () => {
 
   async function getCuratorList() {
     try {
-      const response = await axios.get('http://localhost:5000/api/assignment/curator-list', {
+      const response = await axios.get('http://localhost:5000/api/leader/curator-list', {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       const curatorListTmp = response.data;
       setCuratorList(curatorListTmp);
-      // Do something with the user data
+     
     } catch (error) {
       console.log(error, 'Fetch CuratorList Error');
     }
   }
 
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
+  // const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+  //   console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+  //   setSelectedRowKeys(newSelectedRowKeys);
+  // };
 
   const onChange = (value: CuratorList) => {
     console.log(`selected ${value}`);
     setCurator(value);
   };
   
-  
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setSelectedRowKeys([]);
       setSelectList(selectedRows);
-    },
-    // getCheckboxProps: (record: DataType) => ({
-    //   disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    //   name: record.name,
-    // }),
+    }
   };
 
   
   const onSubmit = (e: any) => {
     e.preventDefault();
-    setSelectedRowKeys([]);
     if(selectList!==undefined && curator !== undefined && selectList.length>0 && curator )
     sendVideoList(selectList, curator);
-  console.log('HHHHHHHHHHHHHHHH')
   };
 
   async function sendVideoList(selectList:Assignment[], curator:CuratorList) {
     try {
       let data = {selectList, curator}
-      const response = await axios.post('http://localhost:5000/api/assignment/send-video-list', data, {
+      const response = await axios.post('http://localhost:5000/api/leader/assignment/send-video-list', data, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -138,9 +129,6 @@ const Assignment = () => {
     }
   }
 
-  console.log(assignment, 'Assignment');
-
- 
   return (
     <section className="container">
       {assignment==undefined || assignment.length < 1 || curatorList === undefined ? (

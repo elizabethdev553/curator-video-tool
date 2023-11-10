@@ -11,13 +11,10 @@ const checkObjectId = require('../../middleware/checkObjectId');
 const Member = require('../../models/Member');
 const Video = require('../../models/Video');
 
-// @route    GET api/assignment/
-// @desc     Get all unassignment videos
-// @access   Private
-router.get('/', async (req, res) => {
+
+router.get('/assignment', async (req, res) => {
   try {
     const video_lists = await Video.find({})
-    // .populate('user', ['name', 'avatar']);
 
     if (!video_lists) {
       return res.status(400).json({ msg: 'There is no videos or you already assigned.' });
@@ -30,25 +27,26 @@ router.get('/', async (req, res) => {
   }
 });
 
-// @route    POST api/assignment
-// @desc     Create or update user profile
-// @access   Private
-router.post(
-  '/upload',
-  auth,
-  // check('video_title', 'video_title is required').notEmpty(),
-  // check('video_link', 'video_link is required').notEmpty(),
-  // check('video_owner_handle', 'video_owner_handle is required').notEmpty(),
-  // check('key', 'key is required').notEmpty(),
-  async (req, res) => {
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
+router.get('/checked-list', async (req, res) => {
+  try {
+    const video_lists = await Video.find({video_check_flag:true})
+
+    if (!video_lists) {
+      return res.status(400).json({ msg: 'There is no checked videos.' });
+    }
+
+    res.json(video_lists);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+router.post('/upload', auth, async (req, res) => {
 
     try {
       req.body.map(item=>{
-// console.log(item, "TIME")
         const newVideo = new Video({
           key: item.key,
           video_title: item.video_title,
@@ -121,7 +119,7 @@ router.get('/curator-list', async (req, res) => {
 });
 
 
-router.post('/send-video-list', async (req, res) => {
+router.post('/assignment/send-video-list', async (req, res) => {
   try {
     console.log(req.body, "REQ.BODEY")
     await Promise.all(req.body.selectList.map(async (item) => {

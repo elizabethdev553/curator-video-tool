@@ -14,29 +14,33 @@ const Member = require('../../models/Member');
 // @access   Public
 router.post(
   '/',
-  check('memberId', 'memberId is required').notEmpty(),
-  check('handle', 'Handle is required').notEmpty(),
-  check('email', 'Please include a valid email').isEmail(),
-  check(
-    'password',
-    'Please enter a password with 6 or more characters'
-  ).isLength({ min: 6 }),
+  // check('memberId', 'memberId is required').notEmpty(),
+  // check('handle', 'Handle is required').notEmpty(),
+  // check('email', 'Please include a valid email').isEmail(),
+  // check(
+  //   'password',
+  //   'Please enter a password with 6 or more characters'
+  //).isLength({ min: 6 }),
   async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    const {memberId, handle, email, password } = req.body;
 
+    // const errors = validationResult(req);
+    // console.log("errors=>!!!!!!", errors);
+    // if (!errors.isEmpty()) {
+    //   console.log("no errors");
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
+    console.log("data=", req.body);
+    const {memberId, handle, email, password } = req.body;
     try {
       let member = await Member.findOne({ email });
-
+      
+      console.log("member", member);
       if (member) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'Member already exists' }] });
+          .json({"msg": "Member is already exist"});
       }
-
+      
       const avatar = normalize(
         gravatar.url(email, {
           s: '200',
@@ -72,7 +76,7 @@ router.post(
         { expiresIn: '5 days' },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.status(200).json({ token });
         }
       );
     } catch (err) {
