@@ -4,9 +4,8 @@ import type { ColumnsType } from 'antd/es/table';
 import { Divider, Table, Select } from 'antd';
 
 import Spinner from '../../components/layout/Spinner';
-
+import type { TableRowSelection } from 'antd/es/table/interface';
 interface Assignment {
-
   key: string;
   video_title: string;
   video_link: string;
@@ -18,36 +17,38 @@ interface CuratorList {
   handle?: String;
 }
 
+interface DataType {
+  key: React.Key;
+  name: string;
+  age: number;
+  address: string;
+}
+
+const data: DataType[] = [];
 const columns: ColumnsType<Assignment> = [
   {
     title: 'key',
     dataIndex: 'key',
-   
   },
   {
     title: 'video_title',
     dataIndex: 'video_title',
-  
   },
   {
     title: 'video_link',
     dataIndex: 'video_link',
-    
   },
   {
     title: 'video_owner_handle',
     dataIndex: 'video_owner_handle',
-  
   },
   {
     title: 'video_curator',
     dataIndex: 'video_curator',
-  
   },
 ];
 
 const Assignment = () => {
-
   const [assignment, setAssignment] = useState<Assignment[]>();
   const [curatorList, setCuratorList] = useState<CuratorList[]>();
   const [selectList, setSelectList] = useState<Assignment[]>();
@@ -83,7 +84,6 @@ const Assignment = () => {
       });
       const curatorListTmp = response.data;
       setCuratorList(curatorListTmp);
-     
     } catch (error) {
       console.log(error, 'Fetch CuratorList Error');
     }
@@ -98,32 +98,74 @@ const Assignment = () => {
     console.log(`selected ${value}`);
     setCurator(value);
   };
-  
-  const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      setSelectedRowKeys([]);
-      setSelectList(selectedRows);
-    }
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
   };
 
-  
+  const rowSelection: TableRowSelection<Assignment> = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE,
+      {
+        key: 'odd',
+        text: 'Select Odd Row',
+        onSelect: (changeableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changeableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return false;
+            }
+            return true;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+      {
+        key: 'even',
+        text: 'Select Even Row',
+        onSelect: (changeableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changeableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return true;
+            }
+            return false;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+    ],
+  };
+
+  // const rowSelection = {
+  //   onChange: (selectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
+  //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  //     setSelectedRowKeys([]);
+  //     setSelectList(selectedRows);
+  //   },
+  // };
+
   const onSubmit = (e: any) => {
     e.preventDefault();
-    if(selectList!==undefined && curator !== undefined && selectList.length>0 && curator )
-    sendVideoList(selectList, curator);
+    if (selectList !== undefined && curator !== undefined && selectList.length > 0 && curator)
+      sendVideoList(selectList, curator);
   };
 
-  async function sendVideoList(selectList:Assignment[], curator:CuratorList) {
+  async function sendVideoList(selectList: Assignment[], curator: CuratorList) {
     try {
-      let data = {selectList, curator}
+      let data = { selectList, curator };
       const response = await axios.post('http://localhost:5000/api/leader/assignment/send-video-list', data, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       const sendVideoListResponse = response.data;
-      setMsg(sendVideoListResponse.Success)
+      setMsg(sendVideoListResponse.Success);
     } catch (error) {
       console.log(error, 'Fetch CuratorList Error');
     }
@@ -131,7 +173,7 @@ const Assignment = () => {
 
   return (
     <section className="container">
-      {assignment==undefined || assignment.length < 1 || curatorList === undefined ? (
+      {assignment == undefined || assignment.length < 1 || curatorList === undefined ? (
         <Spinner />
       ) : (
         <Fragment>
@@ -140,10 +182,7 @@ const Assignment = () => {
             <Divider />
 
             <Table
-              rowSelection={{
-                type: 'checkbox',
-                ...rowSelection,
-              }}
+              rowSelection={rowSelection}
               columns={columns}
               dataSource={assignment}
             />
