@@ -12,10 +12,12 @@ const Member = require('../../models/Member');
 const Video = require('../../models/Video');
 
 
-router.get('/assignment', async (req, res) => {
+router.get('/assignment/:date', async (req, res) => {
   try {
-    const video_lists = await Video.find({})
+    const date= req.params.date
+    const video_lists = await Video.find({video_createdAt:date})
 
+    
     if (!video_lists) {
       return res.status(400).json({ msg: 'There is no videos or you already assigned.' });
     }
