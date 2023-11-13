@@ -1,7 +1,9 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import type { ColumnsType } from 'antd/es/table';
-import { Divider, Table, Select } from 'antd';
+import { Divider, Table, Select, Pagination, DatePicker } from 'antd';
+import type { DatePickerProps } from 'antd';
+import dayjs from 'dayjs';
 
 import Spinner from '../../components/layout/Spinner';
 import type { TableRowSelection } from 'antd/es/table/interface';
@@ -11,6 +13,8 @@ interface Assignment {
   video_link: string;
   video_owner_handle: string;
   video_curator: string;
+  video_createdAt: string;
+
 }
 
 interface CuratorList {
@@ -27,7 +31,7 @@ interface DataType {
 const data: DataType[] = [];
 const columns: ColumnsType<Assignment> = [
   {
-    title: 'key',
+    title: 'video_id',
     dataIndex: 'key',
   },
   {
@@ -46,7 +50,19 @@ const columns: ColumnsType<Assignment> = [
     title: 'video_curator',
     dataIndex: 'video_curator',
   },
+  {
+    title: 'video_createdAt',
+    dataIndex: 'video_createdAt',
+  },
 ];
+
+const today = new Date(); 
+
+const year = String(today.getFullYear()).slice(-2);
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0'); 
+
+const TODAY = `20${year}-${month}-${day}`; 
 
 const Assignment = () => {
   const [assignment, setAssignment] = useState<Assignment[]>();
@@ -55,14 +71,20 @@ const Assignment = () => {
   const [curator, setCurator] = useState<CuratorList>();
   const [msg, setMsg] = useState('');
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [date, setDate] = useState<String>(TODAY);
   useEffect(() => {
-    getUnCheckedList();
+    getUnCheckedList(date);
     getCuratorList();
-  }, [msg]);
+  }, [msg, date]);
 
-  async function getUnCheckedList() {
+  const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
+    console.log(date, dateString);
+    setDate(dateString);
+  };
+
+  async function getUnCheckedList(date:String) {
     try {
-      const response = await axios.get('http://localhost:5000/api/leader/assignment', {
+      const response = await axios.get(`http://localhost:5000/api/leader/assignment/${date}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -99,9 +121,10 @@ const Assignment = () => {
     setCurator(value);
   };
 
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+  const onSelectChange = (newSelectedRowKeys: React.Key[],selectedRows: Assignment[]) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
+    setSelectList(selectedRows);
   };
 
   const rowSelection: TableRowSelection<Assignment> = {
@@ -173,11 +196,12 @@ const Assignment = () => {
 
   return (
     <section className="container">
+      <h1 className="large text-primary">Assignment</h1>
+      <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} />
       {assignment == undefined || assignment.length < 1 || curatorList === undefined ? (
         <Spinner />
       ) : (
         <Fragment>
-          <h1 className="large text-primary">Assignment</h1>
           <form className="form" onSubmit={onSubmit}>
             <Divider />
 

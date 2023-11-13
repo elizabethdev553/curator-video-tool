@@ -38,12 +38,12 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user },  logou
           <span className="hide-sm">Performance results</span>
         </Link>
       </li> */}
-      {/* <li>
+      <li>
         <Link to="/curators-list">
           <i className="fas fa-user" />{' '}
           <span className="hide-sm">Curators list</span>
         </Link>
-      </li> */}
+      </li>
       <li>
         <a onClick={logout} href="#">
           <i className="fas fa-sign-out-alt" />{' '}
