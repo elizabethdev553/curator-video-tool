@@ -6,6 +6,7 @@ import CheckedList from './components/admin/CheckedList';
 import Assignment from './components/admin/Assignment';
 import VideoCheck from './components/curator/VideoCheck';
 import AssignedList from './components/curator/AssignedList';
+import Home from './components/admin/Home';
 
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';

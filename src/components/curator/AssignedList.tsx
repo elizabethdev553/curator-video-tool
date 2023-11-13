@@ -85,7 +85,7 @@ const AssignedList:React.FC<AuthProps> = ({auth}) => {
   };
 
   return (
-    <section className="container-fluid">
+    <section className="container">
       {assignment == undefined || assignment.length < 1 ? (
         <Spinner />
       ) : (
