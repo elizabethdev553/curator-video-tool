@@ -6,10 +6,9 @@ import { useSelectedCouncil } from '@/store';
 import { isDefined } from '@/types';
 
 export default function Videos() {
-  const { council } = useSelectedCouncil();
-  console.log(council, "Council")
+  // const { council } = useSelectedCouncil();
   
-  const { created, total, loading, error } = useVideos({ council });
+  const { data, loading, error } = useVideos();
 
   // Add some
 
@@ -24,7 +23,7 @@ export default function Videos() {
   return (
     <div className="sub_panel">
       <h4>Videos</h4>
-      <Row>
+      {/* <Row>
         <Col>
           <OverlayTrigger placement="bottom" overlay={<Tooltip> totalCount of videosConnection between council period</Tooltip>}>
             <div className="input_box_md">{isDefined(created) ? created : '-'}</div>
@@ -37,7 +36,7 @@ export default function Videos() {
           </OverlayTrigger>
           <h6>total</h6>
         </Col>
-      </Row>
+      </Row> */}
     </div>
   );
 }

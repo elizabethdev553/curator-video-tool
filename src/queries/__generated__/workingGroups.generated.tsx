@@ -1,107 +1,27 @@
 import * as Types from './baseTypes.generated';
 
 import { gql } from '@apollo/client';
-import { MemberFieldsFragmentDoc } from './members.generated';
 import * as Apollo from '@apollo/client';
-
 const defaultOptions = {} as const;
+export type WorkingGroupMetadataFieldsFragment = { __typename: 'WorkingGroupMetadata', about?: string | null, description?: string | null, status?: string | null, statusMessage?: string | null };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////           working groups         ///////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////
+export type WorkerFieldsFragment = { __typename: 'Worker', id: string, runtimeId: number, applicationId: string, isLead: boolean, rewardPerBlock: string, missingRewardAmount?: string | null, stake: string, group: { __typename: 'WorkingGroup', id: string, name: string }, status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' } };
 
-export type SpendingRewardFieldsFragment = { __typename: "RewardPaidEvent", createdAt: any | undefined, deletedAt: any | undefined, amount: number, worker: { membership: { handle: string } } };
-export type SpendingBudgetFieldsFragment = { __typename: "BudgetSpendingEvent", createdAt: any | undefined, deletedAt: any | undefined, amount: number };
-export type HireOpeningFillFieldsFragment = { __typename: "OpeningFilledEvent", createdAt: any | undefined, deletedAt: any | undefined, workersHired: { membership: { handle: string } } };
-export type FireTerminatedFieldsFragment = { __typename: "TerminatedWorkerEvent", createdAt: any | undefined, deletedAt: any | undefined, worker: { membership: { handle: string } } };
-export type FireExitedFieldsFragment = { __typename: "WorkerExitedEvent", createdAt: any | undefined, deletedAt: any | undefined, worker: { membership: { handle: string } } };
-export type SlashStakeFieldsFragment = { __typename: "StakeSlashedEvent", createdAt: any | undefined, deletedAt: any | undefined, worker: { membership: { handle: string } } };
+export type SpendingRewardFieldsFragment = { __typename: 'RewardPaidEvent', createdAt: any, deletedAt?: any | null, amount: string, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } };
 
-export type WorkingGroupFieldsFragment = {
-  __typename: 'WorkingGroup',
-  id: string,
-  name: string,
-  budget: string,
-  metadata?: {
-    __typename: 'WorkingGroupMetadata',
-    about?: string | null,
-    description?: string | null,
-    status?: string | null,
-    statusMessage?: string | null
-  } | null,
-  rewardpaideventgroup: Array<SpendingRewardFieldsFragment>,
-  budgetspendingeventgroup: Array<SpendingBudgetFieldsFragment>,
-  openingfilledeventgroup: Array<HireOpeningFillFieldsFragment>,
-  terminatedworkereventgroup: Array<FireTerminatedFieldsFragment>,
-  workerexitedeventgroup: Array<FireExitedFieldsFragment>,
-  stakeslashedeventgroup: Array<SlashStakeFieldsFragment>,
-  workers: Array<{ __typename: 'Worker', stake: string, missingRewardAmount: number }>,
-  leader: { __typename: 'Worker', membershipId: string, isActive: boolean, membership: { handle: string } } | null
-};
+export type SpendingBudgetFieldsFragment = { __typename: 'BudgetSpendingEvent', createdAt: any, deletedAt?: any | null, amount: string };
 
-export const SpendingRewardFieldsFragmentDoc = gql`
-fragment SpendingRewardFields on RewardPaidEvent {
-  createdAt
-  deletedAt
-    amount
-    worker{
-      membership{
-        handle
-      }
-    }
-} 
-`
-export const SpendingBudgetFieldsFragmentDoc = gql`
-fragment SpendingBudgetFields on BudgetSpendingEvent {
-  createdAt
-  deletedAt
-   amount
-}
-`
-export const HireOpeningFillFieldsFragmentDoc = gql`
-fragment HireOpeningFillFields on OpeningFilledEvent{
-  createdAt
-  deletedAt
-   workersHired{
-        membership{
-          handle
-        }
-      }
-}
-`
-export const FireTerminatedFieldsFragmentDoc = gql`
-fragment FireTerminatedWorkerFields on TerminatedWorkerEvent {
-  createdAt
-  deletedAt
-  worker{
-        membership{
-          handle
-        }
-      }
-}
-`
-export const FireExitedFieldsFragmentDoc = gql`
-fragment FireWorkeredExitedFields on WorkerExitedEvent{
-  createdAt
-  deletedAt
-  worker{
-        membership{
-          handle
-        }
-      }
-}
-`
-export const SlashStakeFieldsFragmentDoc = gql`
-fragment SlashStakeFields on StakeSlashedEvent{
-  createdAt
-  deletedAt
-      worker{
-        membership{
-          handle
-        }
-      }
-}
-`
+export type HireOpeningFillFieldsFragment = { __typename: 'OpeningFilledEvent', createdAt: any, deletedAt?: any | null, workersHired: Array<{ __typename: 'Worker', membership: { __typename: 'Membership', handle: string } }> };
+
+export type FireTerminatedWorkerFieldsFragment = { __typename: 'TerminatedWorkerEvent', createdAt: any, deletedAt?: any | null, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } };
+
+export type FireWorkeredExitedFieldsFragment = { __typename: 'WorkerExitedEvent', createdAt: any, deletedAt?: any | null, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } };
+
+export type SlashStakeFieldsFragment = { __typename: 'StakeSlashedEvent', createdAt: any, deletedAt?: any | null, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } };
+
+export type WorkingGroupFieldsFragment = { __typename: 'WorkingGroup', id: string, name: string, budget: string, metadata?: { __typename: 'WorkingGroupMetadata', about?: string | null, description?: string | null, status?: string | null, statusMessage?: string | null } | null, workers: Array<{ __typename: 'Worker', stake: string, missingRewardAmount?: string | null }>, rewardpaideventgroup?: Array<{ __typename: 'RewardPaidEvent', createdAt: any, deletedAt?: any | null, amount: string, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } }> | null, budgetspendingeventgroup?: Array<{ __typename: 'BudgetSpendingEvent', createdAt: any, deletedAt?: any | null, amount: string }> | null, openingfilledeventgroup?: Array<{ __typename: 'OpeningFilledEvent', createdAt: any, deletedAt?: any | null, workersHired: Array<{ __typename: 'Worker', membership: { __typename: 'Membership', handle: string } }> }> | null, terminatedworkereventgroup?: Array<{ __typename: 'TerminatedWorkerEvent', createdAt: any, deletedAt?: any | null, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } }> | null, workerexitedeventgroup?: Array<{ __typename: 'WorkerExitedEvent', createdAt: any, deletedAt?: any | null, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } }> | null, stakeslashedeventgroup?: Array<{ __typename: 'StakeSlashedEvent', createdAt: any, deletedAt?: any | null, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } }> | null, leader?: { __typename: 'Worker', membershipId: string, isActive: boolean, membership: { __typename: 'Membership', handle: string } } | null };
+
+export type RewardPaidEventFieldsFragment = { __typename: 'RewardPaidEvent', id: string, amount: string, rewardAccount: string, createdAt: any, groupId: string, group: { __typename: 'WorkingGroup', leader?: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } | null } };
 
 export type GetWorkingGroupsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.WorkingGroupWhereInput>;
@@ -110,8 +30,50 @@ export type GetWorkingGroupsQueryVariables = Types.Exact<{
   limit?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
-export type GetWorkingGroupsQuery = { __typename: 'Query', workingGroups: Array<WorkingGroupFieldsFragment> };
 
+export type GetWorkingGroupsQuery = { __typename: 'Query', workingGroups: Array<{ __typename: 'WorkingGroup', id: string, name: string, budget: string, metadata?: { __typename: 'WorkingGroupMetadata', about?: string | null, description?: string | null, status?: string | null, statusMessage?: string | null } | null, workers: Array<{ __typename: 'Worker', stake: string, missingRewardAmount?: string | null }>, rewardpaideventgroup?: Array<{ __typename: 'RewardPaidEvent', createdAt: any, deletedAt?: any | null, amount: string, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } }> | null, budgetspendingeventgroup?: Array<{ __typename: 'BudgetSpendingEvent', createdAt: any, deletedAt?: any | null, amount: string }> | null, openingfilledeventgroup?: Array<{ __typename: 'OpeningFilledEvent', createdAt: any, deletedAt?: any | null, workersHired: Array<{ __typename: 'Worker', membership: { __typename: 'Membership', handle: string } }> }> | null, terminatedworkereventgroup?: Array<{ __typename: 'TerminatedWorkerEvent', createdAt: any, deletedAt?: any | null, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } }> | null, workerexitedeventgroup?: Array<{ __typename: 'WorkerExitedEvent', createdAt: any, deletedAt?: any | null, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } }> | null, stakeslashedeventgroup?: Array<{ __typename: 'StakeSlashedEvent', createdAt: any, deletedAt?: any | null, worker: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } }> | null, leader?: { __typename: 'Worker', membershipId: string, isActive: boolean, membership: { __typename: 'Membership', handle: string } } | null }> };
+
+export type GetWorkersQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.WorkerWhereInput>;
+  offset?: Types.InputMaybe<Types.Scalars['Int']>;
+  limit?: Types.InputMaybe<Types.Scalars['Int']>;
+}>;
+
+
+export type GetWorkersQuery = { __typename: 'Query', workers: Array<{ __typename: 'Worker', id: string, runtimeId: number, applicationId: string, isLead: boolean, rewardPerBlock: string, missingRewardAmount?: string | null, stake: string, group: { __typename: 'WorkingGroup', id: string, name: string }, status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' } }> };
+
+export type GetRewardsQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.RewardPaidEventWhereInput>;
+}>;
+
+
+export type GetRewardsQuery = { __typename: 'Query', rewardPaidEvents: Array<{ __typename: 'RewardPaidEvent', id: string, amount: string, rewardAccount: string, createdAt: any, groupId: string, group: { __typename: 'WorkingGroup', leader?: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } | null } }> };
+
+export type GetBudgetSpendingQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.BudgetSpendingEventWhereInput>;
+}>;
+
+
+export type GetBudgetSpendingQuery = { __typename: 'Query', budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent', amount: string, createdAt: any, groupId: string, group: { __typename: 'WorkingGroup', leader?: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } | null } }> };
+
+export const WorkerFieldsFragmentDoc = gql`
+    fragment WorkerFields on Worker {
+  id
+  runtimeId
+  group {
+    id
+    name
+  }
+  status {
+    __typename
+  }
+  applicationId
+  isLead
+  rewardPerBlock
+  missingRewardAmount
+  stake
+}
+    `;
 export const WorkingGroupMetadataFieldsFragmentDoc = gql`
     fragment WorkingGroupMetadataFields on WorkingGroupMetadata {
   about
@@ -120,7 +82,69 @@ export const WorkingGroupMetadataFieldsFragmentDoc = gql`
   statusMessage
 }
     `;
-
+export const SpendingRewardFieldsFragmentDoc = gql`
+    fragment SpendingRewardFields on RewardPaidEvent {
+  createdAt
+  deletedAt
+  amount
+  worker {
+    membership {
+      handle
+    }
+  }
+}
+    `;
+export const SpendingBudgetFieldsFragmentDoc = gql`
+    fragment SpendingBudgetFields on BudgetSpendingEvent {
+  createdAt
+  deletedAt
+  amount
+}
+    `;
+export const HireOpeningFillFieldsFragmentDoc = gql`
+    fragment HireOpeningFillFields on OpeningFilledEvent {
+  createdAt
+  deletedAt
+  workersHired {
+    membership {
+      handle
+    }
+  }
+}
+    `;
+export const FireTerminatedWorkerFieldsFragmentDoc = gql`
+    fragment FireTerminatedWorkerFields on TerminatedWorkerEvent {
+  createdAt
+  deletedAt
+  worker {
+    membership {
+      handle
+    }
+  }
+}
+    `;
+export const FireWorkeredExitedFieldsFragmentDoc = gql`
+    fragment FireWorkeredExitedFields on WorkerExitedEvent {
+  createdAt
+  deletedAt
+  worker {
+    membership {
+      handle
+    }
+  }
+}
+    `;
+export const SlashStakeFieldsFragmentDoc = gql`
+    fragment SlashStakeFields on StakeSlashedEvent {
+  createdAt
+  deletedAt
+  worker {
+    membership {
+      handle
+    }
+  }
+}
+    `;
 export const WorkingGroupFieldsFragmentDoc = gql`
     fragment WorkingGroupFields on WorkingGroup {
   id
@@ -133,22 +157,22 @@ export const WorkingGroupFieldsFragmentDoc = gql`
     stake
     missingRewardAmount
   }
-  rewardpaideventgroup{
+  rewardpaideventgroup {
     ...SpendingRewardFields
   }
-  budgetspendingeventgroup{
+  budgetspendingeventgroup {
     ...SpendingBudgetFields
   }
-  openingfilledeventgroup{
+  openingfilledeventgroup {
     ...HireOpeningFillFields
   }
-  terminatedworkereventgroup{
+  terminatedworkereventgroup {
     ...FireTerminatedWorkerFields
   }
-  workerexitedeventgroup{
+  workerexitedeventgroup {
     ...FireWorkeredExitedFields
   }
-  stakeslashedeventgroup{
+  stakeslashedeventgroup {
     ...SlashStakeFields
   }
   leader {
@@ -160,134 +184,142 @@ export const WorkingGroupFieldsFragmentDoc = gql`
   }
 }
     ${WorkingGroupMetadataFieldsFragmentDoc}
-    ${SpendingRewardFieldsFragmentDoc}
-    ${SpendingBudgetFieldsFragmentDoc}
-    ${HireOpeningFillFieldsFragmentDoc}
-    ${FireTerminatedFieldsFragmentDoc}
-    ${FireExitedFieldsFragmentDoc}
-    ${SlashStakeFieldsFragmentDoc}
+${SpendingRewardFieldsFragmentDoc}
+${SpendingBudgetFieldsFragmentDoc}
+${HireOpeningFillFieldsFragmentDoc}
+${FireTerminatedWorkerFieldsFragmentDoc}
+${FireWorkeredExitedFieldsFragmentDoc}
+${SlashStakeFieldsFragmentDoc}`;
+export const RewardPaidEventFieldsFragmentDoc = gql`
+    fragment RewardPaidEventFields on RewardPaidEvent {
+  id
+  amount
+  rewardAccount
+  createdAt
+  groupId
+  group {
+    leader {
+      membership {
+        handle
+      }
+    }
+  }
+}
     `;
-
-
 export const GetWorkingGroupsDocument = gql`
-query GetWorkingGroups($where: WorkingGroupWhereInput, $orderBy: [WorkingGroupOrderByInput!], $offset: Int, $limit: Int) {
-workingGroups(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
-...WorkingGroupFields
+    query GetWorkingGroups($where: WorkingGroupWhereInput, $orderBy: [WorkingGroupOrderByInput!], $offset: Int, $limit: Int) {
+  workingGroups(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    ...WorkingGroupFields
+  }
 }
-}
-${WorkingGroupFieldsFragmentDoc}`;
+    ${WorkingGroupFieldsFragmentDoc}`;
 
-
-
+/**
+ * __useGetWorkingGroupsQuery__
+ *
+ * To run a query within a React component, call `useGetWorkingGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkingGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkingGroupsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
 export function useGetWorkingGroupsQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>(GetWorkingGroupsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>(GetWorkingGroupsDocument, options);
+      }
 export function useGetWorkingGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>(GetWorkingGroupsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>(GetWorkingGroupsDocument, options);
+        }
 export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGroupsQuery>;
 export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>;
 export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>;
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////               workers              /////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-export type GetWorkersQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.WorkerWhereInput>;
-  offset?: Types.InputMaybe<Types.Scalars['Int']>;
-  limit?: Types.InputMaybe<Types.Scalars['Int']>;
-}>;
-
-export type WorkerFieldsFragment = { __typename: 'Worker', id: string, runtimeId: number, applicationId: string, isLead: boolean, rewardPerBlock: string, missingRewardAmount?: string | null, stake: string, membership: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, isCouncilMember: boolean, inviteCount: number, createdAt: any, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }>, stakingaccountaddedeventmember?: Array<{ __typename: 'StakingAccountAddedEvent', createdAt: any, inBlock: number, network: Types.Network, account: string }> | null }, group: { __typename: 'WorkingGroup', id: string, name: string }, status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' } };
-export type WorkerDetailedFieldsFragment = { __typename: 'Worker', roleAccount: string, rewardAccount: string, stakeAccount: string, id: string, runtimeId: number, applicationId: string, isLead: boolean, rewardPerBlock: string, missingRewardAmount?: string | null, stake: string, entry: { __typename: 'OpeningFilledEvent', inBlock: number, network: Types.Network, createdAt: any }, application: { __typename: 'WorkingGroupApplication', id: string, openingId: string, opening: { __typename: 'WorkingGroupOpening', stakeAmount: string } }, membership: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, isCouncilMember: boolean, inviteCount: number, createdAt: any, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }>, stakingaccountaddedeventmember?: Array<{ __typename: 'StakingAccountAddedEvent', createdAt: any, inBlock: number, network: Types.Network, account: string }> | null }, group: { __typename: 'WorkingGroup', id: string, name: string }, status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' } };
-
-export type GetWorkersQuery = { __typename: 'Query', workers: Array<{ __typename: 'Worker', id: string, runtimeId: number, applicationId: string, isLead: boolean, rewardPerBlock: string, missingRewardAmount?: string | null, stake: string, membership: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, isCouncilMember: boolean, inviteCount: number, createdAt: any, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }>, stakingaccountaddedeventmember?: Array<{ __typename: 'StakingAccountAddedEvent', createdAt: any, inBlock: number, network: Types.Network, account: string }> | null }, group: { __typename: 'WorkingGroup', id: string, name: string }, status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' } }> };
-
-export type GetWorkerQueryVariables = Types.Exact<{
-  where: Types.WorkerWhereUniqueInput;
-}>;
-
-export type GetWorkerQuery = { __typename: 'Query', workerByUniqueInput?: { __typename: 'Worker', roleAccount: string, rewardAccount: string, stakeAccount: string, id: string, runtimeId: number, applicationId: string, isLead: boolean, rewardPerBlock: string, missingRewardAmount?: string | null, stake: string, entry: { __typename: 'OpeningFilledEvent', inBlock: number, network: Types.Network, createdAt: any }, application: { __typename: 'WorkingGroupApplication', id: string, openingId: string, opening: { __typename: 'WorkingGroupOpening', stakeAmount: string } }, membership: { __typename: 'Membership', id: string, rootAccount: string, controllerAccount: string, boundAccounts: Array<string>, handle: string, isVerified: boolean, isFoundingMember: boolean, isCouncilMember: boolean, inviteCount: number, createdAt: any, metadata: { __typename: 'MemberMetadata', name?: string | null, about?: string | null, avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri', avatarUri: string } | null }, roles: Array<{ __typename: 'Worker', id: string, createdAt: any, isLead: boolean, group: { __typename: 'WorkingGroup', name: string } }>, stakingaccountaddedeventmember?: Array<{ __typename: 'StakingAccountAddedEvent', createdAt: any, inBlock: number, network: Types.Network, account: string }> | null }, group: { __typename: 'WorkingGroup', id: string, name: string }, status: { __typename: 'WorkerStatusActive' } | { __typename: 'WorkerStatusLeaving' } | { __typename: 'WorkerStatusLeft' } | { __typename: 'WorkerStatusTerminated' } } | null };
-
-
-export const WorkerFieldsFragmentDoc = gql`
-  fragment WorkerFields on Worker {
-    id
-    runtimeId
-    membership {
-      ...MemberFields
-    }
-    group {
-      id
-      name
-    }
-    status {
-      __typename
-    }
-    applicationId
-    isLead
-    rewardPerBlock
-    missingRewardAmount
-    stake
-  }
-      ${MemberFieldsFragmentDoc}`;
-
-
 export const GetWorkersDocument = gql`
     query GetWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
-      workers(where: $where, offset: $offset, limit: $limit) {
-      ...WorkerFields
-    }
+  workers(where: $where, offset: $offset, limit: $limit) {
+    ...WorkerFields
   }
-      ${WorkerFieldsFragmentDoc}`;
+}
+    ${WorkerFieldsFragmentDoc}`;
 
-
+/**
+ * __useGetWorkersQuery__
+ *
+ * To run a query within a React component, call `useGetWorkersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWorkersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWorkersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
 export function useGetWorkersQuery(baseOptions?: Apollo.QueryHookOptions<GetWorkersQuery, GetWorkersQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetWorkersQuery, GetWorkersQueryVariables>(GetWorkersDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetWorkersQuery, GetWorkersQueryVariables>(GetWorkersDocument, options);
+      }
 export function useGetWorkersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWorkersQuery, GetWorkersQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetWorkersQuery, GetWorkersQueryVariables>(GetWorkersDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetWorkersQuery, GetWorkersQueryVariables>(GetWorkersDocument, options);
+        }
 export type GetWorkersQueryHookResult = ReturnType<typeof useGetWorkersQuery>;
 export type GetWorkersLazyQueryHookResult = ReturnType<typeof useGetWorkersLazyQuery>;
 export type GetWorkersQueryResult = Apollo.QueryResult<GetWorkersQuery, GetWorkersQueryVariables>;
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////            worker reward             //////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////
-export type RewardPaidFragment = {
-  _typename: 'RewardPaidEvent',
-  id: string,
-  amount: number,
-  rewardAccount: string,
-  createdAt: any,
-  groupId: string,
-  group: {
-    leader: {
-      membership: {
-        handle: string
-      }
-    }
-
+export const GetRewardsDocument = gql`
+    query GetRewards($where: RewardPaidEventWhereInput) {
+  rewardPaidEvents(where: $where, limit: 10000) {
+    ...RewardPaidEventFields
   }
 }
-export type GetRewardsQuery = {
-  __typename: 'Query', rewardPaidEvents: Array<RewardPaidFragment>
-};
+    ${RewardPaidEventFieldsFragmentDoc}`;
 
-export type GetRewardsQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.RewardPaidEventWhereInput>;
-}>;
-
-export const RewardPaidEventFieldsFragmentDoc = gql`
-      fragment RewardPaidEventFields on RewardPaidEvent {
-    id
+/**
+ * __useGetRewardsQuery__
+ *
+ * To run a query within a React component, call `useGetRewardsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRewardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRewardsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetRewardsQuery(baseOptions?: Apollo.QueryHookOptions<GetRewardsQuery, GetRewardsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options);
+      }
+export function useGetRewardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRewardsQuery, GetRewardsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options);
+        }
+export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>;
+export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>;
+export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>;
+export const GetBudgetSpendingDocument = gql`
+    query GetBudgetSpending($where: BudgetSpendingEventWhereInput) {
+  budgetSpendingEvents(where: $where) {
     amount
-    rewardAccount
     createdAt
     groupId
     group {
@@ -296,83 +328,35 @@ export const RewardPaidEventFieldsFragmentDoc = gql`
           handle
         }
       }
-    },
-  }
-  `;
-
-export const GetRewardsDocument = gql`
-      query GetRewards($where: RewardPaidEventWhereInput) {
-    rewardPaidEvents(where: $where, limit:100000) {
-      ...RewardPaidEventFields
-    }
-  }
-      ${RewardPaidEventFieldsFragmentDoc}`;
-
-export function useGetRewardsQuery(baseOptions?: Apollo.QueryHookOptions<GetRewardsQuery, GetRewardsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options);
-}
-export function useGetRewardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRewardsQuery, GetRewardsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetRewardsQuery, GetRewardsQueryVariables>(GetRewardsDocument, options);
-}
-export type GetRewardsQueryHookResult = ReturnType<typeof useGetRewardsQuery>;
-export type GetRewardsLazyQueryHookResult = ReturnType<typeof useGetRewardsLazyQuery>;
-export type GetRewardsQueryResult = Apollo.QueryResult<GetRewardsQuery, GetRewardsQueryVariables>;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////      get budget spending       ////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-export type BudgetSpendingFragment = {
-  __typename: 'BudgetSpendingEvents',
-  amount: number,
-  createdAt: any,
-  groupId: string,
-  group: {
-    leader: {
-      membership: {
-        handle: string
-      }
     }
   }
 }
-export type GetBudgetSpendingQuery = {
-  __typename: 'Query',
-  budgetSpendingEvents: Array<BudgetSpendingFragment>
-};
+    `;
 
-export type GetBudgetSpendingQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.BudgetSpendingEventWhereInput>;
-}>;
-
-
-export const GetBudgetSpendingDocument = gql`
-query GetBudgetSpending($where: BudgetSpendingEventWhereInput) {
-  budgetSpendingEvents(where: $where,limit:100000) {
-    amount
-    createdAt
-    groupId
-    group{
-      leader{
-        membership{
-          handle
-        }
-      }
-    }
-  }
-}
-
-`;
-
+/**
+ * __useGetBudgetSpendingQuery__
+ *
+ * To run a query within a React component, call `useGetBudgetSpendingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBudgetSpendingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBudgetSpendingQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
 export function useGetBudgetSpendingQuery(baseOptions?: Apollo.QueryHookOptions<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(GetBudgetSpendingDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(GetBudgetSpendingDocument, options);
+      }
 export function useGetBudgetSpendingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(GetBudgetSpendingDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>(GetBudgetSpendingDocument, options);
+        }
 export type GetBudgetSpendingQueryHookResult = ReturnType<typeof useGetBudgetSpendingQuery>;
 export type GetBudgetSpendingLazyQueryHookResult = ReturnType<typeof useGetBudgetSpendingLazyQuery>;
 export type GetBudgetSpendingQueryResult = Apollo.QueryResult<GetBudgetSpendingQuery, GetBudgetSpendingQueryVariables>;

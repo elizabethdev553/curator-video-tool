@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import {useEffect} from 'react'
 // import { Home } from './pages';
-import { View } from './pages';
+// import { View } from './pages';
 import CheckedList from './components/admin/CheckedList';
 import Assignment from './components/admin/Assignment';
 import VideoCheck from './components/curator/VideoCheck';
@@ -26,29 +26,29 @@ import { LOGOUT } from './actions/types';
 
 import './App.css'
 
-const router = createBrowserRouter([
-  // {
-  //   path: '/',
-  //   element: <Home />,
-  // },
-  {
-    path: '/view',
-    element: <View />,
-  },
-  {
-    path: '/checked-list',
-    element: <CheckedList />,
-  },
-  {
-    path: '/assignment',
-    element: <Assignment />,
-  },
+// const router = createBrowserRouter([
+//   // {
+//   //   path: '/',
+//   //   element: <Home />,
+//   // },
+//   {
+//     path: '/view',
+//     element: <View />,
+//   },
+//   {
+//     path: '/checked-list',
+//     element: <CheckedList />,
+//   },
+//   {
+//     path: '/assignment',
+//     element: <Assignment />,
+//   },
 
-  {
-    path: '/curator-panel/check/:id',
-    element: <VideoCheck />,
-  },
-]);
+//   {
+//     path: '/curator-panel/check/:id',
+//     element: <VideoCheck />,
+//   },
+// ]);
 
 function App() {
 
@@ -76,6 +76,7 @@ function App() {
           <Routes>
             {/* <Route path="register" element={<Register />} /> */}
             <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
             {/* <RouterProvider router={router} /> */}
 
             <Route path="/checked-list" element={<PrivateRoute component={CheckedList} />} />

@@ -2,127 +2,95 @@ import * as Types from './baseTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
 const defaultOptions = {} as const;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////       get leader                 ///////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-export type GetLeaderQueryVariables = Types.Exact<{
+export type GetLeadQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.OpeningFilledEventWhereInput>;
 }>;
 
 
-export type LeaderNameFragment = { __typename: 'Leader', membership: { handle: string } };
-export type LeaderFragment = { createdAt: any | undefined, groupId: string, workersHired: Array<LeaderNameFragment>, opening: { type: string } }
+export type GetLeadQuery = { __typename: 'Query', openingFilledEvents: Array<{ __typename: 'OpeningFilledEvent', createdAt: any, groupId: string, workersHired: Array<{ __typename: 'Worker', membership: { __typename: 'Membership', handle: string } }>, opening: { __typename: 'WorkingGroupOpening', type: Types.WorkingGroupOpeningType } }> };
 
-export type GetLeaderQuery = { __typename: 'Query', openingFilledEvents: Array<LeaderFragment> };
-
-export const GetLeaderDocument = gql`
-query getLead($where:OpeningFilledEventWhereInput){
-  openingFilledEvents(where:$where){
-    createdAt
-    groupId
-    workersHired{
-      membership{
-        handle
-      }
-    }
-    opening{
-      type     
-    }
-  }
-}
-`;
-
-
-export function useLeadersQuery(baseOptions?: Apollo.QueryHookOptions<GetLeaderQuery, GetLeaderQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetLeaderQuery, GetLeaderQueryVariables>(GetLeaderDocument, options);
-}
-export function useLeadersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLeaderQuery, GetLeaderQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetLeaderQuery, GetLeaderQueryVariables>(GetLeaderDocument, options);
-}
-export type GetLeadersQueryHookResult = ReturnType<typeof useLeadersQuery>;
-export type GetLeadersLazyQueryHookResult = ReturnType<typeof useLeadersLazyQuery>;
-export type GetLeadersQueryResult = Apollo.QueryResult<GetLeaderQuery, GetLeaderQueryVariables>;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////            get port of leader            /////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-export type GetPostOfLeaderQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.ProposalDiscussionPostWhereInput>;
-}>;
-
-
-export type PostOfLeaderFragment = { __typename: "Leader", createdAt: any | undefined, author: { handle: string }, text: string }
-export type GetPostOfLeaderQuery = { __typename: 'Query', proposalDiscussionPosts: Array<PostOfLeaderFragment> };
-
-export const GetPostOfLeaderDocument = gql`
-query getPostOfLead($where:ProposalDiscussionPostWhereInput){
-  proposalDiscussionPosts(where:$where){ #count, average, max
-    createdAt
-    author{
-      handle
-    }
-    text
-  }
-}
-`;
-
-
-export function usePostOfLeadersQuery(baseOptions?: Apollo.QueryHookOptions<GetPostOfLeaderQuery, GetPostOfLeaderQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetPostOfLeaderQuery, GetPostOfLeaderQueryVariables>(GetPostOfLeaderDocument, options);
-}
-export function usePostOfLeadersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostOfLeaderQuery, GetPostOfLeaderQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetPostOfLeaderQuery, GetPostOfLeaderQueryVariables>(GetPostOfLeaderDocument, options);
-}
-export type GetPostOfLeadersQueryHookResult = ReturnType<typeof usePostOfLeadersQuery>;
-export type GetPostOfLeadersLazyQueryHookResult = ReturnType<typeof usePostOfLeadersLazyQuery>;
-export type GetPostOfLeadersQueryResult = Apollo.QueryResult<GetPostOfLeaderQuery, GetPostOfLeaderQueryVariables>;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////            get termiated worker          /////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 export type GetTerminatedWorkerQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.TerminatedWorkerEventWhereInput>;
 }>;
 
 
-export type TerminatedWorkerFragment = {
-  __typename: "TerminatedWorkder",
-  createdAt: any | undefined,
-  groupId: string,
-  group: {
-    leader: {
-      membership: {
-        handle: string
+export type GetTerminatedWorkerQuery = { __typename: 'Query', terminatedWorkerEvents: Array<{ __typename: 'TerminatedWorkerEvent', createdAt: any, groupId: string, group: { __typename: 'WorkingGroup', leader?: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } | null }, worker: { __typename: 'Worker', isLead: boolean, membership: { __typename: 'Membership', handle: string } } }> };
+
+export type GetExitedWorkerQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.WorkerExitedEventWhereInput>;
+}>;
+
+
+export type GetExitedWorkerQuery = { __typename: 'Query', workerExitedEvents: Array<{ __typename: 'WorkerExitedEvent', createdAt: any, groupId: string, group: { __typename: 'WorkingGroup', leader?: { __typename: 'Worker', membership: { __typename: 'Membership', handle: string } } | null }, worker: { __typename: 'Worker', isLead: boolean, membership: { __typename: 'Membership', handle: string } } }> };
+
+export type GetSlashWorkerQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.WorkEntrySlashedEventWhereInput>;
+}>;
+
+
+export type GetSlashWorkerQuery = { __typename: 'Query', workEntrySlashedEvents: Array<{ __typename: 'WorkEntrySlashedEvent', createdAt: any, entry: { __typename: 'BountyEntry', worker: { __typename: 'Membership', handle: string } } }> };
+
+export type GetPostOfLeadQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.ProposalDiscussionPostWhereInput>;
+}>;
+
+
+export type GetPostOfLeadQuery = { __typename: 'Query', proposalDiscussionPosts: Array<{ __typename: 'ProposalDiscussionPost', createdAt: any, text: string, author: { __typename: 'Membership', handle: string } }> };
+
+
+export const GetLeadDocument = gql`
+    query getLead($where: OpeningFilledEventWhereInput) {
+  openingFilledEvents(where: $where) {
+    createdAt
+    groupId
+    workersHired {
+      membership {
+        handle
       }
     }
-  }
-  worker: {
-    membership: {
-      handle: string
-    },
-    isLead: boolean
+    opening {
+      type
+    }
   }
 }
-export type GetTerminatedWorkerQuery = {
-  __typename: 'Query', terminatedWorkerEvents: Array<TerminatedWorkerFragment>
-};
+    `;
 
-export const GetTerminatedDocument = gql`
-query getTerminatedWorker($where: TerminatedWorkerEventWhereInput) {
+/**
+ * __useGetLeadQuery__
+ *
+ * To run a query within a React component, call `useGetLeadQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLeadQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLeadQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetLeadQuery(baseOptions?: Apollo.QueryHookOptions<GetLeadQuery, GetLeadQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLeadQuery, GetLeadQueryVariables>(GetLeadDocument, options);
+      }
+export function useGetLeadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLeadQuery, GetLeadQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLeadQuery, GetLeadQueryVariables>(GetLeadDocument, options);
+        }
+export type GetLeadQueryHookResult = ReturnType<typeof useGetLeadQuery>;
+export type GetLeadLazyQueryHookResult = ReturnType<typeof useGetLeadLazyQuery>;
+export type GetLeadQueryResult = Apollo.QueryResult<GetLeadQuery, GetLeadQueryVariables>;
+export const GetTerminatedWorkerDocument = gql`
+    query getTerminatedWorker($where: TerminatedWorkerEventWhereInput) {
   terminatedWorkerEvents(where: $where) {
     createdAt
     groupId
-    group{
-      leader{
-        membership{
+    group {
+      leader {
+        membership {
           handle
         }
       }
@@ -135,54 +103,37 @@ query getTerminatedWorker($where: TerminatedWorkerEventWhereInput) {
     }
   }
 }
-`;
+    `;
 
-
-export function useTerminatedQuery(baseOptions?: Apollo.QueryHookOptions<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>(GetTerminatedDocument, options);
-}
-export function useTerminatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>(GetTerminatedDocument, options);
-}
-export type GetTerminatedWorkerQueryHookResult = ReturnType<typeof useTerminatedQuery>;
-export type GetTerminatedWorkerLazyQueryHookResult = ReturnType<typeof useTerminatedLazyQuery>;
-export type GetTerminatedWorkderQueryResult = Apollo.QueryResult<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////               get exited worker          /////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-export type GetExiteddWorkerQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.WorkerExitedEventWhereInput>;
-}>;
-
-
-export type ExitedWorkerFragment = {
-  __typename: "ExitedWorker",
-  createdAt: any | undefined,
-  groupId: string,
-  group: {
-    leader: {
-      membership: {
-        handle: string
+/**
+ * __useGetTerminatedWorkerQuery__
+ *
+ * To run a query within a React component, call `useGetTerminatedWorkerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTerminatedWorkerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTerminatedWorkerQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetTerminatedWorkerQuery(baseOptions?: Apollo.QueryHookOptions<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>(GetTerminatedWorkerDocument, options);
       }
-    }
-  },
-  worker: {
-    membership: {
-      handle: string
-    },
-    isLead: boolean
-  }
-}
-export type GetExitedWorkerQuery = {
-  __typename: 'Query', workerExitedEvents: Array<ExitedWorkerFragment>
-};
-
-export const GetExitedDocument = gql`
-query getExitedWorker($where: WorkerExitedEventWhereInput) {
+export function useGetTerminatedWorkerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>(GetTerminatedWorkerDocument, options);
+        }
+export type GetTerminatedWorkerQueryHookResult = ReturnType<typeof useGetTerminatedWorkerQuery>;
+export type GetTerminatedWorkerLazyQueryHookResult = ReturnType<typeof useGetTerminatedWorkerLazyQuery>;
+export type GetTerminatedWorkerQueryResult = Apollo.QueryResult<GetTerminatedWorkerQuery, GetTerminatedWorkerQueryVariables>;
+export const GetExitedWorkerDocument = gql`
+    query getExitedWorker($where: WorkerExitedEventWhereInput) {
   workerExitedEvents(where: $where) {
     createdAt
     groupId
@@ -201,46 +152,37 @@ query getExitedWorker($where: WorkerExitedEventWhereInput) {
     }
   }
 }
+    `;
 
-`;
-
-
-export function useExitedQuery(baseOptions?: Apollo.QueryHookOptions<GetExitedWorkerQuery, GetExiteddWorkerQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetExitedWorkerQuery, GetExiteddWorkerQueryVariables>(GetExitedDocument, options);
-}
-export function useExitedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExitedWorkerQuery, GetExiteddWorkerQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetExitedWorkerQuery, GetExiteddWorkerQueryVariables>(GetExitedDocument, options);
-}
-export type GetExitedWorkerQueryHookResult = ReturnType<typeof useExitedQuery>;
-export type GetExitedWorkerLazyQueryHookResult = ReturnType<typeof useExitedLazyQuery>;
-export type GetExitedWorkderQueryResult = Apollo.QueryResult<GetExitedWorkerQuery, GetExiteddWorkerQueryVariables>;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////               get slashed worker         /////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-export type GetSlasheddWorkerQueryVariables = Types.Exact<{
-  where?: Types.InputMaybe<Types.WorkEntrySlashedEventWhereInput>;
-}>;
-
-
-export type SlashedWorkerFragment = {
-  __typename: "WorkEntrySlashedEvents",
-  createdAt: any | undefined,
-  entry: {
-    worker: {
-      handle: string
-    }
-  }
-}
-export type GetSlashedWorkerQuery = {
-  __typename: 'Query', workEntrySlashedEvents: Array<SlashedWorkerFragment>
-};
-
-export const GetSlashedDocument = gql`
-query getSlashWorker($where: WorkEntrySlashedEventWhereInput) {
+/**
+ * __useGetExitedWorkerQuery__
+ *
+ * To run a query within a React component, call `useGetExitedWorkerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExitedWorkerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExitedWorkerQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetExitedWorkerQuery(baseOptions?: Apollo.QueryHookOptions<GetExitedWorkerQuery, GetExitedWorkerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetExitedWorkerQuery, GetExitedWorkerQueryVariables>(GetExitedWorkerDocument, options);
+      }
+export function useGetExitedWorkerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExitedWorkerQuery, GetExitedWorkerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetExitedWorkerQuery, GetExitedWorkerQueryVariables>(GetExitedWorkerDocument, options);
+        }
+export type GetExitedWorkerQueryHookResult = ReturnType<typeof useGetExitedWorkerQuery>;
+export type GetExitedWorkerLazyQueryHookResult = ReturnType<typeof useGetExitedWorkerLazyQuery>;
+export type GetExitedWorkerQueryResult = Apollo.QueryResult<GetExitedWorkerQuery, GetExitedWorkerQueryVariables>;
+export const GetSlashWorkerDocument = gql`
+    query getSlashWorker($where: WorkEntrySlashedEventWhereInput) {
   workEntrySlashedEvents(where: $where) {
     createdAt
     entry {
@@ -250,18 +192,71 @@ query getSlashWorker($where: WorkEntrySlashedEventWhereInput) {
     }
   }
 }
+    `;
 
-`;
-
-
-export function useSlashedQuery(baseOptions?: Apollo.QueryHookOptions<GetSlashedWorkerQuery, GetSlasheddWorkerQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetSlashedWorkerQuery, GetSlasheddWorkerQueryVariables>(GetSlashedDocument, options);
+/**
+ * __useGetSlashWorkerQuery__
+ *
+ * To run a query within a React component, call `useGetSlashWorkerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSlashWorkerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSlashWorkerQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetSlashWorkerQuery(baseOptions?: Apollo.QueryHookOptions<GetSlashWorkerQuery, GetSlashWorkerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSlashWorkerQuery, GetSlashWorkerQueryVariables>(GetSlashWorkerDocument, options);
+      }
+export function useGetSlashWorkerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSlashWorkerQuery, GetSlashWorkerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSlashWorkerQuery, GetSlashWorkerQueryVariables>(GetSlashWorkerDocument, options);
+        }
+export type GetSlashWorkerQueryHookResult = ReturnType<typeof useGetSlashWorkerQuery>;
+export type GetSlashWorkerLazyQueryHookResult = ReturnType<typeof useGetSlashWorkerLazyQuery>;
+export type GetSlashWorkerQueryResult = Apollo.QueryResult<GetSlashWorkerQuery, GetSlashWorkerQueryVariables>;
+export const GetPostOfLeadDocument = gql`
+    query getPostOfLead($where: ProposalDiscussionPostWhereInput) {
+  proposalDiscussionPosts(where: $where) {
+    createdAt
+    author {
+      handle
+    }
+    text
+  }
 }
-export function useSlashedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSlashedWorkerQuery, GetSlasheddWorkerQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetSlashedWorkerQuery, GetSlasheddWorkerQueryVariables>(GetSlashedDocument, options);
-}
-export type GetSlashedWorkerQueryHookResult = ReturnType<typeof useSlashedQuery>;
-export type GetslashedWorkerLazyQueryHookResult = ReturnType<typeof useSlashedLazyQuery>;
-export type GetSlashedWorkderQueryResult = Apollo.QueryResult<GetSlashedWorkerQuery, GetSlasheddWorkerQueryVariables>;
+    `;
+
+/**
+ * __useGetPostOfLeadQuery__
+ *
+ * To run a query within a React component, call `useGetPostOfLeadQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostOfLeadQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostOfLeadQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetPostOfLeadQuery(baseOptions?: Apollo.QueryHookOptions<GetPostOfLeadQuery, GetPostOfLeadQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostOfLeadQuery, GetPostOfLeadQueryVariables>(GetPostOfLeadDocument, options);
+      }
+export function useGetPostOfLeadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostOfLeadQuery, GetPostOfLeadQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostOfLeadQuery, GetPostOfLeadQueryVariables>(GetPostOfLeadDocument, options);
+        }
+export type GetPostOfLeadQueryHookResult = ReturnType<typeof useGetPostOfLeadQuery>;
+export type GetPostOfLeadLazyQueryHookResult = ReturnType<typeof useGetPostOfLeadLazyQuery>;
+export type GetPostOfLeadQueryResult = Apollo.QueryResult<GetPostOfLeadQuery, GetPostOfLeadQueryVariables>;

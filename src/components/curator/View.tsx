@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { Divider, Table, Select, Button, Card, Form, Input, Col, Row } from 'antd';
 import {
-  Channels,
-  CouncilSelect,
-  // Memberships,
   Videos,
 } from '@/components';
 import './view.css';

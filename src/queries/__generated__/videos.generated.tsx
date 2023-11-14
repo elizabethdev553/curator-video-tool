@@ -1,7 +1,7 @@
 import * as Types from './baseTypes.generated';
 
-import { gql } from '@apollo/client';
-import { BasicChannelFieldsFragmentDoc } from './channels.generated';
+import { gql } from '@apollo/client'
+// import { BasicChannelFieldsFragmentDoc } from './channels.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type GetVideoCountQueryVariables = Types.Exact<{
@@ -12,15 +12,17 @@ export type GetVideoCountQueryVariables = Types.Exact<{
 export type GetVideoCountQuery = { __typename: 'Query', videosConnection: { __typename: 'VideoConnection', totalCount: number } };
 
 export type GetVideosQueryVariables = Types.Exact<{
-  whereVideo?: Types.InputMaybe<Types.VideoWhereInput>;
-  whereChannel?: Types.InputMaybe<Types.ChannelWhereInput>;
-  skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  // whereVideo?: Types.InputMaybe<Types.VideoWhereInput>;
+  // whereChannel?: Types.InputMaybe<Types.ChannelWhereInput>;
+  // skip?: Types.InputMaybe<Types.Scalars['Int']>;
   limit?: Types.InputMaybe<Types.Scalars['Int']>;
-  text: Types.Scalars['String'];
-}>;
+  orderBy?:Types.VideoOrderByInput
+  where?:Types.InputMaybe<Types.VideoWhereInput>;
+  // text: Types.Scalars['String'];
 
+}>
 
-export type GetVideosQuery = { __typename: 'Query', search: Array<{ __typename: 'SearchFTSOutput', rank: string, item: { __typename: 'Channel', id: string, title?: string | null, createdAt: any, rewardAccount: string, channelStateBloatBond: string, avatarPhoto?: { __typename: 'StorageDataObject', id: string, createdAt: any, size: string, isAccepted: boolean, ipfsHash: string, storageBag: { __typename: 'StorageBag', id: string }, type: { __typename: 'DataObjectTypeChannelAvatar' } | { __typename: 'DataObjectTypeChannelCoverPhoto' } | { __typename: 'DataObjectTypeUnknown' } | { __typename: 'DataObjectTypeVideoMedia' } | { __typename: 'DataObjectTypeVideoSubtitle' } | { __typename: 'DataObjectTypeVideoThumbnail' } } | null } | { __typename: 'Video', id: string, title?: string | null, createdAt: any } }> };
+export type GetVideosQuery = any;
 
 export type BasicVideoFieldsFragment = { __typename: 'Video', id: string, title?: string | null, createdAt: any };
 
@@ -52,28 +54,28 @@ export type GetVideoCountQueryHookResult = ReturnType<typeof useGetVideoCountQue
 export type GetVideoCountLazyQueryHookResult = ReturnType<typeof useGetVideoCountLazyQuery>;
 export type GetVideoCountQueryResult = Apollo.QueryResult<GetVideoCountQuery, GetVideoCountQueryVariables>;
 export const GetVideosDocument = gql`
-    query GetVideos($whereVideo: VideoWhereInput, $whereChannel: ChannelWhereInput, $skip: Int = 0, $limit: Int = 5, $text: String!) {
-  search(
-    whereVideo: $whereVideo
-    whereChannel: $whereChannel
-    skip: $skip
-    limit: $limit
-    text: $text
-  ) {
-    rank
-    item {
-      __typename
-      ... on Channel {
-        ...BasicChannelFields
-      }
-      ... on Video {
-        ...BasicVideoFields
+    query GetVideos{
+      videos(orderBy: createdAt_DESC, where: {createdAt_gt: "2023-11-13T00:50:12.000Z", createdAt_lt: "2023-11-13T22:50:12.000Z"}) {
+        createdAt
+        description
+        id
+        title
+        media {
+          id
+        }
+        channel {
+          id
+          title
+          ownerMember {
+            handle
+            id
+          }
+        }
       }
     }
-  }
-}
-    ${BasicChannelFieldsFragmentDoc}
-${BasicVideoFieldsFragmentDoc}`;
+    `
+ 
+// ${BasicVideoFieldsFragmentDoc}`;
 
 
 export function useGetVideosQuery(baseOptions: Apollo.QueryHookOptions<GetVideosQuery, GetVideosQueryVariables>) {
@@ -84,6 +86,8 @@ export function useGetVideosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<GetVideosQuery, GetVideosQueryVariables>(GetVideosDocument, options);
 }
+// lo.useLazyQuery<GetVideosQuery, GetVideosQueryVariables>(GetVideosDocument, options);
+// }
 export type GetVideosQueryHookResult = ReturnType<typeof useGetVideosQuery>;
 export type GetVideosLazyQueryHookResult = ReturnType<typeof useGetVideosLazyQuery>;
 export type GetVideosQueryResult = Apollo.QueryResult<GetVideosQuery, GetVideosQueryVariables>;

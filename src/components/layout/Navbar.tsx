@@ -45,6 +45,12 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user },  logou
         </Link>
       </li>
       <li>
+        <Link to="/home">
+          <i className="fas fa-user" />{' '}
+          <span className="hide-sm">Home</span>
+        </Link>
+      </li>
+      <li>
         <a onClick={logout} href="#">
           <i className="fas fa-sign-out-alt" />{' '}
           <span className="hide-sm">Logout</span>

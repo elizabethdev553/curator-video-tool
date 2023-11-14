@@ -1,34 +1,21 @@
-query GetVideoCount($where: VideoWhereInput) {
-  videosConnection(first: 0, where: $where) {
-    totalCount
-  }
-}
 
-query GetVideos(
-  $whereVideo: VideoWhereInput
-  $whereChannel: ChannelWhereInput
-  $skip: Int = 0
-  $limit: Int = 5
-  $text: String!
-) {
-  search(whereVideo: $whereVideo, whereChannel: $whereChannel, skip: $skip, limit: $limit, text: $text) {
-    rank
-    item {
-      __typename
 
-      ... on Channel {
-        ...BasicChannelFields
-      }
-
-      ... on Video {
-        ...BasicVideoFields
+query GetVideos{
+  videos(orderBy: createdAt_DESC, where: {createdAt_gt: "2023-11-13T00:50:12.000Z", createdAt_lt: "2023-11-13T22:50:12.000Z"}) {
+    createdAt
+    description
+    id
+    title
+    media {
+      id
+    }
+    channel {
+      id
+      title
+      ownerMember {
+        handle
+        id
       }
     }
   }
-}
-
-fragment BasicVideoFields on Video {
-  id
-  title
-  createdAt
 }

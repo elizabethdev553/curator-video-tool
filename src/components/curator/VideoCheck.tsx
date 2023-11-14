@@ -7,7 +7,7 @@ import { Divider, Table, Select, Button, Card, Form, Input, Col, Row } from 'ant
 const { TextArea } = Input;
 
 import Spinner from '../../components/layout/Spinner';
-import { View } from '../../pages'
+import View from './View'
 
 interface Assignment {
   key: string;
