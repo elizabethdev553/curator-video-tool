@@ -1,12 +1,12 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import axios from 'axios';
-import type { ColumnsType } from 'antd/es/table';
-import { Divider, Table, Select, Pagination, DatePicker } from 'antd';
 import type { DatePickerProps } from 'antd';
+import { DatePicker,Divider, Pagination, Select, Table } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import type { TableRowSelection } from 'antd/es/table/interface';
+import axios from 'axios';
 import dayjs from 'dayjs';
+import React, { Fragment,useEffect, useState } from 'react';
 
 import Spinner from '../../components/layout/Spinner';
-import type { TableRowSelection } from 'antd/es/table/interface';
 
 
 interface Assignment {
@@ -20,7 +20,7 @@ interface Assignment {
 }
 
 interface CuratorList {
-  handle?: String;
+  handle?: string;
 }
 
 interface DataType {
@@ -73,7 +73,7 @@ const Assignment = () => {
   const [curator, setCurator] = useState<CuratorList>();
   const [msg, setMsg] = useState('');
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [date, setDate] = useState<String>(TODAY);
+  const [date, setDate] = useState<string>(TODAY);
   useEffect(() => {
     getUnCheckedList(date);
     getCuratorList();
@@ -84,7 +84,7 @@ const Assignment = () => {
     setDate(dateString);
   };
 
-  async function getUnCheckedList(date:String) {
+  async function getUnCheckedList(date:string) {
     try {
       const response = await axios.get(`http://localhost:5000/api/leader/assignment/${date}`, {
         headers: {
@@ -119,12 +119,12 @@ const Assignment = () => {
   // };
 
   const onChange = (value: CuratorList) => {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
     setCurator(value);
   };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[],selectedRows: Assignment[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    // console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
     setSelectList(selectedRows);
   };
@@ -183,7 +183,7 @@ const Assignment = () => {
 
   async function sendVideoList(selectList: Assignment[], curator: CuratorList) {
     try {
-      let data = { selectList, curator };
+      const data = { selectList, curator };
       const response = await axios.post('http://localhost:5000/api/leader/assignment/send-video-list', data, {
         headers: {
           'Content-Type': 'application/json',

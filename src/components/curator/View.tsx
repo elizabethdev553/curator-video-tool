@@ -1,12 +1,7 @@
+import { Button, Card, Col, Divider, Form, Input, Row,Select, Table } from 'antd';
 import React, { useState } from 'react';
-import { Divider, Table, Select, Button, Card, Form, Input, Col, Row } from 'antd';
-import {
-  Videos,
-} from '@/components';
-// import './view.css';
-import { useSelectedCouncil } from '@/store';
 
-let flag = false;
+const flag = false;
 const View = () => {
   // const { council, setCouncil } = useSelectedCouncil();
   const [key, setkey] = useState('');

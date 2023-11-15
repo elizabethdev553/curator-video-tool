@@ -1,30 +1,25 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './App.css'
+
 import {useEffect} from 'react'
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router, createBrowserRouter, Route, RouterProvider , Routes } from 'react-router-dom';
+
+// import CheckedList from '';
+// import Assignment from '';
+import { loadUser } from './actions/auth';
+import { LOGOUT } from './actions/types';
+import Assignment from './components/admin/Assignment';
 // import { Home } from './pages';
 // import { View } from './pages';
 import CheckedList from './components/admin/CheckedList';
-import Assignment from './components/admin/Assignment';
-import VideoCheck from './components/curator/VideoCheck';
-import AssignedList from './components/curator/AssignedList';
 import Home from './components/admin/Home';
-
-import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-import store from './utils/store';
 import Login from './components/auth/Login';
+import AssignedList from './components/curator/AssignedList';
+import VideoCheck from './components/curator/VideoCheck';
 import Navbar from './components/layout/Navbar';
 import PrivateRoute from './utils/PrivateRoute';
-// import CheckedList from '';
-// import Assignment from '';
-
-
-import { loadUser } from './actions/auth';
-
 import setAuthToken from './utils/setAuthToken';
-import { LOGOUT } from './actions/types';
-
-import './App.css'
+import store from './utils/store';
 
 // const router = createBrowserRouter([
 //   // {

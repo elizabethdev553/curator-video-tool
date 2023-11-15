@@ -1,13 +1,13 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { Button, Card, Col, Divider, Form, Input, Row,Select, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { Divider, Table, Select, Button, Card, Form, Input, Col, Row } from 'antd';
-
-const { TextArea } = Input;
+import axios from 'axios';
+import React, { Fragment,useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 import Spinner from '../../components/layout/Spinner';
 import View from './View'
+
+const { TextArea } = Input;
 
 interface Assignment {
   key: string;
@@ -31,7 +31,7 @@ const VideoCheck = () => {
   }, [id]);
 
 
-  async function getVideoDetail(video_id: String | undefined) {
+  async function getVideoDetail(video_id: string | undefined) {
     try {
       const response = await axios.get(`http://localhost:5000/api/curator/check/${video_id}`, {
         headers: {
@@ -46,8 +46,8 @@ const VideoCheck = () => {
     }
   }
 
-  async function saveDescriptionResult(description:String, video_id: String | undefined) {
-    let data = {description, video_id}
+  async function saveDescriptionResult(description:string, video_id: string | undefined) {
+    const data = {description, video_id}
     try {
       const response = await axios.post('http://localhost:5000/api/curator/check/description', data, {
         headers: {

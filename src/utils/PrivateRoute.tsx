@@ -1,7 +1,8 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+
 import Spinner from '../components/layout/Spinner';
 
 

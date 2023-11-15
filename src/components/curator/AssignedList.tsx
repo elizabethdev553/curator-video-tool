@@ -1,12 +1,13 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import {Link} from 'react-router-dom'
-import axios from 'axios';
+import { Divider, Select,Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { Divider, Table, Select } from 'antd';
-const { Option } = Select;
+import axios from 'axios';
+import React, { Fragment,useEffect, useState } from 'react';
+import {Link} from 'react-router-dom'
 
 import Spinner from '../../components/layout/Spinner';
 import api from '../../utils/api'
+
+const { Option } = Select;
 
 interface Assignment {
   key: string;
@@ -55,13 +56,12 @@ interface AuthProps {
 const AssignedList:React.FC<AuthProps> = ({auth}) => {
   const [assignment, setAssignment] = useState<Assignment[]>();
   const [selectList, setSelectList] = useState<Assignment>();
-  let member_id: String = auth.user.handle;
+  const member_id: string = auth.user.handle;
   useEffect(() => {
     getUnCheckedList(member_id);
   }, []);
 
-  console.log(assignment, "assingment")
-  async function getUnCheckedList(member_id: String) {
+  async function getUnCheckedList(member_id: string) {
     try {
       const response = await api.get(`/curator/${member_id}`, {
         headers: {

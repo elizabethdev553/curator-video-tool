@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import { connect } from 'react-redux';
 import PropTypes, { InferProps } from 'prop-types';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link, Navigate } from 'react-router-dom';
 
 interface LandingProps {
   isAuthenticated?: boolean;

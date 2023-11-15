@@ -1,15 +1,16 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { Divider, Table, Select, Pagination, DatePicker } from 'antd';
 import type { DatePickerProps } from 'antd';
-import api from '../utils/api'
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { DatePicker,Divider, Pagination, Select, Table } from 'antd';
 // import { useSelectedCouncil } from '@/store';
 // import { isDefined } from '@/types';
 import type { ColumnsType } from 'antd/es/table';
-
 // import Spinner from '../../components/layout/Spinner';
 import type { TableRowSelection } from 'antd/es/table/interface';
+import axios from 'axios';
+import React, { Fragment,useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import api from '../utils/api'
+
 interface Assignment {
   key: string;
   video_title: string;
@@ -20,7 +21,7 @@ interface Assignment {
 }
 
 interface CuratorList {
-  handle?: String;
+  handle?: string;
 }
 
 interface DataType {

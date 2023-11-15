@@ -1,10 +1,8 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import axios from 'axios';
+import {useEffect, useState } from 'react';
+import { Divider, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { Divider, Table, Select } from 'antd';
-import api from '../../utils/api'
-// import Spinner from '../../components/layout/Spinner';
 
+import api from '../../utils/api'
 interface VideoDetail {
 
   key: string;
@@ -49,8 +47,6 @@ const CheckedList=()=> {
   useEffect(() => {
     getCheckedList();
   }, []);
-
-  console.log(checkedList, "CheckedList")
 
   async function getCheckedList() {
     try {

@@ -1,5 +1,0 @@
-query GetForumThreadsCount($where: ForumThreadWhereInput) {
-  forumThreadsConnection(first: 0, where: $where) {
-    totalCount
-  }
-}

@@ -1,14 +1,14 @@
-import api from '../utils/api';
 import { Dispatch } from 'redux';
+
+import api from '../utils/api';
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
   AUTH_ERROR,
-  LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT
-} from './types';
+  LOGIN_SUCCESS,
+  LOGOUT,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
+  USER_LOADED} from './types';
 
 /*
   NOTE: we don't need a config object for axios as the
@@ -57,7 +57,7 @@ export const loadUser = () => async (dispatch: Dispatch) => {
 // };
 
 // Login User
-export const login = (email:String, password:String) => async (dispatch: Dispatch) => {
+export const login = (email:string, password:string) => async (dispatch: Dispatch) => {
   const body = { email, password };
 
   try {

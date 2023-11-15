@@ -1,6 +1,7 @@
 import axios from 'axios';
-import store from '../utils/store';
+
 import { LOGOUT } from '../actions/types';
+import store from '../utils/store';
 
 // Create an instance of axios
 const api = axios.create({

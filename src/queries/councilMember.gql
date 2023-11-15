@@ -1,8 +1,0 @@
-query getCouncilMembers{
-  councilMembers{
-    electedInCouncilId
-    member{
-      handle
-    }
-  }
-}

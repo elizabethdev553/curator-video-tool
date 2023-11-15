@@ -1,7 +1,8 @@
-import React, { useState, ChangeEvent, FormEvent} from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import React, { ChangeEvent, FormEvent,useState} from 'react';
+import { connect } from 'react-redux';
+import { Link, Navigate } from 'react-router-dom';
+
 import { login } from '../../actions/auth';
 
 interface LoginProps {
