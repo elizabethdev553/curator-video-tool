@@ -3,7 +3,7 @@ import { Divider, Table, Select, Button, Card, Form, Input, Col, Row } from 'ant
 import {
   Videos,
 } from '@/components';
-import './view.css';
+// import './view.css';
 import { useSelectedCouncil } from '@/store';
 
 let flag = false;

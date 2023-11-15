@@ -36,7 +36,7 @@ const VideoSchema = new mongoose.Schema({
   //   type: String
   // },
   video_createdAt: {
-    type: String,
+    type: Date,
     reqired:true
   },
   date: {

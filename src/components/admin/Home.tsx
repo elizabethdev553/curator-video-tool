@@ -1,35 +1,42 @@
 // import './home.css';
 
-import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Divider, DatePicker } from 'antd';
+import type { DatePickerProps } from 'antd';
+import dayjs from 'dayjs';
+import { connect } from 'react-redux';
 
-import {
-  // Channels,
-  // CouncilSelect,
-  // Memberships,
-  Videos,
-} from '@/components';
-// import { useSelectedCouncil } from '@/store';
+import { Videos } from '@/components';
 
-export default function Home() {
-  // const { council, setCouncil } = useSelectedCouncil();
+const today = new Date(); 
 
-  return (
-    <div style={{ backgroundColor: 'black' }} className='view_video'>
-      <h1 className='text-white'>Joystream Council Voter Dashboard</h1>
-      <hr className='text-white' />
-      {/* <CouncilSelect council={council} onChange={setCouncil} /> */}
-      <hr style={{ height: '3px', color: 'white' }} />
-      <Row>
-        <Col md={6}>
-          {/* <Channels /> */}
-        </Col>
-        <Col md={6}>
-          <Videos />
-        </Col>
-      
-      </Row>
+const year = String(today.getFullYear()).slice(-2);
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0'); 
+
+const TODAY = `20${year}-${month}-${day}`; 
+
+const Home = () => {
+  const [date, setDate] = useState<string>(TODAY);
+
+  const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
+    setDate(dateString);
     
-    </div>
+    console.log(date, dateString, "HHHHHHHHHHHHHHHHHHHHH");
+  };
+  return (
+    <section className="container">
+      <h1 className="large text-primary">Upload List</h1>
+      <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} />
+      <Videos filter_date={date} />
+    </section>
   );
-}
+};
+
+const mapStateToProps = (state:any) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  user:state.auth.user,
+  selectDate:state.selectDate.date_select
+});
+
+export default connect(mapStateToProps, {  })(Home);

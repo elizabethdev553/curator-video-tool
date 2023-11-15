@@ -7,13 +7,15 @@ import dayjs from 'dayjs';
 
 import Spinner from '../../components/layout/Spinner';
 import type { TableRowSelection } from 'antd/es/table/interface';
+
+
 interface Assignment {
   key: string;
   video_title: string;
   video_link: string;
   video_owner_handle: string;
   video_curator: string;
-  video_createdAt: string;
+  video_createdAt: Date;
 
 }
 

@@ -15,9 +15,11 @@ const Video = require('../../models/Video');
 router.get('/assignment/:date', async (req, res) => {
   try {
     const date= req.params.date
-    const video_lists = await Video.find({video_createdAt:date})
+    const dateGt= new Date(date)
+    const dateLt= new Date(date + "T23:59:59.999Z")
+    // console.log(dateGt, dateLt, "welcome")
+    const video_lists = await Video.find({ video_createdAt: { $gte: dateGt, $lt: dateLt } })
 
-    
     if (!video_lists) {
       return res.status(400).json({ msg: 'There is no videos or you already assigned.' });
     }
@@ -45,7 +47,7 @@ router.get('/checked-list', async (req, res) => {
 });
 
 
-router.post('/upload', auth, async (req, res) => {
+router.post('/upload', async (req, res) => {
 
     try {
       req.body.map(item=>{

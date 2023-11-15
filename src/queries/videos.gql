@@ -1,7 +1,7 @@
 
 
-query GetVideos{
-  videos(orderBy: createdAt_DESC, where: {createdAt_gt: "2023-11-13T00:50:12.000Z", createdAt_lt: "2023-11-13T22:50:12.000Z"}) {
+query GetVideos($where:VideoWhereInput){
+  videos(orderBy: createdAt_DESC, where: $where) {
     createdAt
     description
     id

@@ -4,47 +4,23 @@ import { useGetVideosLazyQuery, VideoOrderByInput } from '@/queries';
 
 // import { useBasicVideo } from '@/api/hooks/video' 
 
-import { ForSelectedCouncil } from './types';
+export function useVideos(date:string) {
 
-export function useVideos() {
-  // const [fetchCreated, createdQuery] = useGetVideoCountLazyQuery();
-  // const [totalCreated, totalQuery] = useGetVideoCountLazyQuery();
-  
+  const createdAt = new Date(date).toISOString();
+  const endedAt = new Date(date+ "T23:59:59.999Z").toISOString();
+  console.log(createdAt, endedAt, "dfdfdfdfdfd")
   const [getVideo, getVideoQuery]= useGetVideosLazyQuery();
-  // const { video, loading } = useBasicVideo(id ?? '', {
-  //   skip: !id,
-  //   onError: (error) => SentryLogger.error('Failed to fetch video', 'VideoTile', error, { video: { id } }),
-  // })
 
-  console.log(getVideo, getVideoQuery, "GGGGGGGGGGGGGGGGGGGGG")
   useEffect(() => {
-    // if (!council) return;
+    let variables = {
+      where: { createdAt_gt: createdAt, createdAt_lt: endedAt },
+    };
+    getVideo({variables})
+  }, [date]);
 
-    // let variables = {
-    //   orderBy: "createdAt_DESC", where: {createdAt_gt: "2023-11-13T00:50:12.000Z", createdAt_lt: "2023-11-13T22:50:12.000Z"}
-    //   // text:"welcome"
-    // };
-
-    // fetchCreated({
-    //   variables,
-    // });
-
-    // variables = {
-    //   where: { createdAt_gt: '2013-01-10T22:50:12.000Z', createdAt_lt: council.endedAt?.timestamp },
-    // };
-
-    // totalCreated({
-    //   variables,
-    // });
-    getVideo()
-  }, []);
-
-  // const created = useMemo(() => createdQuery.data?.videosConnection.totalCount, [createdQuery.data]);
   const data = useMemo(() => getVideoQuery.data, [getVideoQuery.data]);
-console.log(data, "DATATATATAT")
-
+console.log(data, "MMMMMMMMMMMMMMMMMMMMMMM")
   return {
-    // created,
     data,
     loading: getVideoQuery.loading,
     error: getVideoQuery.error,
