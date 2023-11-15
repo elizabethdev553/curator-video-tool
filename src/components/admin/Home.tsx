@@ -1,12 +1,12 @@
 // import './home.css';
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Divider, DatePicker } from 'antd';
 import type { DatePickerProps } from 'antd';
 import dayjs from 'dayjs';
-import { connect } from 'react-redux';
-
+import { useVideos } from '@/hooks';
 import { Videos } from '@/components';
+import api from '../../utils/api'
 
 const today = new Date(); 
 
@@ -21,22 +21,30 @@ const Home = () => {
 
   const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
     setDate(dateString);
-    
-    console.log(date, dateString, "HHHHHHHHHHHHHHHHHHHHH");
   };
+  
+  
+  const { data, loading, error } = useVideos(date);
+
+    if (loading) {
+      return <div className="sub_panel loading">loading...</div>;
+    }
+  
+    if (error) {
+      return <div className="sub_panel loading">error</div>;
+    }
+
   return (
     <section className="container">
       <h1 className="large text-primary">Upload List</h1>
       <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} />
-      <Videos filter_date={date} />
+      {data === undefined || data.length < 1 ? (
+        <div>opps!</div>
+      ) : (
+        
+      <Videos results={data} />
+      )}
     </section>
   );
 };
-
-const mapStateToProps = (state:any) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  user:state.auth.user,
-  selectDate:state.selectDate.date_select
-});
-
-export default connect(mapStateToProps, {  })(Home);
+export default Home

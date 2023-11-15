@@ -48,28 +48,28 @@ router.get('/checked-list', async (req, res) => {
 
 
 router.post('/upload', async (req, res) => {
-
-    try {
-      req.body.map(item=>{
-        const newVideo = new Video({
-          key: item.key,
-          video_title: item.video_title,
-          video_link: item.video_link,
-          video_owner_handle: item.video_owner_handle,
-          video_channel_id: item.video_channel_id,  
-          video_createdAt: item.video_createdAt,  
-        });
-  
-        const savedVideo = newVideo.save();
-      })
-
-      res.json({success:"you saved videos successfully."});
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
-    }
+  try {
+    // const tmp = JSON.parse(req.body.tmp)
+    await Promise.all(req.body.map(async (item) => {
+      // let tmp = await Video.findOne({ key: item.key });
+      // if(tmp) return res.json({fault:"you already saved the data"})
+      const newVideo = new Video({
+        key: item.key,
+        video_title: item.video_title,
+        video_link: item.video_link,
+        video_owner_handle: item.video_owner_handle,
+        video_channel_id: item.video_channel_id,
+        video_createdAt: item.video_createdAt,
+      });
+      const savedVideo = await newVideo.save();
+    }));
+    res.json({ success: "you saved videos successfully." });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
-);
+});
+
 router.post(
   '/curator-list',
   auth,

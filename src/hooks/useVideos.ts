@@ -9,17 +9,25 @@ export function useVideos(date:string) {
   const createdAt = new Date(date).toISOString();
   const endedAt = new Date(date+ "T23:59:59.999Z").toISOString();
   console.log(createdAt, endedAt, "dfdfdfdfdfd")
-  const [getVideo, getVideoQuery]= useGetVideosLazyQuery();
+  let variables = {
+    where: { createdAt_gt: createdAt, createdAt_lt: endedAt },
+    limit:50000
+  };
+  const [getVideo, getVideoQuery]= useGetVideosLazyQuery({variables});
 
   useEffect(() => {
-    let variables = {
-      where: { createdAt_gt: createdAt, createdAt_lt: endedAt },
-    };
+    if (!date) return;
     getVideo({variables})
   }, [date]);
-
-  const data = useMemo(() => getVideoQuery.data, [getVideoQuery.data]);
-console.log(data, "MMMMMMMMMMMMMMMMMMMMMMM")
+  const data = useMemo(() => getVideoQuery.data?.videos.map((item: any) => {
+    let temp: any = {};
+    temp.key = item['media']['id'];
+    temp.video_title = item['title'];
+    temp.video_link = item['media']['id'];
+    temp.video_owner_handle = item['channel']['ownerMember']['handle'];
+    temp.video_createdAt = item['createdAt'];
+    return temp
+  }), [getVideoQuery.data]);
   return {
     data,
     loading: getVideoQuery.loading,

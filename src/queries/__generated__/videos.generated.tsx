@@ -5,6 +5,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type GetVideosQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.VideoWhereInput>;
+  limit?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 
@@ -12,8 +13,8 @@ export type GetVideosQuery = { __typename: 'Query', videos: Array<{ __typename: 
 
 
 export const GetVideosDocument = gql`
-    query GetVideos($where: VideoWhereInput) {
-  videos(orderBy: createdAt_DESC, where: $where) {
+    query GetVideos($where: VideoWhereInput, $limit: Int) {
+  videos(orderBy: createdAt_DESC, where: $where, limit: $limit) {
     createdAt
     description
     id
@@ -46,6 +47,7 @@ export const GetVideosDocument = gql`
  * const { data, loading, error } = useGetVideosQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
