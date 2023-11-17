@@ -38,12 +38,12 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<Home />} />
 
             <Route path="/checked-list" element={<PrivateRoute component={CheckedList} />} />
             <Route path="/assignment" element={<PrivateRoute component={Assignment} />} />
             <Route path="/assigned-list" element={<PrivateRoute component={AssignedList} />} />
             <Route path="/curator-panel/check/:id" element={<PrivateRoute component={VideoCheck} />} />
+            <Route path="/home" element={<PrivateRoute component={Home} />} />
           </Routes>
         </Router>
       </Provider>
