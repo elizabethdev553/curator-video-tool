@@ -3,7 +3,7 @@ import { DatePicker,Divider, Pagination, Select, Table } from 'antd';
 // import { useSelectedCouncil } from '@/store';
 // import { isDefined } from '@/types';
 import type { ColumnsType } from 'antd/es/table';
-// import Spinner from '../../components/layout/Spinner';
+import Spinner from './layout/Spinner';
 import type { TableRowSelection } from 'antd/es/table/interface';
 import axios from 'axios';
 import React, { Fragment,useEffect, useState } from 'react';
@@ -93,8 +93,8 @@ const Videos: React.FC<VideosProps> = ({ results }: VideosProps) => {
 
   return (
     <Fragment>
-      {results === undefined || results.length < 1 ? (
-        <div>Nothing!</div>
+      {results === undefined ? (
+        <Spinner />
       ) : (
         <Fragment>
           <form className="form" onSubmit={onSubmit}>

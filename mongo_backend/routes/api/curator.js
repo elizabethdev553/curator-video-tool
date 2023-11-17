@@ -15,7 +15,7 @@ const Video = require('../../models/Video');
 router.get('/:member_id', async (req, res) => {
   try {
     let handle = req.params.member_id
-    const video_lists = await Video.find({video_curator:handle})
+    const video_lists = await Video.find({video_curator:handle, video_check_flag:false})
 
     if (!video_lists) {
       return res.status(400).json({ msg: 'There is no videos or you already assigned.' });

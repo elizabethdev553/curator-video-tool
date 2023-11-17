@@ -1,11 +1,11 @@
-import { Button, Card, Col, Divider, Form, Input, Row,Select, Table } from 'antd';
+import { Button, Card, Col, Divider, Form, Input, Row, Select, Table,Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import axios from 'axios';
-import React, { Fragment,useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import Spinner from '../../components/layout/Spinner';
-import View from './View'
+import View from './View';
 
 const { TextArea } = Input;
 
@@ -19,6 +19,7 @@ interface Assignment {
 
 type FieldType = {
   description?: string;
+  remember?:boolean
 };
 
 const VideoCheck = () => {
@@ -29,7 +30,6 @@ const VideoCheck = () => {
   useEffect(() => {
     getVideoDetail(id);
   }, [id]);
-
 
   async function getVideoDetail(video_id: string | undefined) {
     try {
@@ -46,8 +46,8 @@ const VideoCheck = () => {
     }
   }
 
-  async function saveDescriptionResult(description:string, video_id: string | undefined) {
-    const data = {description, video_id}
+  async function saveDescriptionResult(description: string, video_id: string | undefined) {
+    const data = { description, video_id };
     try {
       const response = await axios.post('http://localhost:5000/api/curator/check/description', data, {
         headers: {
@@ -55,16 +55,14 @@ const VideoCheck = () => {
         },
       });
       const sendVideoListResponse = response.data;
-      setMsg(sendVideoListResponse.Success)
+      setMsg(sendVideoListResponse.Success);
     } catch (error) {
       console.log(error, 'Fetch Description Error');
     }
   }
 
   const onFinish = (values: any) => {
-    console.log('Success:', values);
     saveDescriptionResult(values.description, id);
-
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -82,7 +80,6 @@ const VideoCheck = () => {
             name="basic"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
-       
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -91,30 +88,37 @@ const VideoCheck = () => {
             <Divider />
 
             <Row>
-              <Col span={12}>
+              <Col span={10}>
                 <Card title="Video Detail" extra={<a href="#">More</a>} style={{ textAlign: 'left' }}>
-                  <p>Video ID: {videoDetail.key}</p>
-                  <p>Video Curator: {videoDetail.video_curator}</p>
-                  <p>Video Link: {videoDetail.video_link}</p>
-                  <p>Video Owner: {videoDetail.video_owner_handle}</p>
-                  <p>Video Title: {videoDetail.video_title}</p>
+                  <p><b>Video ID:</b> {videoDetail.key}</p>
+                  <p><b>Video Curator:</b> {videoDetail.video_curator}</p>
+                  <p><b>Video Link:</b>{videoDetail.video_link}</p>
+                  <p><b>Video Owner:</b> {videoDetail.video_owner_handle}</p>
+                  <p><b>Video Title:</b> {videoDetail.video_title}</p>
                 </Card>
 
                 <Form.Item<FieldType>
                   label="description"
                   name="description"
-                  rules={[{ required: true, message: 'Please input your description!' }]}
+                  // rules={[{ required: true, message: 'Please input your description!' }]}
                 >
                   <TextArea rows={4} />
+                </Form.Item>
+
+                <Form.Item<FieldType> name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
+                  <Checkbox>Check</Checkbox>
                 </Form.Item>
 
                 <Form.Item>
                   <Button size="large" htmlType="submit">
                     Save
                   </Button>
-                  <Link to='/curator-panel' className="btn btn-primary">Close</Link>
+                  <Link to="/curator-panel" className="btn btn-primary">
+                    Close
+                  </Link>
                 </Form.Item>
               </Col>
+              <Col span={2}></Col>
               <Col span={12}>
                 <View />
               </Col>

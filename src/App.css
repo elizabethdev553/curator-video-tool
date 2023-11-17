@@ -36,7 +36,7 @@
   
   /* Utilities */
   .container {
-    max-width: 1100px;
+    max-width: 1400px;
     margin: auto;
     overflow: hidden;
     padding: 0 2rem;
@@ -332,7 +332,7 @@
   
   
   /* Mobile Styles */
-  @media (max-width: 700px) {
+  @media (max-width: 1400px) {
     .container {
       margin-top: 8rem;
     }

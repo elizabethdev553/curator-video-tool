@@ -113,18 +113,11 @@ const Assignment = () => {
     }
   }
 
-  // const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-  //   console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-  //   setSelectedRowKeys(newSelectedRowKeys);
-  // };
-
   const onChange = (value: CuratorList) => {
-    // console.log(`selected ${value}`);
     setCurator(value);
   };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[],selectedRows: Assignment[]) => {
-    // console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
     setSelectList(selectedRows);
   };
@@ -167,14 +160,6 @@ const Assignment = () => {
     ],
   };
 
-  // const rowSelection = {
-  //   onChange: (selectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
-  //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  //     setSelectedRowKeys([]);
-  //     setSelectList(selectedRows);
-  //   },
-  // };
-
   const onSubmit = (e: any) => {
     e.preventDefault();
     if (selectList !== undefined && curator !== undefined && selectList.length > 0 && curator)
@@ -195,12 +180,13 @@ const Assignment = () => {
       console.log(error, 'Fetch CuratorList Error');
     }
   }
+  
 
   return (
     <section className="container">
       <h1 className="large text-primary">Assignment</h1>
       <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} />
-      {assignment == undefined || assignment.length < 1 || curatorList === undefined ? (
+      {assignment == undefined  ? (
         <Spinner />
       ) : (
         <Fragment>
@@ -217,7 +203,7 @@ const Assignment = () => {
               placeholder="Select a person"
               optionFilterProp="children"
               onChange={onChange}
-              options={curatorList.map((item: CuratorList) => {
+              options={curatorList?.map((item: CuratorList) => {
                 return { value: item.handle, label: item.handle };
               })}
             />

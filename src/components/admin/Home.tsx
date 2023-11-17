@@ -7,7 +7,7 @@ import React, { useEffect,useState } from 'react';
 
 import { Videos } from '@/components';
 import { useVideos } from '@/hooks';
-
+import Spinner from "../layout/Spinner"
 import api from '../../utils/api'
 
 const today = new Date(); 
@@ -29,7 +29,7 @@ const Home = () => {
   const { data, loading, error } = useVideos(date);
 
     if (loading) {
-      return <div className="sub_panel loading">loading...</div>;
+      <Spinner />
     }
   
     if (error) {
@@ -40,12 +40,9 @@ const Home = () => {
     <section className="container">
       <h1 className="large text-primary">Upload List</h1>
       <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} />
-      {data === undefined || data.length < 1 ? (
-        <div>opps!</div>
-      ) : (
-        
+      {
       <Videos results={data} />
-      )}
+      }
     </section>
   );
 };
