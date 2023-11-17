@@ -91,11 +91,11 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
           </Link>
         </h1>
         <ul>
-          <li>
+          {/* <li>
             <Link to="/register">
               <i className="fas fa-user" /> <span className="hide-sm">Register</span>
             </Link>
-          </li>
+          </li> */}
         <Fragment>{isAuthenticated ? authLinks : ''}</Fragment>
         </ul>
       </nav>

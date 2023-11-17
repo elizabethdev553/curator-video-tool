@@ -40,8 +40,12 @@
     margin: auto;
     overflow: hidden;
     padding: 0 2rem;
-    margin-top: 6rem;
+    margin-top: 8rem;
     margin-bottom: 3rem;
+  }
+  
+  .login{
+    padding-top: 160px
   }
   
   /* Text Styles*/
@@ -67,7 +71,7 @@
   }
   
   .text-primary {
-    color: var(--primary-color);
+    color: var(--primary-color)!important;
   }
   
   .text-dark {
@@ -162,6 +166,15 @@
   .alert-primary {
     background: var(--primary-color);
     color: #fff;
+  }
+
+  .btn-primary:hover,
+  .bg-primary:hover,
+  .badge-primary:hover,
+  .alert-primary:hover {
+    background: var(--primary-color);
+    color: #fff;
+    opacity: 0.8;
   }
   
   .btn-light,
@@ -303,13 +316,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.7rem 2rem;
+    padding: 1.3rem 5rem;
     position: fixed;
     z-index: 1;
     width: 100%;
     top: 0;
     border-bottom: solid 1px var(--primary-color);
-    opacity: 0.9;
+    opacity: 0.8;
   }
   
   .navbar ul {
@@ -323,7 +336,11 @@
   }
   
   .navbar a:hover {
-    color: var(--primary-color);
+    color: var(--primary-color)!important;
+  }
+
+  .navbar li a{
+    font-size: 18px;
   }
   
   .navbar .welcome span {
@@ -365,10 +382,7 @@
       justify-content: center;
     }
   
-    .navbar h1 {
-      margin-bottom: 1rem;
-    }
-  
+    
     .navbar .welcome {
       display: none;
     }
@@ -379,4 +393,8 @@
     right: 2rem;
     display: inline-block;
   }
+}
+
+dl, ol, ul {
+  margin-bottom: 0rem!important;
 }
