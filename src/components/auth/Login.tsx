@@ -36,34 +36,38 @@ const Login: React.FC<LoginProps> = ({ login, isAuthenticated, user }) => {
   }
 
   return (
-    <section className="container">
-      <h1 className="large text-primary">Sign In</h1>
-      <p className="lead">
-        <i className="fas fa-user" /> Sign Into Your Account
-      </p>
-      <form className="form" onSubmit={onSubmit}>
-        <div className="form-group">
-          <input
-            type="email"
-            placeholder="Email Address"
-            name="email"
-            value={email}
-            onChange={onChange}
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={password}
-            onChange={onChange}
-            minLength={6}
-          />
-        </div>
-        <input type="submit" className="btn btn-primary" value="Login" />
-      </form>
-    </section>
+      <section className="container login">
+        <h1 className="large text-primary mb-5">Sign In</h1>
+        <p className="lead mt-4 mb-4">
+          Sign Into Your Account
+        </p>
+        <form className="form mt-5 mb-5" onSubmit={onSubmit}>
+          <div className="form-group mt-4 mb-4">
+            <input
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              value={email}
+              onChange={onChange}
+              className="form-control-lg"
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={password}
+              onChange={onChange}
+              minLength={6}
+              className='form-control-lg'
+            />
+          </div>
+          <div>
+          <input type="submit" className="btn btn-primary btn-lg form-control mt-4 mb-4" value="Login" />
+          </div>
+        </form>
+      </section>
   );
 };
 
