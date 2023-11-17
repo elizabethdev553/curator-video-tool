@@ -4,16 +4,13 @@ import {useEffect} from 'react'
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, createBrowserRouter, Route, RouterProvider , Routes } from 'react-router-dom';
 
-// import CheckedList from '';
-// import Assignment from '';
 import { loadUser } from './actions/auth';
 import { LOGOUT } from './actions/types';
 import Assignment from './components/admin/Assignment';
-// import { Home } from './pages';
-// import { View } from './pages';
 import CheckedList from './components/admin/CheckedList';
 import Home from './components/admin/Home';
 import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 import AssignedList from './components/curator/AssignedList';
 import VideoCheck from './components/curator/VideoCheck';
 import Navbar from './components/layout/Navbar';
@@ -21,29 +18,6 @@ import PrivateRoute from './utils/PrivateRoute';
 import setAuthToken from './utils/setAuthToken';
 import store from './utils/store';
 
-// const router = createBrowserRouter([
-//   // {
-//   //   path: '/',
-//   //   element: <Home />,
-//   // },
-//   {
-//     path: '/view',
-//     element: <View />,
-//   },
-//   {
-//     path: '/checked-list',
-//     element: <CheckedList />,
-//   },
-//   {
-//     path: '/assignment',
-//     element: <Assignment />,
-//   },
-
-//   {
-//     path: '/curator-panel/check/:id',
-//     element: <VideoCheck />,
-//   },
-// ]);
 
 function App() {
 
@@ -71,6 +45,7 @@ function App() {
           <Routes>
             {/* <Route path="register" element={<Register />} /> */}
             <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
             {/* <RouterProvider router={router} /> */}
 

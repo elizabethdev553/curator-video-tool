@@ -34,27 +34,27 @@ export const loadUser = () => async (dispatch: Dispatch) => {
 };
 
 // Register User
-// export const register = (formData) => async (dispatch) => {
-//   try {
-//     const res = await api.post('/members', formData);
+export const register = (formData:any) => async (dispatch: Dispatch) => {
+  try {
+    const res = await api.post('/members', formData);
 
-//     dispatch({
-//       type: REGISTER_SUCCESS,
-//       payload: res.data
-//     });
-//     dispatch(loadUser());
-//   } catch (err) {
-//     const errors = err.response.data.errors;
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadUser() as any);
+  } catch (err:any) {
+    const errors = err.response.data.errors;
 
-//     if (errors) {
-//       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-//     }
+    if (errors) {
+      console.log(errors, "Register Action Error")
+    }
 
-//     dispatch({
-//       type: REGISTER_FAIL
-//     });
-//   }
-// };
+    dispatch({
+      type: REGISTER_FAIL
+    });
+  }
+};
 
 // Login User
 export const login = (email:string, password:string) => async (dispatch: Dispatch) => {

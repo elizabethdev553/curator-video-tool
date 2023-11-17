@@ -1,53 +1,41 @@
-import './auth.css'; 
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import { Link, Navigate } from 'react-router-dom';
+import { register } from '../../actions/auth';
+import PropTypes from 'prop-types';
 
-import axios from 'axios';
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+// Define prop types
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & {
+  isAuthenticated: boolean;
+};
 
-const RegisterComponent = () => {
+const Register = ({ register, isAuthenticated }: Props) => {
   const [formData, setFormData] = useState({
-    memberId:'',
+    memberId: '',
     handle: '',
     email: '',
     password: '',
     password2: ''
   });
 
-  //const [alert, setAlert] = useState(false);
   const { memberId, handle, email, password, password2 } = formData;
-  const navigate = useNavigate();
-  const onChange = (e: any) =>   
-     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async (e: any) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== password2) {
-      //setAlert(true);
-      alert("Passwords do not match");
-    }
-    try {
-      const { password2, ...data } = formData;
-      console.log("data", data);
-      const response = await axios.post('http://localhost:5000/api/members',  data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if(response.status == 200){
-        console.log("response=>>>>", response.data);
-        localStorage.setItem("authData", response.data);
-        navigate('/');
-      }
-      
-      // Do something with the user data
-    } catch (error) {
-      console.log(error, 'Fetch CuratorList Error');
+      console.log('Passwords do not match', 'danger');
+    } else {
+      register({ memberId, handle, email, password });
     }
   };
 
-  // if (isAuthenticated) {
-  //   return <Navigate to="/dashboard" />;
-  // }
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
     <section className="container">
@@ -63,7 +51,6 @@ const RegisterComponent = () => {
             name="memberId"
             value={memberId}
             onChange={onChange}
-            required
           />
         </div>
         <div className="form-group">
@@ -73,7 +60,6 @@ const RegisterComponent = () => {
             name="handle"
             value={handle}
             onChange={onChange}
-            required
           />
         </div>
         <div className="form-group">
@@ -83,7 +69,6 @@ const RegisterComponent = () => {
             name="email"
             value={email}
             onChange={onChange}
-            required
           />
           <small className="form-text">
             This site uses Gravatar so if you want a profile image, use a
@@ -97,7 +82,6 @@ const RegisterComponent = () => {
             name="password"
             value={password}
             onChange={onChange}
-            required
           />
         </div>
         <div className="form-group">
@@ -107,7 +91,6 @@ const RegisterComponent = () => {
             name="password2"
             value={password2}
             onChange={onChange}
-            required
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />
@@ -119,4 +102,15 @@ const RegisterComponent = () => {
   );
 };
 
-export default RegisterComponent;
+Register.propTypes = {
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = (state: any) => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+const connector = connect(mapStateToProps, { register });
+
+export default connector(Register);
