@@ -8,7 +8,7 @@ const View = () => {
   const [showVideo, setShowVideo] = useState(false);
 
   const handleButtonClick = () => {
-    // let video = <video controls src="https://distributor.adovrn.xyz/distributor/api/v1/assets/${key}" />;
+    // let video = <video controls src="https://dwg.joystream.name/distributor/api/v1/assets/${key}" />;
     setShowVideo(true);
   };
 
@@ -36,7 +36,7 @@ const View = () => {
       <Row>
         {showVideo && (
           <video
-            src={`https://distributor.adovrn.xyz/distributor/api/v1/assets/${key}`}
+            src={`https://dwg.joystream.name/distributor/api/v1/assets/${key}`}
             controls
           ></video>
         )}
