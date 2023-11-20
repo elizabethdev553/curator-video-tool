@@ -42,7 +42,7 @@ const columns: ColumnsType<Assignment> = [
   },
   {
     title: 'video_link',
-    dataIndex: 'video_link',
+    dataIndex: 'video_media_id',
   },
   {
     title: 'video_owner_handle',
@@ -71,7 +71,7 @@ const Assignment = () => {
   const [curatorList, setCuratorList] = useState<CuratorList[]>();
   const [selectList, setSelectList] = useState<Assignment[]>();
   const [curator, setCurator] = useState<CuratorList>();
-  const [msg, setMsg] = useState('');
+  const [msg, setMsg] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [date, setDate] = useState<string>(TODAY);
   useEffect(() => {
@@ -162,8 +162,10 @@ const Assignment = () => {
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    if (selectList !== undefined && curator !== undefined && selectList.length > 0 && curator)
+    if (selectList !== undefined && curator !== undefined && selectList.length > 0 && curator){
+      setMsg(true);
       sendVideoList(selectList, curator);
+    }
   };
 
   async function sendVideoList(selectList: Assignment[], curator: CuratorList) {
@@ -175,7 +177,7 @@ const Assignment = () => {
         },
       });
       const sendVideoListResponse = response.data;
-      setMsg(sendVideoListResponse.Success);
+      setMsg(false);
     } catch (error) {
       console.log(error, 'Fetch CuratorList Error');
     }

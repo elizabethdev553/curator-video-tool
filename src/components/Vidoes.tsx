@@ -10,7 +10,6 @@ import React, { Fragment,useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import api from '../utils/api'
-
 interface Assignment {
   key: string;
   video_title: string;
@@ -43,20 +42,24 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_title',
   },
   {
-    title: 'video_link',
-    dataIndex: 'video_link',
+    title: 'video_media_id',
+    dataIndex: 'video_media_id',
   },
   {
     title: 'video_owner_handle',
     dataIndex: 'video_owner_handle',
   },
   {
-    title: 'video_curator',
-    dataIndex: 'video_curator',
+    title: 'video_channel_title',
+    dataIndex: 'video_channel_title',
   },
   {
     title: 'video_createdAt',
     dataIndex: 'video_createdAt',
+  },
+  {
+    title: 'video_ypp_id',
+    dataIndex: 'video_yt_id',
   },
 ];
 
@@ -65,6 +68,7 @@ export interface VideosProps {
 }
 
 const Videos: React.FC<VideosProps> = ({ results }: VideosProps) => {
+  const [flag, setFlag] = useState<Boolean>(false)
   const navigate = useNavigate();
  
   async function uploadList(data: any) {
@@ -77,8 +81,8 @@ const Videos: React.FC<VideosProps> = ({ results }: VideosProps) => {
         
         },
       });
-      console.log(res.data, 'RESPONSE');
-      navigate('/assignment');
+      setFlag(false)
+      navigate('/video-list');
      
     } catch (err) {
      
@@ -88,9 +92,13 @@ const Videos: React.FC<VideosProps> = ({ results }: VideosProps) => {
 
   const onSubmit = (e: any) => {
     e.preventDefault();
+    setFlag(true)
     if (results !== undefined && results.length > 0) uploadList(results);
   };
 
+  if(flag===true) {
+    return <Spinner />
+  }
   return (
     <Fragment>
       {results === undefined ? (

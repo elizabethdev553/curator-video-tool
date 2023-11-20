@@ -11,6 +11,27 @@ const checkObjectId = require('../../middleware/checkObjectId');
 const Member = require('../../models/Member');
 const Video = require('../../models/Video');
 
+router.get('/video-list/:date', async (req, res) => {
+  try {
+    const date= req.params.date
+    const dateGt= new Date(date)
+    const dateLt= new Date(date + "T23:59:59.999Z")
+    const video_lists = await Video.find({ video_createdAt: { $gte: dateGt, $lt: dateLt } })
+    .sort({
+      video_createdAt: -1
+    })
+
+    if (!video_lists) {
+      return res.status(400).json({ msg: 'There is no videos or you already assigned.' });
+    }
+
+    res.json(video_lists);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 
 router.get('/assignment/:date', async (req, res) => {
   try {
@@ -18,7 +39,7 @@ router.get('/assignment/:date', async (req, res) => {
     const dateGt= new Date(date)
     const dateLt= new Date(date + "T23:59:59.999Z")
     // console.log(dateGt, dateLt, "welcome")
-    const video_lists = await Video.find({ video_createdAt: { $gte: dateGt, $lt: dateLt } })
+    const video_lists = await Video.find({ video_createdAt: { $gte: dateGt, $lt: dateLt },video_yt_id:null, video_curator: ''})
 
     if (!video_lists) {
       return res.status(400).json({ msg: 'There is no videos or you already assigned.' });
@@ -51,17 +72,19 @@ router.post('/upload', async (req, res) => {
   try {
     // const tmp = JSON.parse(req.body.tmp)
     await Promise.all(req.body.map(async (item) => {
-      // let tmp = await Video.findOne({ key: item.key });
-      // if(tmp) return res.json({fault:"you already saved the data"})
-      const newVideo = new Video({
-        key: item.key,
-        video_title: item.video_title,
-        video_link: item.video_link,
-        video_owner_handle: item.video_owner_handle,
-        video_channel_id: item.video_channel_id,
-        video_createdAt: item.video_createdAt,
-      });
-      const savedVideo = await newVideo.save();
+      let tmp = await Video.findOne({ key: item.key });
+      if(!tmp){
+        const newVideo = new Video({
+          key: item.key,
+          video_title: item.video_title,
+          video_media_id: item.video_media_id,
+          video_owner_handle: item.video_owner_handle,
+          video_channel_id: item.video_channel_id,
+          video_createdAt: item.video_createdAt,
+          video_yt_id:item.video_yt_id
+        });
+        const savedVideo = await newVideo.save();
+      }
     }));
     res.json({ success: "you saved videos successfully." });
   } catch (err) {

@@ -1,14 +1,15 @@
 
-
-query GetVideos($where:VideoWhereInput, $limit:Int){
+query GetVideos ($where:VideoWhereInput, $limit:Int){
   videos(orderBy: createdAt_DESC, where: $where, limit:$limit) {
     createdAt
     description
+    duration
     id
-    title
-    media {
+    ytVideoId
+    nft {
       id
     }
+    title
     channel {
       id
       title
@@ -17,5 +18,14 @@ query GetVideos($where:VideoWhereInput, $limit:Int){
         id
       }
     }
+    media {
+      id
+    }
+  }
+}
+
+query GetVideoCount($where: VideoWhereInput) {
+  videosConnection(first: 0, where: $where, orderBy: createdAt_DESC) {
+    totalCount
   }
 }
