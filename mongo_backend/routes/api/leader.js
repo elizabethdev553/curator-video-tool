@@ -39,7 +39,7 @@ router.get('/assignment/:date', async (req, res) => {
     const dateGt= new Date(date)
     const dateLt= new Date(date + "T23:59:59.999Z")
     // console.log(dateGt, dateLt, "welcome")
-    const video_lists = await Video.find({ video_createdAt: { $gte: dateGt, $lt: dateLt },video_yt_id:null, video_curator: ''})
+    const video_lists = await Video.find({ video_createdAt: { $gte: dateGt, $lt: dateLt },video_yt_id:null, video_check_flag: false})
 
     if (!video_lists) {
       return res.status(400).json({ msg: 'There is no videos or you already assigned.' });
