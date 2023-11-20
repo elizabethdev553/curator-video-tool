@@ -1,6 +1,6 @@
 import { Button, Card, Col, Divider, Form, Input, Row,Select, Table } from 'antd';
 import React, { useState } from 'react';
-
+import './view.css'
 const flag = false;
 export interface VideosProps {
   results: any;
