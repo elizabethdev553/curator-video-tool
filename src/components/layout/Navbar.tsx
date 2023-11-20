@@ -41,7 +41,7 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
         </Link>
       </li> */}
       <li>
-        <Link to="/curators-list">
+        <Link to="/curator-list">
           <i className="fas fa-user" /> <span className="hide-sm">Curators list</span>
         </Link>
       </li>
