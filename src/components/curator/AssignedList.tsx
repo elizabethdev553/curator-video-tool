@@ -29,16 +29,16 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_title',
   },
   {
-    title: 'video_link',
-    dataIndex: 'video_link',
-  },
-  {
     title: 'video_owner_handle',
     dataIndex: 'video_owner_handle',
   },
   {
     title: 'video_curator',
     dataIndex: 'video_curator',
+  },
+  {
+    title: 'video_createdAt',
+    dataIndex: 'video_createdAt',
   },
   {
     title: 'video_check_description',

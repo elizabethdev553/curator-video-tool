@@ -4,14 +4,14 @@ import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, useParams, Navigate, useNavigate } from 'react-router-dom';
 import Spinner from '../../components/layout/Spinner';
-import View from './View';
+import VideoPanel from './VideoPanel';
 
 const { TextArea } = Input;
 
 interface Assignment {
   key: string;
   video_title: string;
-  video_link: string;
+  video_media_id: string;
   video_owner_handle: string;
   video_curator: string;
 }
@@ -95,7 +95,7 @@ const VideoCheck = () => {
                 <Card title="Video Detail" extra={<a href="#">More</a>} style={{ textAlign: 'left' }}>
                   <p><b>Video ID:</b> {videoDetail.key}</p>
                   <p><b>Video Curator:</b> {videoDetail.video_curator}</p>
-                  <p><b>Video Link:</b>{videoDetail.video_link}</p>
+                  <p><b>Video Link:</b>{videoDetail.video_media_id}</p>
                   <p><b>Video Owner:</b> {videoDetail.video_owner_handle}</p>
                   <p><b>Video Title:</b> {videoDetail.video_title}</p>
                 </Card>
@@ -111,7 +111,7 @@ const VideoCheck = () => {
                 <Form.Item<FieldType> name="check" valuePropName="checked"  label="Please check if you checked this!" wrapperCol={{ span: 30 }}>
                   <Checkbox>Check Button</Checkbox>
                 </Form.Item>
-
+                
                 <Form.Item>
                   <Button size="large" htmlType="submit">
                     Save
@@ -120,7 +120,7 @@ const VideoCheck = () => {
               </Col>
               <Col span={2}></Col>
               <Col span={12}>
-                <View />
+                <VideoPanel results={videoDetail.video_media_id} />
               </Col>
             </Row>
           </Form>
