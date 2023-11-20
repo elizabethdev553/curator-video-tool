@@ -1,9 +1,8 @@
-import { Divider, Select,Table } from 'antd';
+import { Divider, Select,Table,Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import axios from 'axios';
 import React, { Fragment,useEffect, useState } from 'react';
 import {Link} from 'react-router-dom'
-
 import Spinner from '../../components/layout/Spinner';
 import api from '../../utils/api'
 
@@ -16,7 +15,8 @@ interface Assignment {
   video_owner_handle: string;
   video_curator: string;
   video_check_flag:boolean;
-  video_check_description:string
+  video_check_description:string;
+  video_check_tag: string[]|undefined;
 }
 
 const columns: ColumnsType<Assignment> = [
@@ -43,6 +43,30 @@ const columns: ColumnsType<Assignment> = [
   {
     title: 'video_check_description',
     dataIndex: 'video_check_description',
+  },
+  {
+    title: 'video_check_tag',
+    dataIndex: 'video_check_tag',
+    render: (_, { video_check_tag,video_check_flag }) => {
+
+
+
+      return(
+
+        <>
+        {video_check_tag &&
+          video_check_tag.map((tag) => {
+            if(tag[0]!='')
+            return (
+              <Tag color="red" key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+        {video_check_flag&& <Tag color="green" key='checked'>CHECKED</Tag>}
+      </>
+        )
+    }
   },
 ];
 
@@ -84,6 +108,7 @@ const AssignedList:React.FC<AuthProps> = ({auth}) => {
     },
   };
 
+  console.log(assignment, "assginment")
   return (
     <section className="container">
       {assignment == undefined || assignment.length < 1 ? (
