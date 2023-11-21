@@ -23,15 +23,6 @@ interface CuratorList {
   handle?: string;
 }
 
-interface DataType {
-  key: React.Key;
-  name: string;
-  age: number;
-  address: string;
-}
-
-const data: DataType[] = [];
-
 const columns: ColumnsType<Assignment> = [
   {
     title: 'video_id',
@@ -60,6 +51,10 @@ const columns: ColumnsType<Assignment> = [
   {
     title: 'video_ypp_id',
     dataIndex: 'video_yt_id',
+  },
+  {
+    title: 'video_nft_id',
+    dataIndex: 'video_nft_id',
   },
 ];
 

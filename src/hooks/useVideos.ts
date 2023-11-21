@@ -17,7 +17,9 @@ export function useVideos(createdAt:String, endedAt:String) {
     getVideo({variables})
   }, [createdAt, endedAt]);
   
+
   const data = useMemo(() => getVideoQuery.data?.videos.map((item: any) => {
+    console.log(item, "item")
     const temp: any = {};
     temp.key = item['id'];
     temp.video_title = item['title'];
@@ -26,11 +28,11 @@ export function useVideos(createdAt:String, endedAt:String) {
     temp.video_createdAt = item['createdAt'];
     temp.video_yt_id = item['ytVideoId'];
     temp.video_channel_title = item['channel']['title'];
+    temp.video_nft_id = item['nft'];
 
     return temp
   }), [getVideoQuery.data]);
 
-  console.log(data, "data")
   return {
     data,
     loading: getVideoQuery.loading,

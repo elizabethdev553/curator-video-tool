@@ -15,7 +15,7 @@ import api from '../../utils/api'
 interface Assignment {
   key: string;
   video_title: string;
-  video_link: string;
+  video_channel_title: string;
   video_owner_handle: string;
   video_curator: string;
   video_createdAt: Date;
@@ -25,14 +25,6 @@ interface CuratorList {
   handle?: string;
 }
 
-interface DataType {
-  key: React.Key;
-  name: string;
-  age: number;
-  address: string;
-}
-
-const data: DataType[] = [];
 const columns: ColumnsType<Assignment> = [
   {
     title: 'video_id',
@@ -43,8 +35,8 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_title',
   },
   {
-    title: 'video_media_id',
-    dataIndex: 'video_media_id',
+    title: 'video_channel_title',
+    dataIndex: 'video_channel_title',
   },
   {
     title: 'video_owner_handle',

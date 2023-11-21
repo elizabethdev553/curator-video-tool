@@ -19,6 +19,9 @@ const VideoSchema = new mongoose.Schema({
   video_yt_id:{
     type:String,
   },
+  video_nft_id:{
+    type:String,
+  },
   
   video_owner_handle: {
     type: String,

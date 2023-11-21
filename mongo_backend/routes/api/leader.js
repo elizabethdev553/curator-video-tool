@@ -79,9 +79,10 @@ router.post('/upload', async (req, res) => {
           video_title: item.video_title,
           video_media_id: item.video_media_id,
           video_owner_handle: item.video_owner_handle,
-          video_channel_id: item.video_channel_id,
+          video_channel_title: item.video_channel_title,
           video_createdAt: item.video_createdAt,
-          video_yt_id:item.video_yt_id
+          video_yt_id:item.video_yt_id,
+          video_nft_id:item.video_nft_id
         });
         const savedVideo = await newVideo.save();
       }
