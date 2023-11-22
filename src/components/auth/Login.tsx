@@ -30,7 +30,7 @@ const Login: React.FC<LoginProps> = ({ login, isAuthenticated, user }) => {
 
   if (isAuthenticated&&user) {
     if(user.handle === 'goldwolf')
-    return <Navigate to="/checked-list" />;
+    return <Navigate to="/video-list" />;
     else
     return  <Navigate to="/assigned-list" />;
   }
