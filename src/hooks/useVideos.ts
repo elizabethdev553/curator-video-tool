@@ -28,7 +28,7 @@ export function useVideos(createdAt:String, endedAt:String) {
     temp.video_createdAt = item['createdAt'];
     temp.video_yt_id = item['ytVideoId'];
     temp.video_channel_title = item['channel']['title'];
-    temp.video_nft_id = item['nft'];
+    item['nft']==null ?temp.video_nft_id = item['nft']: temp.video_nft_id = item['nft']['id'];
 
     return temp
   }), [getVideoQuery.data]);

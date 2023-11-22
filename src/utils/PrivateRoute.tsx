@@ -5,15 +5,8 @@ import { Navigate } from 'react-router-dom';
 
 import Spinner from '../components/layout/Spinner';
 
-
-interface AuthProps {
-  auth: {
-    isAuthenticated: boolean;
-    user:any
-  };
-}
 interface PrivateRouteProps {
-  component: React.FC<AuthProps>;
+  component: any
   auth: {
     isAuthenticated: boolean;
     loading: boolean;
@@ -24,7 +17,7 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, auth }) => {
 
   if (auth.loading) return <Spinner />;
-  if (auth.isAuthenticated) return <Component auth={auth} />;
+  if (auth.isAuthenticated) return <Component />;
 
   return <Navigate to="/" />;
 };
