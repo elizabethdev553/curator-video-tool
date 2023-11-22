@@ -4,46 +4,47 @@ import type { DatePickerProps } from 'antd';
 import { DatePicker,Divider } from 'antd';
 import dayjs from 'dayjs';
 import React, { useEffect,useState } from 'react';
-
+import {useParams} from 'react-router-dom'
 import { Videos } from '@/components';
 import { useVideos } from '@/hooks';
 import Spinner from "../layout/Spinner"
 import api from '../../utils/api'
-
-const today = new Date(); 
-
-const year = String(today.getFullYear()).slice(-2);
-const month = String(today.getMonth() + 1).padStart(2, '0');
-const day = String(today.getDate()).padStart(2, '0'); 
-
-const TODAY = `20${year}-${month}-${day}`; 
+let createdAt:String=''
 
 const Home = () => {
-  const [date, setDate] = useState<string>(TODAY);
+  const { date, time } = useParams();
 
-  const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
-    setDate(dateString);
-  };
-  
-  
-  const { data, loading, error } = useVideos(date);
+  if(date===undefined){
+    return <>loading...</>
+  }
 
-    if (loading) {
-      <Spinner />
-    }
+  if(time == "undefined" || time ===undefined){
+    createdAt = new Date(date).toISOString();
+  }
+  else{
+    createdAt = time
+  }
+
+const endedAt = new Date(date+ "T23:59:59.999Z").toISOString();
+  const { data, loading, error } = useVideos(createdAt, endedAt);
   
-    if (error) {
-      return <div className="sub_panel loading">error</div>;
-    }
+  if (loading) {
+    <Spinner />
+  }
+  
+  if (error) {
+    return <div className="sub_panel loading">error</div>;
+  }
+  console.log(data, "data")
 
   return (
     <section className="container">
       <h1 className="large text-primary">Upload List</h1>
-      <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} />
       {
       <Videos results={data} />
       }
     </section>
   );
 };
+
 export default Home

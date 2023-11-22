@@ -9,13 +9,20 @@ const VideoSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  video_link: {
+  video_media_id: {
     type: String,
     required: true
   },
-  video_channel_id: {
+  video_channel_title: {
     type: String,
   },
+  video_yt_id:{
+    type:String,
+  },
+  video_nft_id:{
+    type:String,
+  },
+  
   video_owner_handle: {
     type: String,
     required: true
@@ -32,6 +39,9 @@ const VideoSchema = new mongoose.Schema({
     type: String,
     default:''
   },
+  video_check_tag:{
+    type: Array,
+  },
   // avatar: {
   //   type: String
   // },
@@ -39,9 +49,9 @@ const VideoSchema = new mongoose.Schema({
     type: Date,
     reqired:true
   },
-  date: {
+
+  video_checkedAt: {
     type: Date,
-    default: Date.now
   }
 });
 

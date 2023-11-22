@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-
+import {Navigate} from 'react-router-dom'
 import api from '../utils/api';
 import {
   AUTH_ERROR,
@@ -42,7 +42,7 @@ export const register = (formData:any) => async (dispatch: Dispatch) => {
       type: REGISTER_SUCCESS,
       payload: res.data
     });
-    dispatch(loadUser() as any);
+    // dispatch(loadUser() as any);
   } catch (err:any) {
     const errors = err.response.data.errors;
 

@@ -1,28 +1,30 @@
-import { Button, Card, Col, Divider, Form, Input, Row, Select, Table,Checkbox } from 'antd';
+import { Button, Card, Col, Divider, Form, Input, Row, Select, Table, Checkbox, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-
+import { Link, useParams, Navigate, useNavigate } from 'react-router-dom';
 import Spinner from '../../components/layout/Spinner';
-import View from './View';
-
+import VideoPanel from './VideoPanel';
+import type { SelectProps } from 'antd';
+const { Option } = Select;
 const { TextArea } = Input;
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 interface Assignment {
   key: string;
   video_title: string;
-  video_link: string;
+  video_media_id: string;
   video_owner_handle: string;
   video_curator: string;
 }
 
 type FieldType = {
   description?: string;
-  remember?:boolean
 };
 
+
 const VideoCheck = () => {
+  const navigate = useNavigate();
   const [videoDetail, setVideoDetail] = useState<Assignment>();
   const [msg, setMsg] = useState('');
   const { id } = useParams();
@@ -30,6 +32,7 @@ const VideoCheck = () => {
   useEffect(() => {
     getVideoDetail(id);
   }, [id]);
+
 
   async function getVideoDetail(video_id: string | undefined) {
     try {
@@ -46,8 +49,8 @@ const VideoCheck = () => {
     }
   }
 
-  async function saveDescriptionResult(description: string, video_id: string | undefined) {
-    const data = { description, video_id };
+  async function saveDescriptionResult(description: string|undefined,video_tabs:string|undefined, video_id: string | undefined) {
+    const data = { description, video_tabs, video_id };
     try {
       const response = await axios.post('http://localhost:5000/api/curator/check/description', data, {
         headers: {
@@ -56,13 +59,16 @@ const VideoCheck = () => {
       });
       const sendVideoListResponse = response.data;
       setMsg(sendVideoListResponse.Success);
+      navigate('/assigned-list');
     } catch (error) {
       console.log(error, 'Fetch Description Error');
     }
   }
 
   const onFinish = (values: any) => {
-    saveDescriptionResult(values.description, id);
+    console.log(values, 'values');
+    // if (values.check === true) console.log(values, 'values');
+    saveDescriptionResult(values.description, values.video_tabs, id);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -80,7 +86,6 @@ const VideoCheck = () => {
             name="basic"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
-            initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -90,11 +95,22 @@ const VideoCheck = () => {
             <Row>
               <Col span={10}>
                 <Card title="Video Detail" extra={<a href="#">More</a>} style={{ textAlign: 'left' }}>
-                  <p><b>Video ID:</b> {videoDetail.key}</p>
-                  <p><b>Video Curator:</b> {videoDetail.video_curator}</p>
-                  <p><b>Video Link:</b>{videoDetail.video_link}</p>
-                  <p><b>Video Owner:</b> {videoDetail.video_owner_handle}</p>
-                  <p><b>Video Title:</b> {videoDetail.video_title}</p>
+                  <p>
+                    <b>Video ID:</b> {videoDetail.key}
+                  </p>
+                  <p>
+                    <b>Video Curator:</b> {videoDetail.video_curator}
+                  </p>
+                  <p>
+                    <b>Video Link:</b>
+                    {videoDetail.video_media_id}
+                  </p>
+                  <p>
+                    <b>Video Owner:</b> {videoDetail.video_owner_handle}
+                  </p>
+                  <p>
+                    <b>Video Title:</b> {videoDetail.video_title}
+                  </p>
                 </Card>
 
                 <Form.Item<FieldType>
@@ -102,25 +118,29 @@ const VideoCheck = () => {
                   name="description"
                   // rules={[{ required: true, message: 'Please input your description!' }]}
                 >
-                  <TextArea rows={4} />
+                  <TextArea rows={5} />
                 </Form.Item>
-
-                <Form.Item<FieldType> name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-                  <Checkbox>Check</Checkbox>
+                <Form.Item
+                  name="video_tabs"
+                  label="Select the tabs. If not, don't select."
+                 
+                >
+                  <Select mode="multiple" placeholder="Please select favourite colors">
+                    <Option value="Cruelty">Cruelty</Option>
+                    <Option value="porn">porn</Option>
+                    <Option value="illegal">illegal</Option>
+                    <Option value="fake">fake</Option>
+                  </Select>
                 </Form.Item>
-
                 <Form.Item>
                   <Button size="large" htmlType="submit">
                     Save
                   </Button>
-                  <Link to="/curator-panel" className="btn btn-primary">
-                    Close
-                  </Link>
                 </Form.Item>
               </Col>
               <Col span={2}></Col>
               <Col span={12}>
-                <View />
+                <VideoPanel results={videoDetail.video_media_id} />
               </Col>
             </Row>
           </Form>

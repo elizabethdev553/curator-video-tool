@@ -3,16 +3,7 @@
     justify-content: center;
 }
 
-#key {
-    width: 400px;
-
-}
-
-.view_video button {
-    width: 80px;
-}
-
 video{
-    width: 800px;
-    height: 600px;
+    width: auto;
+    height: 800px;
 }

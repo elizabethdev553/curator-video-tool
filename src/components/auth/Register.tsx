@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
@@ -11,6 +11,7 @@ type Props = PropsFromRedux & {
 };
 
 const Register = ({ register, isAuthenticated }: Props) => {
+  const navigator=useNavigate()
   const [formData, setFormData] = useState({
     memberId: '',
     handle: '',
@@ -30,19 +31,14 @@ const Register = ({ register, isAuthenticated }: Props) => {
       console.log('Passwords do not match', 'danger');
     } else {
       register({ memberId, handle, email, password });
+      navigator("/curator-list")
     }
   };
 
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
-  }
-
   return (
     <section className="container">
-      <h1 className="large text-primary">Sign Up</h1>
-      <p className="lead">
-        <i className="fas fa-user" /> Create Your Account
-      </p>
+      <h1 className="large text-primary">Create A New Curator</h1>
+      
       <form className="form" onSubmit={onSubmit}>
         <div className="form-group">
           <input
@@ -93,11 +89,8 @@ const Register = ({ register, isAuthenticated }: Props) => {
             onChange={onChange}
           />
         </div>
-        <input type="submit" className="btn btn-primary" value="Register" />
+        <input type="submit" className="btn btn-primary" value="Save" />
       </form>
-      <p className="my-1">
-        Already have an account? <Link to="/login">Sign In</Link>
-      </p>
     </section>
   );
 };

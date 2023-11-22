@@ -15,7 +15,9 @@ const Video = require('../../models/Video');
 router.get('/:member_id', async (req, res) => {
   try {
     let handle = req.params.member_id
-    const video_lists = await Video.find({video_curator:handle, video_check_flag:false})
+    const video_lists = await Video.find({video_curator:handle}).sort({
+      video_createdAt: -1
+    })
 
     if (!video_lists) {
       return res.status(400).json({ msg: 'There is no videos or you already assigned.' });
@@ -48,9 +50,9 @@ router.get('/check/:id', async (req, res) => {
 
 router.post('/check/description', async (req, res) => {
   try {
-    console.log(req.body, "REQ.BODEY")    
+  
       const filter = { key: req.body.video_id };
-      const update = { $set: { video_check_description: req.body.description, video_check_flag:true } };
+      const update = { $set: { video_check_description: req.body.description,video_check_tag:req.body.video_tabs, video_check_flag:true, video_checkedAt:Date.now()} };
       await Video.updateOne(filter, update);
 
     res.json({Success:"Success"});

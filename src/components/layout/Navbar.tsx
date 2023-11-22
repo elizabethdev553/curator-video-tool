@@ -20,6 +20,11 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
   const admin = (
     <Fragment>
       <li>
+        <Link to="/video-list">
+          <i className="fas fa-user" /> <span className="hide-sm">Video List</span>
+        </Link>
+      </li>
+      <li>
         <Link to="/assignment">
           <i className="fas fa-user" /> <span className="hide-sm">Assignment</span>
         </Link>
@@ -36,15 +41,11 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
         </Link>
       </li> */}
       <li>
-        <Link to="/curators-list">
+        <Link to="/curator-list">
           <i className="fas fa-user" /> <span className="hide-sm">Curators list</span>
         </Link>
       </li>
-      <li>
-        <Link to="/home">
-          <i className="fas fa-user" /> <span className="hide-sm">Home</span>
-        </Link>
-      </li>
+      
       <li>
         <a onClick={logout} href="#">
           <i className="fas fa-sign-out-alt" /> <span className="hide-sm">Logout</span>

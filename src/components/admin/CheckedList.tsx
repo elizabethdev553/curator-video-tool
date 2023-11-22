@@ -1,5 +1,5 @@
 import {useEffect, useState } from 'react';
-import { Divider, Table } from 'antd';
+import { Divider, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 
 import api from '../../utils/api'
@@ -11,11 +11,13 @@ interface VideoDetail {
   video_owner_handle: string;
   video_curator: string;
   video_check_description: string;
+  video_check_tag:string[]|undefined;
+  video_check_flag:boolean
 }
 
 const columns: ColumnsType<VideoDetail> = [
   {
-    title: 'key',
+    title: 'ID',
     dataIndex: 'key',
   },
   {
@@ -38,6 +40,29 @@ const columns: ColumnsType<VideoDetail> = [
     title: 'video_check_description',
     dataIndex: 'video_check_description',
   },
+  // {
+  //   title: 'video_check_flag',
+  //   dataIndex: 'video_check_flag',
+  // },
+  {
+    title: 'video_check_tag',
+    dataIndex: 'video_check_tag',
+    render: (_, { video_check_tag,video_check_flag }) => (
+      <>
+        {video_check_tag &&
+          video_check_tag.map((tag) => {
+            if(tag[0]!='')
+            return (
+              <Tag color="red" key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+        {video_check_flag&& <Tag color="green" key='checked'> CHECKED</Tag>}
+      </>
+    ),
+  },
+  
 ];
 
 const CheckedList=()=> {

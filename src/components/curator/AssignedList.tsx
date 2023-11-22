@@ -1,62 +1,102 @@
-import { Divider, Select,Table } from 'antd';
+import { Divider, Select,Table,Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import axios from 'axios';
 import React, { Fragment,useEffect, useState } from 'react';
 import {Link} from 'react-router-dom'
-
 import Spinner from '../../components/layout/Spinner';
 import api from '../../utils/api'
+
+import { connect, ConnectedProps } from 'react-redux';
 
 const { Option } = Select;
 
 interface Assignment {
   key: string;
   video_title: string;
-  video_link: string;
+  video_channel_title: string;
   video_owner_handle: string;
   video_curator: string;
-  video_check_flag:boolean;
-  video_check_description:string
+  video_createdAt: Date;
+  video_yt_id: string;
+  video_nft_id: string;
+  video_check_tag: string[];
+  video_check_flag: boolean;
+  video_check_description: string;
+  video_checkedAt:string
 }
 
 const columns: ColumnsType<Assignment> = [
   {
-    title: 'key',
+    title: 'ID',
     dataIndex: 'key',
   },
   {
-    title: 'video_title',
+    title: 'TITLE',
     dataIndex: 'video_title',
   },
   {
-    title: 'video_link',
-    dataIndex: 'video_link',
+    title: 'CHANNEL NAME',
+    dataIndex: 'video_channel_title',
   },
   {
-    title: 'video_owner_handle',
+    title: 'OWNER',
     dataIndex: 'video_owner_handle',
   },
   {
-    title: 'video_curator',
+    title: 'CURATOR',
     dataIndex: 'video_curator',
   },
   {
-    title: 'video_check_description',
+    title: 'YT ID',
+    dataIndex: 'video_yt_id',
+  },
+  {
+    title: 'NFT ID',
+    dataIndex: 'video_nft_id',
+  },
+  {
+    title: 'UPLOAD TIME',
+    dataIndex: 'video_createdAt',
+  },
+  {
+    title: 'CHECKED TIME',
+    dataIndex: 'video_checkedAt',
+  },
+  {
+    title: 'CHECK DESCRIPTION',
     dataIndex: 'video_check_description',
+  },
+  {
+    title: 'video_check_tag',
+    dataIndex: 'video_check_tag',
+    render: (_, { video_check_tag,video_check_flag }) => {
+
+
+
+      return(
+
+        <>
+        {video_check_tag &&
+          video_check_tag.map((tag) => {
+            if(tag[0]!='')
+            return (
+              <Tag color="red" key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+        {video_check_flag&& <Tag color="green" key='checked'>CHECKED</Tag>}
+      </>
+        )
+    }
   },
 ];
 
-interface AuthProps {
-  auth: {
-    isAuthenticated: boolean;
-    user:any
-  };
-}
 
-const AssignedList:React.FC<AuthProps> = ({auth}) => {
+const AssignedList= ({ auth: { user } }: any) => {
   const [assignment, setAssignment] = useState<Assignment[]>();
   const [selectList, setSelectList] = useState<Assignment>();
-  const member_id: string = auth.user.handle;
+  const member_id: string = user.handle;
   useEffect(() => {
     getUnCheckedList(member_id);
   }, []);
@@ -84,6 +124,7 @@ const AssignedList:React.FC<AuthProps> = ({auth}) => {
     },
   };
 
+  console.log(assignment, "assginment")
   return (
     <section className="container">
       {assignment == undefined || assignment.length < 1 ? (
@@ -110,4 +151,10 @@ const AssignedList:React.FC<AuthProps> = ({auth}) => {
   );
 };
 
-export default AssignedList;
+const mapStateToProps = (state: any) => ({
+  auth: state.auth,
+});
+
+const connector = connect(mapStateToProps, {});
+
+export default connector(AssignedList);
