@@ -14,6 +14,10 @@ import {
   YPP_FILTER,
   CHECKED_FILTER,
   NFT_FILTER,
+  ASSIGNMENT_VIDEOS,
+  NON_YPP_FILTER,
+  NON_NFT_FILTER,
+  NON_CHECKED_FILTER
   } from '../actions/types';
 const today = new Date();
 
@@ -30,6 +34,10 @@ const initialState = {
   error: {},
   sel_date: TODAY,
   filter_data:null,
+  all_num:null,
+  ypp_num:null,
+  nft_num:null,
+  check_num:null
 };
 
 function videoReducer(state = initialState, action:any) {
@@ -42,6 +50,10 @@ function videoReducer(state = initialState, action:any) {
         videos: payload,
         filter_data:payload,
         loading: false,
+        all_num: payload.length,
+        ypp_num: payload.filter((item:any) => item.video_yt_id == null).length,
+        nft_num: payload.filter((item:any) => item.video_nft_id != 'No'&& item.video_nft_id != null).length,
+        check_num:payload.filter((item:any) => item.video_check_flag !== false).length
         
       };
       case SET_DATE:
@@ -61,90 +73,67 @@ function videoReducer(state = initialState, action:any) {
         ...state,
         filter_data: state.videos.filter((item:any) => item.video_yt_id !== null),
         loading: false,
-        filter:2
+
       };
-      case NFT_FILTER:
+      case NON_NFT_FILTER:
       return {
         ...state,
-        filter_data: state.videos.filter((item:any) => item.video_nft_id !== null),
+        filter_data: state.videos.filter((item:any) =>  item.video_nft_id != 'No'|| item.video_nft_id != null),
         loading: false,
-        filter:3
+
       };
       case CHECKED_FILTER:
       return {
         ...state,
         filter_data: state.videos.filter((item:any) => item.video_check_flag !== false),
         loading: false,
-        filter:4
+
       };
       case ALL_FILTER:
       return {
         ...state,
         filter_data: state.videos,
         loading: false,
-        filter:1
-      };
-      // case GET_VIDEOS:
-      //   return {
-      //     ...state,
-      //     videos: payload,
-      //     loading: false
-      // };
 
-    // case SET_LOADING:
-    //   return {
-    //     ...state,
-    //     loading: true
-    //   };
-    // case GET_VIDEO:
-    //   return {
-    //     ...state,
-    //     video: payload,
-    //     loading: false
-    //   };
-    // case ADD_VIDEO:
-    //   return {
-    //     ...state,
-    //     videos: [payload, ...state.videos],
-    //     loading: false
-    //   };
-    // case DELETE_VIDEO:
-    //   return {
-    //     ...state,
-    //     videos: state.videos.filter((video) => video._id !== payload),
-    //     loading: false
-    //   };
-    // case VIDEO_ERROR:
-    //   return {
-    //     ...state,
-    //     error: payload,
-    //     loading: false
-    //   };
-    // case UPDATE_LIKES:
-    //   return {
-    //     ...state,
-    //     videos: state.videos.map((video) =>
-    //       video._id === payload.id ? { ...video, likes: payload.likes } : video
-    //     ),
-    //     loading: false
-    //   };
-    // case ADD_COMMENT:
-    //   return {
-    //     ...state,
-    //     video: { ...state.video, comments: payload },
-    //     loading: false
-    //   };
-    // case REMOVE_COMMENT:
-    //   return {
-    //     ...state,
-    //     video: {
-    //       ...state.video,
-    //       comments: state.video.comments.filter(
-    //         (comment) => comment._id !== payload
-    //       )
-    //     },
-    //     loading: false
-    //   };
+      };
+    
+      case NON_YPP_FILTER:
+      return {
+        ...state,
+        filter_data: state.videos.filter((item:any) => item.video_yt_id == null),
+        loading: false,
+
+      };
+      case NFT_FILTER:
+      return {
+        ...state,
+        filter_data: state.videos.filter((item:any) =>  item.video_nft_id !== 'No'&& item.video_nft_id !== null),
+        loading: false,
+
+      };
+      case NON_CHECKED_FILTER:
+      return {
+        ...state,
+        filter_data: state.videos.filter((item:any) => item.video_check_flag == false),
+        loading: false,
+
+      };
+      case ASSIGNMENT_VIDEOS:
+        return {
+          ...state,
+          filter_data: state.videos.map((item:any)=>{
+            const tmp = payload.selectList.find((id:any) => id == item.key)
+            if (tmp) {
+              console.log(tmp, "item")
+              // return item
+              return { ...item, video_curator: payload.curator };
+            }
+            return item
+          }),
+          loading: false,
+
+        };
+   
     default:
       return state;
   }

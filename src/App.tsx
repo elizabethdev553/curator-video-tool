@@ -6,8 +6,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { loadUser } from './actions/auth';
 import { LOGOUT } from './actions/types';
-import Assignment from './components/admin/Assignment';
-import CheckedList from './components/admin/CheckedList';
+// import Assignment from './components/admin/Assignment';
+// import CheckedList from './components/admin/CheckedList';
 import CuratorList from './components/admin/CuratorList';
 import Home from './components/admin/Home';
 import VideoList from './components/admin/VideoList';
@@ -40,10 +40,10 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Login />} />
 
-            <Route path="/checked-list" element={<PrivateRoute component={CheckedList} />} />
+            {/* <Route path="/checked-list" element={<PrivateRoute component={CheckedList} />} /> */}
             <Route path="/register" element={<PrivateRoute component={Register} />} />
             <Route path="/curator-list" element={<PrivateRoute component={CuratorList} />} />
-            <Route path="/assignment" element={<PrivateRoute component={Assignment} />} />
+            {/* <Route path="/assignment" element={<PrivateRoute component={Assignment} />} /> */}
             <Route path="/assigned-list" element={<PrivateRoute component={AssignedList} />} />
             <Route path="/curator-panel/check/:id" element={<PrivateRoute component={VideoCheck} />} />
             <Route path="/from-qn/:date/:time?" element={<PrivateRoute component={Home} />} />

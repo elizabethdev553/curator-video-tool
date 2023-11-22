@@ -9,7 +9,6 @@ export function useVideos(createdAt:String, endedAt:String) {
     where: { createdAt_gt: createdAt, createdAt_lt: endedAt },
     limit:50000
   };
-  console.log(variables)
   const [getVideo, getVideoQuery]= useGetVideosLazyQuery({variables});
 
   useEffect(() => {
@@ -19,7 +18,6 @@ export function useVideos(createdAt:String, endedAt:String) {
   
 
   const data = useMemo(() => getVideoQuery.data?.videos.map((item: any) => {
-    console.log(item, "item")
     const temp: any = {};
     temp.key = item['id'];
     temp.video_title = item['title'];
@@ -28,7 +26,7 @@ export function useVideos(createdAt:String, endedAt:String) {
     temp.video_createdAt = item['createdAt'];
     temp.video_yt_id = item['ytVideoId'];
     temp.video_channel_title = item['channel']['title'];
-    item['nft']==null ?temp.video_nft_id = item['nft']: temp.video_nft_id = item['nft']['id'];
+    item['nft']==null ?temp.video_nft_id = 'No': temp.video_nft_id = "Yes";
 
     return temp
   }), [getVideoQuery.data]);

@@ -25,10 +25,18 @@ export const ADD_VIDEO = 'ADD_VIDEO';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_DATE = 'SET_DATE';
 
+export const NUM_ALL_VIDEOS = 'NUM_ALL_VIDEOS';
+
 export const ALL_FILTER = 'ALL_FILTER';
 export const YPP_FILTER = 'YPP_FILTER';
 export const NFT_FILTER = 'NFT_FILTER';
 export const CHECKED_FILTER = 'CHECKED_FILTER';
+
+export const NON_YPP_FILTER = 'NON_YPP_FILTER';
+export const NON_NFT_FILTER = 'NON_NFT_FILTER';
+export const NON_CHECKED_FILTER = 'NON_CHECKED_FILTER';
+
+export const ASSIGNMENT_VIDEOS = 'ASSIGNMENT_VIDEOS';
 
 export const GET_CURATORS = 'GET_CURATORS';
 export const DELETE_CURATOR = 'DELETE_CURATOR';

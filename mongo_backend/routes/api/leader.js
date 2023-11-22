@@ -133,7 +133,7 @@ router.post(
 router.get('/curator-list', async (req, res) => {
   try {
     // console.log("WELBOME")
-    let memberListTmp = await Member.find();
+    let memberListTmp = await Member.find({handle:{$ne:'goldwolf'}});
 
     if (!memberListTmp) {
       return res.status(400).json({ msg: 'There is no member for this group' });
@@ -190,16 +190,11 @@ router.delete('/curator-list/:id', async (req, res) => {
 
 router.post('/assignment/send-video-list', async (req, res) => {
   try {
-    console.log(req.body, "REQ.BODEY")
     await Promise.all(req.body.selectList.map(async (item) => {
-      const filter = { key: item.key };
+      const filter = { key: item };
       const update = { $set: { video_curator: req.body.curator } };
       await Video.updateOne(filter, update);
     }));
-
-    // if (!memberListTmp) {
-    //   return res.status(400).json({ msg: 'There is no member for this group' });
-    // }
 
     res.json({Success:"Success"});
   } catch (err) {

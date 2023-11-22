@@ -78,15 +78,6 @@ const CuratorList = ({getCuratorList,delCurator, curator:{curators}}:any) => {
           hideOnSinglePage: true,
           showSizeChanger: true,
         }}
-        // onRow={(record, rowIndex) => {
-        //   return {
-        //     onClick: (event) => {console.log(event, "event")}, // click row
-        //     onDoubleClick: (event) => {}, // double click row
-        //     onContextMenu: (event) => {}, // right button click row
-        //     onMouseEnter: (event) => {}, // mouse enter row
-        //     onMouseLeave: (event) => {}, // mouse leave row
-        //   };
-        // }}
         columns={columns}
         dataSource={curators}
       />

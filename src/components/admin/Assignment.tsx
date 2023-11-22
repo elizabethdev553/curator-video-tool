@@ -121,7 +121,6 @@ const Assignment = () => {
   }, [msg, date]);
 
   const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
     setDate(dateString);
   };
 

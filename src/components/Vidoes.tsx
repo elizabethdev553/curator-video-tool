@@ -1,22 +1,23 @@
-import type { DatePickerProps } from 'antd';
-import { DatePicker,Divider, Pagination, Select, Table } from 'antd';
-// import { useSelectedCouncil } from '@/store';
-// import { isDefined } from '@/types';
+import { Divider, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import Spinner from './layout/Spinner';
-import type { TableRowSelection } from 'antd/es/table/interface';
-import axios from 'axios';
-import React, { Fragment,useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import api from '../utils/api'
+import api from '../utils/api';
 interface Assignment {
   key: string;
   video_title: string;
-  video_link: string;
+  video_channel_title: string;
   video_owner_handle: string;
   video_curator: string;
-  video_createdAt: string;
+  video_createdAt: Date;
+  video_checkedAt: Date;
+  video_yt_id: string;
+  video_nft_id: string;
+  video_check_tag: string[];
+  video_check_flag: boolean;
+  video_check_description: string;
 }
 
 interface CuratorList {
@@ -63,36 +64,31 @@ export interface VideosProps {
 }
 
 const Videos: React.FC<VideosProps> = ({ results }: VideosProps) => {
-  const [flag, setFlag] = useState<Boolean>(false)
+  const [flag, setFlag] = useState<Boolean>(false);
   const navigate = useNavigate();
- 
+
   async function uploadList(data: any) {
     try {
-      console.log(data, "YYYYYYYYYYYYYYYYY")
-      // const tmp = JSON.stringify(data);
       const res = await api.post('/leader/upload', data, {
         headers: {
           'Content-Type': 'application/json',
-        
         },
       });
-      setFlag(false)
+      setFlag(false);
       navigate('/video-list');
-     
     } catch (err) {
-     
       console.log('ERROR');
     }
   }
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    setFlag(true)
+    setFlag(true);
     if (results !== undefined && results.length > 0) uploadList(results);
   };
 
-  if(flag===true) {
-    return <Spinner />
+  if (flag === true) {
+    return <Spinner />;
   }
   return (
     <Fragment>
@@ -103,9 +99,9 @@ const Videos: React.FC<VideosProps> = ({ results }: VideosProps) => {
           <form className="form" onSubmit={onSubmit}>
             <Divider />
 
-            <Table  columns={columns} dataSource={results}  />
+            <Table columns={columns} dataSource={results} />
 
-       <input type="submit" className="btn btn-primary" value="Save in DataBase" />
+            <input type="submit" className="btn btn-primary" value="Save in DataBase" />
           </form>
         </Fragment>
       )}
