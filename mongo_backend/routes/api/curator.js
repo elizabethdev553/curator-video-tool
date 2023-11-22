@@ -52,7 +52,7 @@ router.post('/check/description', async (req, res) => {
   try {
   
       const filter = { key: req.body.video_id };
-      const update = { $set: { video_check_description: req.body.description,video_check_tag:req.body.video_tabs, video_check_flag:true, video_checkedAt:Date.now()} };
+      const update = { $set: { video_check_description: req.body.description,video_check_tag:req.body.video_tabs,video_category:req.body.video_category, video_check_flag:true, video_checkedAt:Date.now()} };
       await Video.updateOne(filter, update);
 
     res.json({Success:"Success"});

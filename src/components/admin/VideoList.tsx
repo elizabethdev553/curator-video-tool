@@ -6,9 +6,6 @@ import type { TableRowSelection } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import CsvDownloadButton from 'react-json-to-csv';
-
 import { useVideoCounts, useVideos } from '@/hooks';
 import { connect, ConnectedProps } from 'react-redux';
 
@@ -27,6 +24,7 @@ interface Assignment {
   video_check_tag: string[];
   video_check_flag: boolean;
   video_check_description: string;
+  video_category:string
 }
 
 interface CuratorList {
@@ -73,6 +71,10 @@ const columns: ColumnsType<Assignment> = [
   {
     title: 'CHECKED TIME',
     dataIndex: 'video_checkedAt',
+  },
+  {
+    title: 'CATEGORY',
+    dataIndex: 'video_category',
   },
   {
     title: 'CHECK TAG',
@@ -234,7 +236,7 @@ const VideoList = ({
           <form className="form" onSubmit={onSubmit}>
             {data > videos.length ? (
               <Link to={`/from-qn/${sel_date}/${videos[0]?.video_createdAt}`} className="btn btn-primary">
-                From QN
+                Refresh
               </Link>
             ) : (
               ''
@@ -247,7 +249,7 @@ const VideoList = ({
                 return { value: item.handle, label: item.handle };
               })}
             />
-            <input type="submit" className="btn btn-primary" value="Send" />
+            <input type="submit" className="btn btn-primary" value="Assign" />
             <Table columns={columns} dataSource={filter_data} rowSelection={rowSelection} />
           </form>
         </Fragment>

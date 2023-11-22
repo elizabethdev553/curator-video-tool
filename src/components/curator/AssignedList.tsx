@@ -1,11 +1,13 @@
-import { Divider, Select,Table,Tag } from 'antd';
+import { Divider, Select,Table,Tag, DatePicker } from 'antd';
+import type { DatePickerProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import axios from 'axios';
 import React, { Fragment,useEffect, useState } from 'react';
 import {Link} from 'react-router-dom'
+import dayjs from 'dayjs';
+
 import Spinner from '../../components/layout/Spinner';
 import api from '../../utils/api'
-
+import { setDate } from '@/actions/admin';
 import { connect, ConnectedProps } from 'react-redux';
 
 const { Option } = Select;
@@ -22,7 +24,8 @@ interface Assignment {
   video_check_tag: string[];
   video_check_flag: boolean;
   video_check_description: string;
-  video_checkedAt:string
+  video_checkedAt:string;
+  video_category:string
 }
 
 const columns: ColumnsType<Assignment> = [
@@ -67,14 +70,14 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_check_description',
   },
   {
+    title: 'CATEGORY',
+    dataIndex: 'video_category',
+  },
+  {
     title: 'video_check_tag',
     dataIndex: 'video_check_tag',
     render: (_, { video_check_tag,video_check_flag }) => {
-
-
-
       return(
-
         <>
         {video_check_tag &&
           video_check_tag.map((tag) => {
@@ -85,7 +88,7 @@ const columns: ColumnsType<Assignment> = [
             </Tag>
           );
         })}
-        {video_check_flag&& <Tag color="green" key='checked'>CHECKED</Tag>}
+        {video_check_flag && <Tag color="green" key='checked'>CHECKED</Tag>}
       </>
         )
     }
@@ -93,7 +96,7 @@ const columns: ColumnsType<Assignment> = [
 ];
 
 
-const AssignedList= ({ auth: { user } }: any) => {
+const AssignedList= ({ auth: { user }, setDate }: any) => {
   const [assignment, setAssignment] = useState<Assignment[]>();
   const [selectList, setSelectList] = useState<Assignment>();
   const member_id: string = user.handle;
@@ -116,6 +119,10 @@ const AssignedList= ({ auth: { user } }: any) => {
     }
   }
 
+  
+  const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
+    setDate(dateString);
+  };
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
@@ -133,7 +140,7 @@ const AssignedList= ({ auth: { user } }: any) => {
         <Fragment>
           <h1 className="large text-primary">Curator Panel</h1>
           <Divider />
-      
+          <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} />
             <Table
               rowSelection={{
                 type: 'radio',
@@ -155,6 +162,6 @@ const mapStateToProps = (state: any) => ({
   auth: state.auth,
 });
 
-const connector = connect(mapStateToProps, {});
+const connector = connect(mapStateToProps, {setDate});
 
 export default connector(AssignedList);

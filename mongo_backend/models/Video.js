@@ -42,6 +42,9 @@ const VideoSchema = new mongoose.Schema({
   video_check_tag:{
     type: Array,
   },
+  video_category:{
+    type: String,
+  },
   // avatar: {
   //   type: String
   // },

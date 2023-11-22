@@ -49,8 +49,8 @@ const VideoCheck = () => {
     }
   }
 
-  async function saveDescriptionResult(description: string|undefined,video_tabs:string|undefined, video_id: string | undefined) {
-    const data = { description, video_tabs, video_id };
+  async function saveDescriptionResult(description: string|undefined,video_tabs:string|undefined,video_category:string, video_id: string | undefined) {
+    const data = { description, video_tabs, video_category,video_id };
     try {
       const response = await axios.post('http://localhost:5000/api/curator/check/description', data, {
         headers: {
@@ -68,7 +68,7 @@ const VideoCheck = () => {
   const onFinish = (values: any) => {
     console.log(values, 'values');
     // if (values.check === true) console.log(values, 'values');
-    saveDescriptionResult(values.description, values.video_tabs, id);
+    saveDescriptionResult(values.description, values.video_tabs, values.video_category, id);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -129,6 +129,17 @@ const VideoCheck = () => {
                     <Option value="porn">Porn</Option>
                     <Option value="illegal">Illegal</Option>
                     <Option value="fake">Fake</Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="video_category"
+                  label="A,B,C,D"
+                >
+                  <Select  placeholder="Please select favourite colors">
+                    <Option value="A">A</Option>
+                    <Option value="B">B</Option>
+                    <Option value="C">C</Option>
+                    <Option value="D">D</Option>
                   </Select>
                 </Form.Item>
                 <Form.Item>
