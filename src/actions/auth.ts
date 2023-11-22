@@ -42,7 +42,7 @@ export const register = (formData:any) => async (dispatch: Dispatch) => {
       type: REGISTER_SUCCESS,
       payload: res.data
     });
-    dispatch(loadUser() as any);
+    // dispatch(loadUser() as any);
   } catch (err:any) {
     const errors = err.response.data.errors;
 

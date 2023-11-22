@@ -39,9 +39,9 @@ const App = () => {
           <Navbar />
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
 
             <Route path="/checked-list" element={<PrivateRoute component={CheckedList} />} />
+            <Route path="/register" element={<PrivateRoute component={Register} />} />
             <Route path="/curator-list" element={<PrivateRoute component={CuratorList} />} />
             <Route path="/assignment" element={<PrivateRoute component={Assignment} />} />
             <Route path="/assigned-list" element={<PrivateRoute component={AssignedList} />} />

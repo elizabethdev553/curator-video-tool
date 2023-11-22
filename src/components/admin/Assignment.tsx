@@ -1,5 +1,5 @@
 import type { DatePickerProps } from 'antd';
-import { DatePicker,Divider, Pagination, Select, Table } from 'antd';
+import { DatePicker,Divider, Tag, Select, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { TableRowSelection } from 'antd/es/table/interface';
 import axios from 'axios';
@@ -12,10 +12,15 @@ import Spinner from '../../components/layout/Spinner';
 interface Assignment {
   key: string;
   video_title: string;
-  video_link: string;
+  video_channel_title: string;
   video_owner_handle: string;
   video_curator: string;
   video_createdAt: Date;
+  video_yt_id: string;
+  video_nft_id: string;
+  video_check_tag: string[];
+  video_check_flag: boolean;
+  video_check_description: string;
 
 }
 
@@ -33,29 +38,65 @@ interface DataType {
 const data: DataType[] = [];
 const columns: ColumnsType<Assignment> = [
   {
-    title: 'video_id',
+    title: 'ID',
     dataIndex: 'key',
   },
   {
-    title: 'video_title',
+    title: 'TITLE',
     dataIndex: 'video_title',
   },
   {
-    title: 'video_link',
-    dataIndex: 'video_media_id',
+    title: 'CHANNEL NAME',
+    dataIndex: 'video_channel_title',
   },
   {
-    title: 'video_owner_handle',
+    title: 'OWNER',
     dataIndex: 'video_owner_handle',
   },
   {
-    title: 'video_curator',
+    title: 'CURATOR',
     dataIndex: 'video_curator',
   },
   {
-    title: 'video_createdAt',
+    title: 'YT ID',
+    dataIndex: 'video_yt_id',
+  },
+  {
+    title: 'NFT ID',
+    dataIndex: 'video_nft_id',
+  },
+  {
+    title: 'UPLOAD TIME',
     dataIndex: 'video_createdAt',
   },
+  {
+    title: 'CHECK DESCRIPTION',
+    dataIndex: 'video_check_description',
+  },
+  {
+    title: 'CHECK TAG',
+    dataIndex: 'video_check_tag',
+    render: (_, { video_check_tag, video_check_flag }) => (
+      <>
+        {video_check_tag &&
+          video_check_tag.map((tag) => {
+            if (tag[0] != '')
+              return (
+                <Tag color="red" key={tag}>
+                  {tag.toUpperCase()}
+                </Tag>
+              );
+          })}
+        {video_check_flag && (
+          <Tag color="green" key="checked">
+            {' '}
+            CHECKED
+          </Tag>
+        )}
+      </>
+    ),
+  },
+
 ];
 
 const today = new Date(); 

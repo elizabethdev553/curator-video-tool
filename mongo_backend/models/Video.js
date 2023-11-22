@@ -49,9 +49,9 @@ const VideoSchema = new mongoose.Schema({
     type: Date,
     reqired:true
   },
-  date: {
+
+  video_checkedAt: {
     type: Date,
-    default: Date.now
   }
 });
 

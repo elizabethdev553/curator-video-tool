@@ -146,6 +146,47 @@ router.get('/curator-list', async (req, res) => {
   }
 });
 
+router.delete('/:id', [auth, checkObjectId('id')], async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ msg: 'Post not found' });
+    }
+
+    // Check user
+    if (post.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'User not authorized' });
+    }
+
+    await post.remove();
+
+    res.json({ msg: 'Post removed' });
+  } catch (err) {
+    console.error(err.message);
+
+    res.status(500).send('Server Error');
+  }
+});
+
+router.delete('/curator-list/:id', async (req, res) => {
+  try {
+    const email=req.params.id;
+    let member = await Member.findOne({email:email});
+
+    if (!member) {
+      return res.status(404).json({ msg: 'Member not found' });
+    }
+
+    await member.remove();
+
+    res.json({ msg: 'Member removed' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 
 router.post('/assignment/send-video-list', async (req, res) => {
   try {
