@@ -1,5 +1,5 @@
 import type { DatePickerProps } from 'antd';
-import { DatePicker, Divider, Pagination, Select, Table, Tag, Radio,Col, Row } from 'antd';
+import { DatePicker, Divider, Pagination, Select, Table, Tag, Radio,Col, Row,Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { RadioChangeEvent } from 'antd';
 import type { TableRowSelection } from 'antd/es/table/interface';
@@ -187,6 +187,17 @@ const VideoList = ({
       sendVideoList(selectedRowKeys, curator);
     }
   };
+  const exportData = () => {
+    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+      JSON.stringify(filter_data)
+    )}`;
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = "data.json";
+
+    link.click();
+  };
+
   const { data } = useVideoCounts(sel_date);
   return (
     <section className="container">
@@ -201,6 +212,7 @@ const VideoList = ({
       <Col span={3}>Ypp Data: {ypp_num}</Col>
       <Col span={3}>Nft Data: {nft_num}</Col>
       <Col span={3}>Checked Data: {check_num}</Col>
+      <Col span={3}><Button onClick={exportData}  danger>Export Data</Button></Col>
       </Row>
       {/* <Col span={3}>  </Col> */}
       <Divider />
@@ -218,7 +230,6 @@ const VideoList = ({
         <Spinner />
       ) : (
         <Fragment>
-          {/* <CsvDownloadButton data={filter_data} headers={Object.keys(filter_data[0])} /> */}
 
           <form className="form" onSubmit={onSubmit}>
             {data > videos.length ? (
