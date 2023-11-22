@@ -7,11 +7,11 @@ import dayjs from 'dayjs';
 import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from 'react-router-dom'
 
-import Spinner from '../../components/layout/Spinner';
 import { useVideoCounts,useVideos } from '@/hooks';
+import { connect, ConnectedProps } from 'react-redux';
 
-import api from '../../utils/api'
-
+import {getVideoList} from '../../actions/admin'
+import Spinner from '../../components/layout/Spinner';
 interface Assignment {
   key: string;
   video_title: string;
@@ -19,6 +19,8 @@ interface Assignment {
   video_owner_handle: string;
   video_curator: string;
   video_createdAt: Date;
+  video_yt_id:string;
+  video_nft_id:string
 }
 
 interface CuratorList {
@@ -47,46 +49,52 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_curator',
   },
   {
+    title: 'video_yt_id',
+    dataIndex: 'video_yt_id',
+  },
+  {
+    title: 'video_nft_id',
+    dataIndex: 'video_nft_id',
+  },
+  {
     title: 'video_createdAt',
     dataIndex: 'video_createdAt',
   },
 ];
+console.log(dayjs(), "dayjs")
 
-const today = new Date();
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux 
 
-const year = String(today.getFullYear()).slice(-2);
-const month = String(today.getMonth() + 1).padStart(2, '0');
-const day = String(today.getDate()).padStart(2, '0');
-
-const TODAY = `20${year}-${month}-${day}`;
-
-const VideoList = () => {
-  const [assignment, setAssignment] = useState<Assignment[]>();
-  const [msg, setMsg] = useState('');
-  const [date, setDate] = useState<string>(TODAY);
+const VideoList = ({ getVideoList, admin: { videos, loading, sel_date } }:any) => {
+  const [date, setDate] = useState<string>(sel_date);
+  // const [msg, setMsg] = useState(true);
   useEffect(() => {
     getVideoList(date);
-  }, [msg, date]);
+    console.log(date)
+  }, [date]);
+  console.log(videos, "videos")
 
   const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
     console.log(date, dateString);
     setDate(dateString);
   };
 
-  async function getVideoList(date: string) {
-    try {
-      const response = await axios.get(`http://localhost:5000/api/leader/video-list/${date}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const assignmentList = response.data;
-      setAssignment(assignmentList);
-      // Do something with the user data
-    } catch (error) {
-      console.log(error, 'Fetch UnCheckedList Error');
-    }
-  }
+
+  // async function getVideoList(date: string) {
+  //   try {
+  //     const response = await axios.get(`http://localhost:5000/api/leader/video-list/${date}`, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //     const assignmentList = response.data;
+  //     setAssignment(assignmentList);
+  //     // Do something with the user data
+  //   } catch (error) {
+  //     console.log(error, 'Fetch UnCheckedList Error');
+  //   }
+  // }
 
 
   // const onSubmit = (e: any) => {
@@ -121,33 +129,32 @@ const VideoList = () => {
   //   }
   // }
 
-  const { data, loading, error } = useVideoCounts(date);
+  const { data } = useVideoCounts(date);
 
-  if (loading) {
-    <Spinner />;
-  }
-
-  if (error) {
-    return <div className="sub_panel loading">error</div>;
-  }
-
+ 
   return (
     <section className="container">
       <h1 className="large text-primary">Videos List</h1>
       <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} />
       QN Size: {data}
-      {assignment == undefined || data==undefined ? (
+      {loading===true || videos==null||!data ? (
         <Spinner />
-      ) : (
+      ) : ( 
         <Fragment>
             <Divider />
 
-            <Table columns={columns} dataSource={assignment} />
-            {data > assignment.length ? <Link to={`/from-qn/${date}/${assignment[0]?.video_createdAt}`} className="btn btn-primary">From QN</Link> : ''}
+            <Table columns={columns} dataSource={videos} />
+            {data > videos.length ? <Link to={`/from-qn/${date}/${videos[0]?.video_createdAt}`} className="btn btn-primary">From QN</Link> : ''}
         </Fragment>
       )}
     </section>
   );
 };
 
-export default VideoList;
+const mapStateToProps = (state: any) => ({
+  admin:state.admin
+});
+
+const connector = connect(mapStateToProps, { getVideoList });
+
+export default connector(VideoList);
