@@ -84,8 +84,8 @@ const VideoCheck = () => {
           <Form
             layout="vertical"
             name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -93,8 +93,8 @@ const VideoCheck = () => {
             <Divider />
 
             <Row>
-              <Col span={10}>
-                <Card title="Video Detail" extra={<a href="#">More</a>} style={{ textAlign: 'left' }}>
+              <Col span={9} style={{paddingRight: '40px', paddingLeft: '20px'}}>
+                <Card title="Video Detail" style={{ textAlign: 'left' }}>
                   <p>
                     <b>Video ID:</b> {videoDetail.key}
                   </p>
@@ -112,24 +112,23 @@ const VideoCheck = () => {
                     <b>Video Title:</b> {videoDetail.video_title}
                   </p>
                 </Card>
-
+                
                 <Form.Item<FieldType>
-                  label="description"
+                  label="Description"
                   name="description"
-                  // rules={[{ required: true, message: 'Please input your description!' }]}
+                  style={{marginTop: '30px', maxWidth:'100%'}}
                 >
                   <TextArea rows={5} />
                 </Form.Item>
                 <Form.Item
                   name="video_tabs"
                   label="Select the tabs. If not, don't select."
-                 
                 >
                   <Select mode="multiple" placeholder="Please select favourite colors">
                     <Option value="Cruelty">Cruelty</Option>
-                    <Option value="porn">porn</Option>
-                    <Option value="illegal">illegal</Option>
-                    <Option value="fake">fake</Option>
+                    <Option value="porn">Porn</Option>
+                    <Option value="illegal">Illegal</Option>
+                    <Option value="fake">Fake</Option>
                   </Select>
                 </Form.Item>
                 <Form.Item>
@@ -138,8 +137,7 @@ const VideoCheck = () => {
                   </Button>
                 </Form.Item>
               </Col>
-              <Col span={2}></Col>
-              <Col span={12}>
+              <Col span={15}>
                 <VideoPanel results={videoDetail.video_media_id} />
               </Col>
             </Row>
