@@ -23,7 +23,7 @@ export function useVideoCounts(date:string) {
   console.log(data, "data")
   return {
     data,
-    loading: getCountQuery.loading,
-    error: getCountQuery.error,
+    loading_qn: getCountQuery.loading,
+    error_qn: getCountQuery.error,
   };
 }
