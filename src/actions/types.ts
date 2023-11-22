@@ -15,6 +15,7 @@ export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 export const PROFILE_ERROR = 'PROFILE_ERROR';
 export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
+
 export const GET_VIDEOS = 'GET_VIDEOS';
 export const GET_VIDEO = 'GET_VIDEO';
 export const VIDEO_ERROR = 'VIDEO_ERROR';
@@ -23,6 +24,17 @@ export const DELETE_VIDEO = 'DELETE_VIDEO';
 export const ADD_VIDEO = 'ADD_VIDEO';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_DATE = 'SET_DATE';
+
+export const ALL_FILTER = 'ALL_FILTER';
+export const YPP_FILTER = 'YPP_FILTER';
+export const NFT_FILTER = 'NFT_FILTER';
+export const CHECKED_FILTER = 'CHECKED_FILTER';
+
+export const GET_CURATORS = 'GET_CURATORS';
+export const DELETE_CURATOR = 'DELETE_CURATOR';
+export const ADD_CURATOR = 'ADD_CURATOR';
+
+
 
 
 export const ADD_COMMENT = 'ADD_COMMENT';

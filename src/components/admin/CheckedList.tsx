@@ -17,7 +17,7 @@ interface VideoDetail {
 
 const columns: ColumnsType<VideoDetail> = [
   {
-    title: 'key',
+    title: 'ID',
     dataIndex: 'key',
   },
   {
@@ -40,10 +40,10 @@ const columns: ColumnsType<VideoDetail> = [
     title: 'video_check_description',
     dataIndex: 'video_check_description',
   },
-  {
-    title: 'video_check_flag',
-    dataIndex: 'video_check_flag',
-  },
+  // {
+  //   title: 'video_check_flag',
+  //   dataIndex: 'video_check_flag',
+  // },
   {
     title: 'video_check_tag',
     dataIndex: 'video_check_tag',

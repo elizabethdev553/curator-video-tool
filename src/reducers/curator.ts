@@ -1,88 +1,38 @@
 import {
-  GET_VIDEOS,
-  VIDEO_ERROR,
-  UPDATE_LIKES,
-  DELETE_VIDEO,
-  ADD_VIDEO,
-  GET_VIDEO,
-  ADD_COMMENT,
-  REMOVE_COMMENT,
-  SET_LOADING,
-  SET_DATE,
   GET_CURATORS,
-  ALL_FILTER,
-  YPP_FILTER,
-  CHECKED_FILTER,
-  NFT_FILTER,
+  DELETE_CURATOR,
+  ADD_CURATOR
   } from '../actions/types';
-const today = new Date();
-
-const year = String(today.getFullYear()).slice(-2);
-const month = String(today.getMonth() + 1).padStart(2, '0');
-const day = String(today.getDate()).padStart(2, '0');
-
-const TODAY = `20${year}-${month}-${day}`;
 
 const initialState = {
-  videos: [],
-  video: null,
+ curators:[],
   loading: true,
   error: {},
-  sel_date: TODAY,
-  filter_data:null,
 };
 
-function videoReducer(state = initialState, action:any) {
+function curatorReducer(state = initialState, action:any) {
   const { type, payload } = action;
   switch (type) {
-    case GET_VIDEOS:
+    case GET_CURATORS:
       console.log(state, 'videos')
       return {
         ...state,
-        videos: payload,
-        filter_data:payload,
+        curators: payload,
         loading: false,
         
       };
-      case SET_DATE:
+      case DELETE_CURATOR:
       return {
         ...state,
-        sel_date:payload,
-        loading:true
-        
+        curators: state.curators.filter((curator:any) => curator.email !== payload),
+        loading: false
       };
-      case GET_CURATORS:
+    
+      case ADD_CURATOR:
       return {
         ...state,
-        curators:payload,
-      };
-      case YPP_FILTER:
-      return {
-        ...state,
-        filter_data: state.videos.filter((item:any) => item.video_yt_id !== null),
-        loading: false,
-        filter:2
-      };
-      case NFT_FILTER:
-      return {
-        ...state,
-        filter_data: state.videos.filter((item:any) => item.video_nft_id !== null),
-        loading: false,
-        filter:3
-      };
-      case CHECKED_FILTER:
-      return {
-        ...state,
-        filter_data: state.videos.filter((item:any) => item.video_check_flag !== false),
-        loading: false,
-        filter:4
-      };
-      case ALL_FILTER:
-      return {
-        ...state,
-        filter_data: state.videos,
-        loading: false,
-        filter:1
+        curators: [payload, ...state.curators],
+        loading: false
       };
       // case GET_VIDEOS:
       //   return {
@@ -150,4 +100,4 @@ function videoReducer(state = initialState, action:any) {
   }
 }
 
-export default videoReducer;
+export default curatorReducer;
