@@ -26,6 +26,8 @@ interface Assignment {
   video_check_description: string;
   video_checkedAt: string;
   video_category: string;
+  video_play:string;
+  video_duplicate:string;
 }
 
 const columns: ColumnsType<Assignment> = [
@@ -46,8 +48,8 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_owner_handle',
   },
   {
-    title: 'CURATOR',
-    dataIndex: 'video_curator',
+    title: 'UPLOAD TIME',
+    dataIndex: 'video_createdAt',
   },
   {
     title: 'YT ID',
@@ -58,23 +60,19 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_nft_id',
   },
   {
-    title: 'UPLOAD TIME',
-    dataIndex: 'video_createdAt',
+    title: 'CURATOR',
+    dataIndex: 'video_curator',
   },
   {
-    title: 'CHECKED TIME',
-    dataIndex: 'video_checkedAt',
-  },
-  {
-    title: 'CHECK DESCRIPTION',
-    dataIndex: 'video_check_description',
+    title: 'ENTITY PALYS',
+    dataIndex: 'video_play',
   },
   {
     title: 'CATEGORY',
     dataIndex: 'video_category',
   },
   {
-    title: 'video_check_tag',
+    title: 'CHECK TAG',
     dataIndex: 'video_check_tag',
     render: (_, { video_check_tag, video_check_flag }) =>
       video_check_tag ? (
@@ -86,6 +84,20 @@ const columns: ColumnsType<Assignment> = [
       ) : (
         ''
       ),
+  },
+  {
+    title: 'DUPLICATE',
+    dataIndex: 'video_duplicate',
+  },
+
+  {
+    title: 'CHECKED TIME',
+    dataIndex: 'video_checkedAt',
+  },
+
+  {
+    title: 'COMMENT',
+    dataIndex: 'video_check_description',
   },
 ];
 

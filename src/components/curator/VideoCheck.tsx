@@ -19,7 +19,7 @@ interface Assignment {
 }
 
 type FieldType = {
-  description?: string;
+  video_description?: string;
 };
 
 const VideoCheck = () => {
@@ -47,15 +47,16 @@ const VideoCheck = () => {
     }
   }
 
-  async function saveDescriptionResult(
-    description: string | undefined,
-    video_tabs: string | undefined,
-    video_category: string,
-    video_id: string | undefined
+  async function saveDescriptionResult(value:any, id:any
+    // description: string | undefined,
+    // video_tabs: string | undefined,
+    // video_category: string,
+    // video_id: string | undefined
   ) {
-    const data = { description, video_tabs, video_category, video_id };
     try {
-      const response = await axios.post('http://localhost:5000/api/curator/check/description', data, {
+      const data = value;
+      data.video_id = id;
+      const response = await api.post('/curator/check/description', data, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -69,9 +70,9 @@ const VideoCheck = () => {
   }
 
   const onFinish = (values: any) => {
-    // console.log(values, 'values');
+    console.log(values, 'values');
     // if (values.check === true) console.log(values, 'values');
-    saveDescriptionResult(values.description, values.video_tabs, values.video_category, id);
+    saveDescriptionResult(values, id);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -118,22 +119,38 @@ const VideoCheck = () => {
 
                 <Form.Item<FieldType>
                   label="Description"
-                  name="description"
+                  name="video_description"
                   style={{ marginTop: '30px', maxWidth: '100%' }}
                 >
                   <TextArea rows={5} />
                 </Form.Item>
-                <Form.Item name="video_tabs" label="If this video was fake, check.">
-                  <Select placeholder="Please select favourite colors">
-                    <Option value="Toxic">Toxic</Option>
+                <Form.Item name="video_tag" label="If this video was fake, check:">
+                  <Select placeholder="Select the list:">
+                    <Option value="Violence">Violence</Option>
+                    <Option value="Porn">Porn</Option>
+                    <Option value="Illegal">Illegal</Option>
                   </Select>
                 </Form.Item>
-                <Form.Item name="video_category" label="A,B,C,D">
+                <Form.Item name="video_category" label="Category Level:">
                   <Select placeholder="Please select favourite colors">
                     <Option value="A">A</Option>
                     <Option value="B">B</Option>
                     <Option value="C">C</Option>
                     <Option value="D">D</Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item name="video_play" label="Entity Play:" hasFeedback
+                rules={[{ required: true, message: 'Please select this!' }]}>
+                  <Select placeholder="Please select favourite colors">
+                    <Option value="Yes">Yes</Option>
+                    <Option value="No">No</Option>
+                  </Select>
+                </Form.Item>
+                
+                <Form.Item name="video_duplicate" label="Video Duplicate:">
+                  <Select placeholder="Please select favourite colors">
+                    <Option value="Yes">Yes</Option>
+                    <Option value="No">No</Option>
                   </Select>
                 </Form.Item>
                 <Form.Item>

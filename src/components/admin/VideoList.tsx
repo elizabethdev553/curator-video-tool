@@ -3,15 +3,15 @@ import { DatePicker, Divider, Pagination, Select, Table, Tag, Radio, Col, Row, B
 import type { ColumnsType } from 'antd/es/table';
 import type { RadioChangeEvent } from 'antd';
 import type { TableRowSelection } from 'antd/es/table/interface';
-
+import { DownloadOutlined } from '@ant-design/icons';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useVideoCounts, useVideos } from '@/hooks';
 import { connect, ConnectedProps } from 'react-redux';
-import moment from 'moment'
+import moment from 'moment';
 import type { RangePickerProps } from 'antd/es/date-picker';
 
-import {getVideoListRange, setDate, getCuratorList, setFilter, sendVideoList } from '../../actions/admin';
+import { getVideoListRange, setDate, getCuratorList, setFilter, sendVideoList } from '../../actions/admin';
 import Spinner from '../../components/layout/Spinner';
 const { RangePicker } = DatePicker;
 interface Assignment {
@@ -28,6 +28,8 @@ interface Assignment {
   video_check_flag: boolean;
   video_check_description: string;
   video_category: string;
+  video_play: string;
+  video_duplicate: string;
 }
 
 interface CuratorList {
@@ -52,8 +54,8 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_owner_handle',
   },
   {
-    title: 'CURATOR',
-    dataIndex: 'video_curator',
+    title: 'UPLOAD TIME',
+    dataIndex: 'video_createdAt',
   },
   {
     title: 'YT ID',
@@ -64,16 +66,12 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_nft_id',
   },
   {
-    title: 'UPLOAD TIME',
-    dataIndex: 'video_createdAt',
+    title: 'CURATOR',
+    dataIndex: 'video_curator',
   },
   {
-    title: 'CHECK DESCRIPTION',
-    dataIndex: 'video_check_description',
-  },
-  {
-    title: 'CHECKED TIME',
-    dataIndex: 'video_checkedAt',
+    title: 'ENTITY PALYS',
+    dataIndex: 'video_play',
   },
   {
     title: 'CATEGORY',
@@ -93,24 +91,55 @@ const columns: ColumnsType<Assignment> = [
         ''
       ),
   },
+  {
+    title: 'DUPLICATE',
+    dataIndex: 'video_duplicate',
+  },
+
+  {
+    title: 'CHECKED TIME',
+    dataIndex: 'video_checkedAt',
+  },
+
+  {
+    title: 'COMMENT',
+    dataIndex: 'video_check_description',
+  },
 ];
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 const tmp = 1;
 const VideoList = ({
-  getVideoList,getVideoListRange,
+  getVideoList,
+  getVideoListRange,
   setDate,
   sendVideoList,
   getCuratorList,
   setFilter,
   curator: { curators },
-  admin: { all_num, ypp_num, nft_num, check_num, videos, loading, start, end, filter_data },
+  admin: {
+    all_num,
+    ypp_num,
+    nft_num,
+    uncheck_num,
+    cat_A,
+    cat_B,
+    cat_C,
+    cat_D,
+    toxic,
+    duplicate,
+    videos,
+    loading,
+    start,
+    end,
+    filter_data,
+  },
 }: any) => {
   const [value, setValue] = useState(tmp);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [curator, setCurator] = useState<CuratorList>();
-  const [start_date, setStart_date]= useState<any>();
-  const [end_date, setEnd_date]= useState<any>();
+  const [start_date, setStart_date] = useState<any>();
+  const [end_date, setEnd_date] = useState<any>();
 
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
@@ -187,18 +216,15 @@ const VideoList = ({
     link.click();
   };
 
-  const onDateChange = (
-    value: RangePickerProps['value'],
-    dateString: [string, string] 
-  ) => {
+  const onDateChange = (value: RangePickerProps['value'], dateString: [string, string]) => {
     // console.log('Selected Time: ', value);
     console.log('Formatted Selected Time: ', dateString);
-    setStart_date(dateString[0])
-    setEnd_date(dateString[1])
+    setStart_date(dateString[0]);
+    setEnd_date(dateString[1]);
     getVideoListRange(dateString);
   };
 
-  const onOk = (value:  RangePickerProps['value']) => {
+  const onOk = (value: RangePickerProps['value']) => {
     console.log('onOk: ', value);
   };
   const { data } = useVideoCounts(start_date, end_date);
@@ -208,15 +234,53 @@ const VideoList = ({
       <Divider />
 
       <Row>
-       
-        <Col span={3}>QN Size: {data}</Col>
-        <Col span={3}>All Data: {all_num}</Col>
-        <Col span={3}>Ypp Data: {ypp_num}</Col>
-        <Col span={3}>Nft Data: {nft_num}</Col>
-        <Col span={3}>Checked Data: {check_num}</Col>
-        <Col span={3}>
-          <Button onClick={exportData} danger>
-            Export Data
+        <Col span={2}>
+          <Tag color="cyan">QN Size: </Tag>
+          {data}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">DB Size: </Tag>
+          {all_num}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">Ypp Videos: </Tag>
+          {ypp_num}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">Nft Videos: </Tag> {nft_num}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">UnChecked Videos: </Tag>
+          {uncheck_num}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">Category A: </Tag>
+          {cat_A}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">Category B: </Tag>
+          {cat_B}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">Category C: </Tag>
+          {cat_C}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">Category D: </Tag>
+          {cat_D}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">Toxic Contents: </Tag>
+          {toxic}
+        </Col>
+        <Col span={2}>
+          <Tag color="cyan">Duplicate Videos: </Tag>
+          {duplicate}
+        </Col>
+
+        <Col span={2}>
+          <Button type="primary" onClick={exportData} shape="round" icon={<DownloadOutlined />} size="large" >
+            Download
           </Button>
         </Col>
       </Row>
@@ -240,29 +304,33 @@ const VideoList = ({
       </Row>
 
       <Divider />
-      
-        <Fragment>
-          <form className="form" onSubmit={onSubmit}>
-            {data!= null &&data > videos.length ? (
-              <Link to={`/from-qn/${moment.utc(start_date).toISOString()}/${moment.utc(end_date).toISOString()}`} className="btn btn-primary">
-                Refresh
-              </Link>
-            ) : (
-              ''
-            )}
-            <Select
-              placeholder="Select a person"
-              optionFilterProp="children"
-              onChange={onCuratorChange}
-              options={curators?.map((item: CuratorList) => {
-                return { value: item.handle, label: item.handle };
-              })}
-            />
-            <input type="submit" className="btn btn-primary" value="Assign" />
-            <Table columns={columns} dataSource={filter_data} rowSelection={rowSelection} />
-          </form>
-        </Fragment>
 
+      <Fragment>
+        <form className="form" onSubmit={onSubmit}>
+          {data != null && data > videos.length ? (
+            <Link
+              to={`/from-qn/${moment.utc(start_date).toISOString()}/${moment.utc(end_date).toISOString()}`}
+              className="btn btn-primary"
+            >
+              Refresh
+            </Link>
+          ) : (
+            <Button type="primary" disabled>
+              Refresh
+            </Button>
+          )}
+          <Select
+            placeholder="Select a person"
+            optionFilterProp="children"
+            onChange={onCuratorChange}
+            options={curators?.map((item: CuratorList) => {
+              return { value: item.handle, label: item.handle };
+            })}
+          />
+          <input type="submit" className="btn btn-primary" value="Assign" />
+          <Table columns={columns} dataSource={filter_data} rowSelection={rowSelection} />
+        </form>
+      </Fragment>
     </section>
   );
 };

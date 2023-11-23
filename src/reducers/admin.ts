@@ -17,8 +17,8 @@ import {
   ASSIGNMENT_VIDEOS,
   NON_YPP_FILTER,
   NON_NFT_FILTER,
-  NON_CHECKED_FILTER
-  } from '../actions/types';
+  NON_CHECKED_FILTER,
+} from '../actions/types';
 const today = new Date();
 
 const year = String(today.getFullYear()).slice(-2);
@@ -33,111 +33,113 @@ const initialState = {
   loading: true,
   error: {},
   sel_date: TODAY,
-  filter_data:null,
-  all_num:null,
-  ypp_num:null,
-  nft_num:null,
-  check_num:null,
-  start:null,
-  end:null
+  filter_data: null,
+  all_num: null,
+  ypp_num: null,
+  nft_num: null,
+  uncheck_num: null,
+  cat_A: null,
+  cat_B: null,
+  cat_C: null,
+  cat_D: null,
+  toxic: null,
+  duplicate: null,
+  start: null,
+  end: null,
 };
 
-function videoReducer(state = initialState, action:any) {
+function videoReducer(state = initialState, action: any) {
   const { type, payload } = action;
   switch (type) {
     case GET_VIDEOS:
-      console.log(state, 'videos')
+      console.log(state, 'videos');
       return {
         ...state,
         videos: payload,
-        filter_data:payload,
+        filter_data: payload,
         loading: false,
         all_num: payload.length,
-        ypp_num: payload.filter((item:any) => item.video_yt_id !== null).length,
-        nft_num: payload.filter((item:any) => item.video_nft_id != 'No'&& item.video_nft_id != null).length,
-        check_num:payload.filter((item:any) => item.video_check_flag !== false).length,
-        start:payload[0],
-        end:payload[1]
-        
+        ypp_num: payload.filter((item: any) => item.video_yt_id !== null).length,
+        nft_num: payload.filter((item: any) => item.video_nft_id != 'No' && item.video_nft_id != null).length,
+        uncheck_num: payload.filter((item: any) => item.video_check_flag == false).length,
+        cat_A: payload.filter((item: any) => item.video_category == 'A').length,
+        cat_B: payload.filter((item: any) => item.video_category == 'B').length,
+        cat_C: payload.filter((item: any) => item.video_category == 'C').length,
+        cat_D: payload.filter((item: any) => item.video_category == 'D').length,
+        toxic: payload.filter((item: any) => item.video_check_tag != null).length,
+        duplicate: payload.filter((item: any) => item.video_duplicate == "Yes").length,
+        start: payload[0],
+        end: payload[1],
       };
-      case SET_DATE:
+    case SET_DATE:
       return {
         ...state,
-        sel_date:payload,
-        loading:true
-        
+        sel_date: payload,
+        loading: true,
       };
-      case GET_CURATORS:
+    case GET_CURATORS:
       return {
         ...state,
-        curators:payload,
+        curators: payload,
       };
-      case YPP_FILTER:
+    case YPP_FILTER:
       return {
         ...state,
-        filter_data: state.videos.filter((item:any) => item.video_yt_id !== null),
+        filter_data: state.videos.filter((item: any) => item.video_yt_id !== null),
         loading: false,
-
       };
-      case NON_NFT_FILTER:
+    case NON_NFT_FILTER:
       return {
         ...state,
-        filter_data: state.videos.filter((item:any) =>  item.video_nft_id != 'No'|| item.video_nft_id != null),
+        filter_data: state.videos.filter((item: any) => item.video_nft_id != 'No' || item.video_nft_id != null),
         loading: false,
-
       };
-      case CHECKED_FILTER:
+    case CHECKED_FILTER:
       return {
         ...state,
-        filter_data: state.videos.filter((item:any) => item.video_check_flag !== false),
+        filter_data: state.videos.filter((item: any) => item.video_check_flag !== false),
         loading: false,
-
       };
-      case ALL_FILTER:
+    case ALL_FILTER:
       return {
         ...state,
         filter_data: state.videos,
         loading: false,
-
       };
-    
-      case NON_YPP_FILTER:
+
+    case NON_YPP_FILTER:
       return {
         ...state,
-        filter_data: state.videos.filter((item:any) => item.video_yt_id == null),
+        filter_data: state.videos.filter((item: any) => item.video_yt_id == null),
         loading: false,
-
       };
-      case NFT_FILTER:
+    case NFT_FILTER:
       return {
         ...state,
-        filter_data: state.videos.filter((item:any) =>  item.video_nft_id !== 'No'&& item.video_nft_id !== null),
+        filter_data: state.videos.filter((item: any) => item.video_nft_id !== 'No' && item.video_nft_id !== null),
         loading: false,
-
       };
-      case NON_CHECKED_FILTER:
+    case NON_CHECKED_FILTER:
       return {
         ...state,
-        filter_data: state.videos.filter((item:any) => item.video_check_flag == false),
+        filter_data: state.videos.filter((item: any) => item.video_check_flag == false),
         loading: false,
-
       };
-      case ASSIGNMENT_VIDEOS:
-        return {
-          ...state,
-          filter_data: state.videos.map((item:any)=>{
-            const tmp = payload.selectList.find((id:any) => id == item.key)
-            if (tmp) {
-              console.log(tmp, "item")
-              // return item
-              return { ...item, video_curator: payload.curator };
-            }
-            return item
-          }),
-          loading: false,
+    case ASSIGNMENT_VIDEOS:
+      return {
+        ...state,
+        filter_data: state.videos.map((item: any) => {
+          const tmp = payload.selectList.find((id: any) => id == item.key);
+          if (tmp) {
+            console.log(tmp, 'item');
+            // return item
+            return { ...item, video_curator: payload.curator };
+          }
+          return item;
+        }),
+        loading: false,
+      };
 
-        };
-   
     default:
       return state;
   }

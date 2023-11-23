@@ -35,7 +35,7 @@ const App = () => {
   return (
     <div className="App">
       <Provider store={store}>
-        <Router>
+        <Router basename='/'>
           <Navbar />
           <Routes>
             <Route path="/" element={<Login />} />

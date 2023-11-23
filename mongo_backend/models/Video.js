@@ -45,9 +45,12 @@ const VideoSchema = new mongoose.Schema({
   video_category:{
     type: String,
   },
-  // avatar: {
-  //   type: String
-  // },
+  video_play:{
+    type:String
+  },
+  video_duplicate:{
+    type:String
+  },
   video_createdAt: {
     type: Date,
     reqired:true
