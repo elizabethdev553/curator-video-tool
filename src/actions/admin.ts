@@ -15,14 +15,34 @@ import {
   NON_CHECKED_FILTER,
   NON_NFT_FILTER,
   NON_YPP_FILTER,
-  NUM_ALL_VIDEOS
+  NUM_ALL_VIDEOS,
+  YPP_NFT,
+  YPP_N_NFT,
+  YPP_CHECK,
+  YPP_N_CHECK,
+  N_YPP_NFT,
+  N_YPP_N_NFT,
+  N_YPP_CHECK,
+  N_YPP_N_CHECK,
+  NFT_CHECK,
+  NFT_N_CHECK,
+  N_NFT_CHECK,
+  N_NFT_N_CHECK,
+  YPP_NFT_CHECK,
+  YPP_NFT_N_CHECK,
+  YPP_N_NFT_CHECK,
+  YPP_N_NFT_N_CHECK,
+  N_YPP_NFT_CHECK,
+  N_YPP_NFT_N_CHECK,
+  N_YPP_N_NFT_CHECK,
+  N_YPP_N_NFT_N_CHECK,
+  NEVER_FILTER,
 } from './types';
-
 
 export const getVideoListRange = (date: string) => async (dispatch: Dispatch) => {
   try {
-    const start= date[0]
-    const end= date[1]
+    const start = date[0];
+    const end = date[1];
     const res = await api.get(`leader/video-list/date-range/${start}/${end}`, {
       headers: {
         'Content-Type': 'application/json',
@@ -34,9 +54,8 @@ export const getVideoListRange = (date: string) => async (dispatch: Dispatch) =>
     });
     dispatch({
       type: NUM_ALL_VIDEOS,
-      payload:date
+      payload: date,
     });
-
   } catch (error) {
     console.log(error, 'Fetch UnCheckedList Error');
   }
@@ -57,43 +76,147 @@ export const setDate = (date: string) => async (dispatch: Dispatch) => {
 export const setFilter = (filter: any) => async (dispatch: Dispatch) => {
   try {
     switch (filter) {
-      case 1:
+      case '':
         dispatch({
           type: ALL_FILTER,
         });
         break;
-      case 2:
+      case 'A':
         dispatch({
           type: YPP_FILTER,
         });
         break;
-      case 3:
-        dispatch({
-          type: NFT_FILTER,
-        });
-        break;
-      case 4:
-        dispatch({
-          type: CHECKED_FILTER,
-        });
-        break;
-        case 5:
+      case 'B':
         dispatch({
           type: NON_YPP_FILTER,
         });
         break;
-        case 6:
+      case 'C':
+        dispatch({
+          type: NFT_FILTER,
+        });
+        break;
+      case 'D':
         dispatch({
           type: NON_NFT_FILTER,
         });
         break;
-        case 7:
+      case 'E':
+        dispatch({
+          type: CHECKED_FILTER,
+        });
+        break;
+      case 'F':
         dispatch({
           type: NON_CHECKED_FILTER,
         });
         break;
 
+      case 'AC':
+        dispatch({
+          type: YPP_NFT,
+        });
+        break;
+      case 'AD':
+        dispatch({
+          type: YPP_N_NFT,
+        });
+        break;
+      case 'AE':
+        dispatch({
+          type: YPP_CHECK,
+        });
+        break;
+      case 'AF':
+        dispatch({
+          type: YPP_N_CHECK,
+        });
+        break;
+      case 'BC':
+        dispatch({
+          type: N_YPP_NFT,
+        });
+        break;
+      case 'BD':
+        dispatch({
+          type: N_YPP_N_NFT,
+        });
+        break;
+      case 'BE':
+        dispatch({
+          type: N_YPP_CHECK,
+        });
+        break;
+      case 'BF':
+        dispatch({
+          type: N_YPP_N_CHECK,
+        });
+        break;
+      case 'CE':
+        dispatch({
+          type: NFT_CHECK,
+        });
+        break;
+      case 'CF':
+        dispatch({
+          type: NFT_N_CHECK,
+        });
+        break;
+      case 'DE':
+        dispatch({
+          type: N_NFT_CHECK,
+        });
+        break;
+      case 'DF':
+        dispatch({
+          type: N_NFT_N_CHECK,
+        });
+        break;
+      case 'ACE':
+        dispatch({
+          type: YPP_NFT_CHECK,
+        });
+        break;
+      case 'ACF':
+        dispatch({
+          type: YPP_NFT_N_CHECK,
+        });
+        break;
+      case 'ADE':
+        dispatch({
+          type: YPP_N_NFT_CHECK,
+        });
+        break;
+      case 'ADF':
+        dispatch({
+          type: YPP_N_NFT_N_CHECK,
+        });
+        break;
+      case 'BCE':
+        dispatch({
+          type: N_YPP_NFT_CHECK,
+        });
+        break;
+      case 'BCF':
+        dispatch({
+          type: N_YPP_NFT_N_CHECK,
+        });
+        break;
+      case 'BDE':
+        dispatch({
+          type: N_YPP_N_NFT_CHECK,
+        });
+        break;
+      case 'BDF':
+        dispatch({
+          type: N_YPP_N_NFT_N_CHECK,
+        });
+        break;
+
       default:
+        dispatch({
+          type: NEVER_FILTER,
+        });
         break;
     }
   } catch (error) {

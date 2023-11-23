@@ -1,5 +1,5 @@
 import type { DatePickerProps } from 'antd';
-import { DatePicker, Divider, Switch, Select, Table, Tag, Radio, Col, Row, Button,Checkbox } from 'antd';
+import { DatePicker, Divider, Switch, Select, Table, Tag, Radio, Col, Row, Button, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { RadioChangeEvent } from 'antd';
 import type { TableRowSelection } from 'antd/es/table/interface';
@@ -226,8 +226,12 @@ const VideoList = ({
   };
 
   const onCheckChange = (checkedValues: CheckboxValueType[]) => {
-    console.log('checked = ', checkedValues);
+    const sort = checkedValues?.sort();
+    const result = sort?.join('');
+    console.log(result, 'result');
+    setFilter(result);
   };
+
   const onOk = (value: RangePickerProps['value']) => {
     console.log('onOk: ', value);
   };
@@ -283,50 +287,41 @@ const VideoList = ({
         </Col>
 
         <Col span={2}>
-          <Button type="primary" onClick={exportData} shape="round" icon={<DownloadOutlined />} size="large" >
+          <Button type="primary" onClick={exportData} shape="round" icon={<DownloadOutlined />} size="large">
             Download
           </Button>
         </Col>
       </Row>
       {/* <Col span={3}>  </Col> */}
       <Divider />
-      <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChange}>
-    <Row>
-      <Col span={2}>
-        <Checkbox value="A">YPP</Checkbox>
-      </Col>
-      <Col span={2}>
-        <Checkbox value="B">Non YPP</Checkbox>
-      </Col>
-      <Col span={2}>
-        <Checkbox value="C">NFT</Checkbox>
-      </Col>
-      <Col span={2}>
-        <Checkbox value="D">Non NFT</Checkbox>
-      </Col>
-      <Col span={2}>
-        <Checkbox value="E">CHECKED</Checkbox>
-      </Col>
-      <Col span={2}>
-        <Checkbox value="F">Non CHECKED</Checkbox>
-      </Col>
-    </Row>
-  </Checkbox.Group>
       <Row>
         <Col span={8}>
           <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onDateChange} onOk={onOk} />
         </Col>
 
-        <Col span={8}>
-          <Radio.Group onChange={onChange} value={value}>
-            <Radio value={1}>All</Radio>
-            <Radio value={2}>YPP</Radio>
-            <Radio value={5}>NON YPP</Radio>
-            <Radio value={3}>NFT</Radio>
-            <Radio value={6}>NON NFT</Radio>
-            <Radio value={4}>CHECKED</Radio>
-            <Radio value={7}>NOT CHECKED</Radio>
-          </Radio.Group>
+        <Col span={16}>
+          <Row>
+      <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChange}>
+            <Col span={3}>
+              <Checkbox value="A">YPP</Checkbox>
+            </Col>
+            <Col span={3}>
+              <Checkbox value="B">Non YPP</Checkbox>
+            </Col>
+            <Col span={3}>
+              <Checkbox value="C">NFT</Checkbox>
+            </Col>
+            <Col span={3}>
+              <Checkbox value="D">Non NFT</Checkbox>
+            </Col>
+            <Col span={3}>
+              <Checkbox value="E">CHECKED</Checkbox>
+            </Col>
+            <Col span={3}>
+              <Checkbox value="F">Non CHECKED</Checkbox>
+            </Col>
+            </Checkbox.Group>
+          </Row>
         </Col>
       </Row>
 

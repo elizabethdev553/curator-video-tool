@@ -18,6 +18,27 @@ import {
   NON_YPP_FILTER,
   NON_NFT_FILTER,
   NON_CHECKED_FILTER,
+  NEVER_FILTER,
+  YPP_NFT,
+  YPP_N_NFT,
+  YPP_CHECK,
+  YPP_N_CHECK,
+  N_YPP_NFT,
+  N_YPP_N_NFT,
+  N_YPP_CHECK,
+  N_YPP_N_CHECK,
+  NFT_CHECK,
+  NFT_N_CHECK,
+  N_NFT_CHECK,
+  N_NFT_N_CHECK,
+  YPP_NFT_CHECK,
+  YPP_NFT_N_CHECK,
+  YPP_N_NFT_CHECK,
+  YPP_N_NFT_N_CHECK,
+  N_YPP_NFT_CHECK,
+  N_YPP_NFT_N_CHECK,
+  N_YPP_N_NFT_CHECK,
+  N_YPP_N_NFT_N_CHECK,
 } from '../actions/types';
 const today = new Date();
 
@@ -50,6 +71,8 @@ const initialState = {
 
 function videoReducer(state = initialState, action: any) {
   const { type, payload } = action;
+  let tmp: any = null;
+  let tmp1: any = null;
   switch (type) {
     case GET_VIDEOS:
       console.log(state, 'videos');
@@ -67,7 +90,7 @@ function videoReducer(state = initialState, action: any) {
         cat_C: payload.filter((item: any) => item.video_category == 'C').length,
         cat_D: payload.filter((item: any) => item.video_category == 'D').length,
         toxic: payload.filter((item: any) => item.video_check_tag != null).length,
-        duplicate: payload.filter((item: any) => item.video_duplicate == "Yes").length,
+        duplicate: payload.filter((item: any) => item.video_duplicate == 'Yes').length,
         start: payload[0],
         end: payload[1],
       };
@@ -82,6 +105,160 @@ function videoReducer(state = initialState, action: any) {
         ...state,
         curators: payload,
       };
+
+    case YPP_NFT:
+      tmp = state.videos.filter((item: any) => item.video_yt_id !== null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_nft_id !== 'No' && item.video_nft_id !== null),
+        loading: false,
+      };
+    case YPP_N_NFT:
+      tmp = state.videos.filter((item: any) => item.video_yt_id !== null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_nft_id == 'No' || item.video_nft_id == null),
+        loading: false,
+      };
+    case YPP_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id !== null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_check_flag !== false),
+        loading: false,
+      };
+
+    case YPP_N_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id !== null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_check_flag == false),
+        loading: false,
+      };
+
+    case N_YPP_NFT:
+      tmp = state.videos.filter((item: any) => item.video_yt_id == null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_nft_id !== 'No' && item.video_nft_id !== null),
+        loading: false,
+      };
+
+    case N_YPP_N_NFT:
+      tmp = state.videos.filter((item: any) => item.video_yt_id == null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_nft_id == 'No' || item.video_nft_id == null),
+        loading: false,
+      };
+
+    case N_YPP_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id == null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_check_flag !== false),
+        loading: false,
+      };
+
+    case N_YPP_N_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id == null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_check_flag == false),
+        loading: false,
+      };
+
+    case NFT_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_nft_id !== 'No' && item.video_nft_id !== null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_check_flag !== false),
+        loading: false,
+      };
+
+    case NFT_N_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_nft_id !== 'No' && item.video_nft_id !== null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_check_flag == false),
+        loading: false,
+      };
+    case N_NFT_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_nft_id == 'No' || item.video_nft_id == null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_check_flag !== false),
+        loading: false,
+      };
+
+    case N_NFT_N_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_nft_id == 'No' || item.video_nft_id == null);
+      return {
+        ...state,
+        filter_data: tmp.filter((item: any) => item.video_check_flag == false),
+        loading: false,
+      };
+    case YPP_NFT_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id !== null);
+      tmp1 = tmp.filter((item: any) => item.video_nft_id !== 'No' && item.video_nft_id !== null);
+      return {
+        ...state,
+        filter_data: tmp1.filter((item: any) => item.video_check_flag !== false),
+        loading: false,
+      };
+
+    case YPP_NFT_N_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id !== null);
+      tmp1 = tmp.filter((item: any) => item.video_nft_id !== 'No' && item.video_nft_id !== null);
+      return {
+        ...state,
+        filter_data: tmp1.filter((item: any) => item.video_check_flag == false),
+        loading: false,
+      };
+
+    case YPP_N_NFT_N_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id !== null);
+      tmp1 = tmp.filter((item: any) => item.video_nft_id == 'No' || item.video_nft_id == null);
+      return {
+        ...state,
+        filter_data: tmp1.filter((item: any) => item.video_check_flag == false),
+        loading: false,
+      };
+
+    case N_YPP_NFT_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id == null);
+      tmp1 = tmp.filter((item: any) => item.video_nft_id !== 'No' && item.video_nft_id !== null);
+      return {
+        ...state,
+        filter_data: tmp1.filter((item: any) => item.video_check_flag !== false),
+        loading: false,
+      };
+
+    case N_YPP_NFT_N_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id == null);
+      tmp1 = tmp.filter((item: any) => item.video_nft_id !== 'No' && item.video_nft_id !== null);
+      return {
+        ...state,
+        filter_data: tmp1.filter((item: any) => item.video_check_flag == false),
+        loading: false,
+      };
+    case N_YPP_N_NFT_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id == null);
+      tmp1 = tmp.filter((item: any) => item.video_nft_id == 'No' || item.video_nft_id == null);
+      return {
+        ...state,
+        filter_data: tmp1.filter((item: any) => item.video_check_flag !== false),
+        loading: false,
+      };
+    case N_YPP_N_NFT_N_CHECK:
+      tmp = state.videos.filter((item: any) => item.video_yt_id == null);
+      tmp1 = tmp.filter((item: any) => item.video_nft_id == 'No' || item.video_nft_id == null);
+      return {
+        ...state,
+        filter_data: tmp1.filter((item: any) => item.video_check_flag == false),
+        loading: false,
+      };
+
     case YPP_FILTER:
       return {
         ...state,
@@ -91,7 +268,7 @@ function videoReducer(state = initialState, action: any) {
     case NON_NFT_FILTER:
       return {
         ...state,
-        filter_data: state.videos.filter((item: any) => item.video_nft_id != 'No' || item.video_nft_id != null),
+        filter_data: state.videos.filter((item: any) => item.video_nft_id == 'No' || item.video_nft_id == null),
         loading: false,
       };
     case CHECKED_FILTER:
@@ -125,6 +302,14 @@ function videoReducer(state = initialState, action: any) {
         filter_data: state.videos.filter((item: any) => item.video_check_flag == false),
         loading: false,
       };
+
+    case NEVER_FILTER:
+      return {
+        ...state,
+        filter_data: [],
+        loading: false,
+      };
+
     case ASSIGNMENT_VIDEOS:
       return {
         ...state,

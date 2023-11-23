@@ -42,6 +42,28 @@ export const GET_CURATORS = 'GET_CURATORS';
 export const DELETE_CURATOR = 'DELETE_CURATOR';
 export const ADD_CURATOR = 'ADD_CURATOR';
 
+export const NEVER_FILTER = 'NEVER_FILTER';
+
+export const YPP_NFT = 'YPP_NFT';
+export const YPP_N_NFT = 'YPP_N_NFT';
+export const YPP_CHECK = 'YPP_CHECK';
+export const YPP_N_CHECK = 'YPP_N_CHECK';
+export const N_YPP_NFT = 'N_YPP_NFT';
+export const N_YPP_N_NFT = 'N_YPP_N_NFT';
+export const N_YPP_CHECK = 'N_YPP_CHECK';
+export const N_YPP_N_CHECK = 'N_YPP_N_CHECK';
+export const NFT_CHECK = 'NFT_CHECK';
+export const NFT_N_CHECK = 'NFT_N_CHECK';
+export const N_NFT_CHECK = 'N_NFT_CHECK';
+export const N_NFT_N_CHECK = 'N_NFT_N_CHECK';
+export const YPP_NFT_CHECK = 'YPP_NFT_CHECK';
+export const YPP_NFT_N_CHECK = 'YPP_NFT_N_CHECK';
+export const YPP_N_NFT_CHECK = 'YPP_N_NFT_CHECK';
+export const YPP_N_NFT_N_CHECK = 'YPP_N_NFT_N_CHECK';
+export const N_YPP_NFT_CHECK = 'N_YPP_NFT_CHECK';
+export const N_YPP_NFT_N_CHECK = 'N_YPP_NFT_N_CHECK';
+export const N_YPP_N_NFT_CHECK = 'N_YPP_N_NFT_CHECK';
+export const N_YPP_N_NFT_N_CHECK = 'N_YPP_N_NFT_N_CHECK';
 
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
