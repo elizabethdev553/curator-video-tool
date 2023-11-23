@@ -52,11 +52,11 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_createdAt',
   },
   {
-    title: 'YT ID',
+    title: 'YPP',
     dataIndex: 'video_yt_id',
   },
   {
-    title: 'NFT ID',
+    title: 'NFT',
     dataIndex: 'video_nft_id',
   },
   {
@@ -72,7 +72,7 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_category',
   },
   {
-    title: 'CHECK TAG',
+    title: 'TOXIC CONTENT',
     dataIndex: 'video_check_tag',
     render: (_, { video_check_tag, video_check_flag }) =>
       video_check_tag ? (

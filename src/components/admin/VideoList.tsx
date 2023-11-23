@@ -1,5 +1,5 @@
 import type { DatePickerProps } from 'antd';
-import { DatePicker, Divider, Pagination, Select, Table, Tag, Radio, Col, Row, Button } from 'antd';
+import { DatePicker, Divider, Switch, Select, Table, Tag, Radio, Col, Row, Button,Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { RadioChangeEvent } from 'antd';
 import type { TableRowSelection } from 'antd/es/table/interface';
@@ -10,6 +10,7 @@ import { useVideoCounts, useVideos } from '@/hooks';
 import { connect, ConnectedProps } from 'react-redux';
 import moment from 'moment';
 import type { RangePickerProps } from 'antd/es/date-picker';
+import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 
 import { getVideoListRange, setDate, getCuratorList, setFilter, sendVideoList } from '../../actions/admin';
 import Spinner from '../../components/layout/Spinner';
@@ -58,11 +59,11 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_createdAt',
   },
   {
-    title: 'YT ID',
+    title: 'YPP',
     dataIndex: 'video_yt_id',
   },
   {
-    title: 'NFT ID',
+    title: 'NFT',
     dataIndex: 'video_nft_id',
   },
   {
@@ -78,7 +79,7 @@ const columns: ColumnsType<Assignment> = [
     dataIndex: 'video_category',
   },
   {
-    title: 'CHECK TAG',
+    title: 'TOXIC CONTENT',
     dataIndex: 'video_check_tag',
     render: (_, { video_check_tag, video_check_flag }) =>
       video_check_tag ? (
@@ -224,6 +225,9 @@ const VideoList = ({
     getVideoListRange(dateString);
   };
 
+  const onCheckChange = (checkedValues: CheckboxValueType[]) => {
+    console.log('checked = ', checkedValues);
+  };
   const onOk = (value: RangePickerProps['value']) => {
     console.log('onOk: ', value);
   };
@@ -286,10 +290,33 @@ const VideoList = ({
       </Row>
       {/* <Col span={3}>  </Col> */}
       <Divider />
+      <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChange}>
+    <Row>
+      <Col span={2}>
+        <Checkbox value="A">YPP</Checkbox>
+      </Col>
+      <Col span={2}>
+        <Checkbox value="B">Non YPP</Checkbox>
+      </Col>
+      <Col span={2}>
+        <Checkbox value="C">NFT</Checkbox>
+      </Col>
+      <Col span={2}>
+        <Checkbox value="D">Non NFT</Checkbox>
+      </Col>
+      <Col span={2}>
+        <Checkbox value="E">CHECKED</Checkbox>
+      </Col>
+      <Col span={2}>
+        <Checkbox value="F">Non CHECKED</Checkbox>
+      </Col>
+    </Row>
+  </Checkbox.Group>
       <Row>
         <Col span={8}>
           <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onDateChange} onOk={onOk} />
         </Col>
+
         <Col span={8}>
           <Radio.Group onChange={onChange} value={value}>
             <Radio value={1}>All</Radio>
