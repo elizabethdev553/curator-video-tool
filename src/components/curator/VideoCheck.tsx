@@ -9,7 +9,7 @@ import type { SelectProps } from 'antd';
 const { Option } = Select;
 const { TextArea } = Input;
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-
+import api from '../../utils/api';
 interface Assignment {
   key: string;
   video_title: string;
@@ -34,7 +34,7 @@ const VideoCheck = () => {
 
   async function getVideoDetail(video_id: string | undefined) {
     try {
-      const response = await axios.get(`http://localhost:5000/api/curator/check/${video_id}`, {
+      const response = await api.get(`/curator/${video_id}`, {
         headers: {
           'Content-Type': 'application/json',
         },

@@ -89,17 +89,26 @@ const columns: ColumnsType<Assignment> = [
   },
 ];
 
+
+const today = new Date(); 
+
+const year = String(today.getFullYear()).slice(-2);
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0'); 
+
+const TODAY = `20${year}-${month}-${day}`; 
+
 const AssignedList = ({ auth: { user }, setDate }: any) => {
   const [assignment, setAssignment] = useState<Assignment[]>();
   const [selectList, setSelectList] = useState<Assignment>();
   const member_id: string = user.handle;
   useEffect(() => {
-    getUnCheckedList(member_id);
+    getUnCheckedList(member_id, TODAY);
   }, []);
 
-  async function getUnCheckedList(member_id: string) {
+  async function getUnCheckedList(member_id: string, dateString:string) {
     try {
-      const response = await api.get(`/curator/${member_id}`, {
+      const response = await api.get(`/curator/${member_id}/${dateString}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -113,6 +122,7 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
 
   const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
     setDate(dateString);
+    getUnCheckedList(member_id, dateString);
   };
 
   const rowSelection = {
@@ -125,9 +135,7 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
   console.log(assignment, 'assginment');
   return (
     <section className="container">
-      {assignment == undefined || assignment.length < 1 ? (
-        <Spinner />
-      ) : (
+      
         <Fragment>
           <h1 className="large text-primary">Curator Panel</h1>
           <Divider />
@@ -148,7 +156,7 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
             ''
           )}
         </Fragment>
-      )}
+
     </section>
   );
 };

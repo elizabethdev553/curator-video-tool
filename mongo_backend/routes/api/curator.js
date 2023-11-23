@@ -12,10 +12,14 @@ const Member = require('../../models/Member');
 const Video = require('../../models/Video');
 
 
-router.get('/:member_id', async (req, res) => {
+router.get('/:handle/:dateString', async (req, res) => {
   try {
-    let handle = req.params.member_id
-    const video_lists = await Video.find({video_curator:handle}).sort({
+    let handle = req.params.handle;
+    let dateString= req.params.dateString;
+    const dateGt = new Date(dateString);
+    const dateLt = new Date(dateString + 'T23:59:59.999Z');
+
+    const video_lists = await Video.find({video_curator:handle, video_createdAt:{ $gte: dateGt, $lt: dateLt }}).sort({
       video_createdAt: -1
     })
 
@@ -31,9 +35,10 @@ router.get('/:member_id', async (req, res) => {
 });
 
 
-router.get('/check/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     let key = req.params.id
+
     let videoDetailTmp = await Video.findOne({key});
 
     if (!videoDetailTmp) {
