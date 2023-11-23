@@ -18,16 +18,12 @@ import {
   NUM_ALL_VIDEOS
 } from './types';
 
-/*
-  NOTE: we don't need a config object for axios as the
- default headers in axios are already Content-Type: application/json
- also axios stringifies and parses JSON for you, so no need for 
- JSON.stringify or JSON.parse
-*/
 
-export const getVideoList = (date: string) => async (dispatch: Dispatch) => {
+export const getVideoListRange = (date: string) => async (dispatch: Dispatch) => {
   try {
-    const res = await api.get(`leader/video-list/${date}`, {
+    const start= date[0]
+    const end= date[1]
+    const res = await api.get(`leader/video-list/date-range/${start}/${end}`, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -38,11 +34,14 @@ export const getVideoList = (date: string) => async (dispatch: Dispatch) => {
     });
     dispatch({
       type: NUM_ALL_VIDEOS,
+      payload:date
     });
+
   } catch (error) {
     console.log(error, 'Fetch UnCheckedList Error');
   }
 };
+
 export const setDate = (date: string) => async (dispatch: Dispatch) => {
   try {
     console.log(date, 'datedffffff');
@@ -162,71 +161,3 @@ export const addCurator = (formData: any) => async (dispatch: Dispatch) => {
     console.log(err, 'ADD CuratorList Error');
   }
 };
-
-// Load User
-// export const loadUser = () => async (dispatch: Dispatch) => {
-//   try {
-//     const res = await api.get('/auth');
-
-//     dispatch({
-//       type: USER_LOADED,
-//       payload: res.data
-//     });
-//   } catch (err) {
-//     dispatch({
-//       type: AUTH_ERROR
-//     });
-//   }
-// };
-
-// // Register User
-// export const register = (formData:any) => async (dispatch: Dispatch) => {
-//   try {
-//     const res = await api.post('/members', formData);
-
-//     dispatch({
-//       type: REGISTER_SUCCESS,
-//       payload: res.data
-//     });
-//     dispatch(loadUser() as any);
-//   } catch (err:any) {
-//     const errors = err.response.data.errors;
-
-//     if (errors) {
-//       console.log(errors, "Register Action Error")
-//     }
-
-//     dispatch({
-//       type: REGISTER_FAIL
-//     });
-//   }
-// };
-
-// // Login User
-// export const login = (email:string, password:string) => async (dispatch: Dispatch) => {
-//   const body = { email, password };
-
-//   try {
-//     const res = await api.post('/auth', body);
-
-//     dispatch({
-//       type: LOGIN_SUCCESS,
-//       payload: res.data
-//     });
-
-//     dispatch(loadUser() as any);
-//   } catch (err:any) {
-//     const errors = err.response.data.errors;
-
-//     if (errors) {
-//       console.log(errors, "auth Action Error")
-//     }
-
-//     dispatch({
-//       type: LOGIN_FAIL
-//     });
-//   }
-// };
-
-// // Logout
-// export const logout = () => ({ type: LOGOUT });

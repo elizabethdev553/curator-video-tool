@@ -3,12 +3,13 @@ import { useEffect, useMemo } from 'react';
 import { useGetVideosLazyQuery } from '@/queries';
 
 
-export function useVideos(createdAt:String, endedAt:String) {
-
+export function useVideos(createdAt:string|undefined, endedAt:string|undefined) {
+  
   const variables = {
     where: { createdAt_gt: createdAt, createdAt_lt: endedAt },
     limit:50000
   };
+  console.log(variables, "varivoseikfj")
   const [getVideo, getVideoQuery]= useGetVideosLazyQuery({variables});
 
   useEffect(() => {

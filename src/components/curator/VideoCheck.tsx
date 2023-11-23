@@ -22,7 +22,6 @@ type FieldType = {
   description?: string;
 };
 
-
 const VideoCheck = () => {
   const navigate = useNavigate();
   const [videoDetail, setVideoDetail] = useState<Assignment>();
@@ -32,7 +31,6 @@ const VideoCheck = () => {
   useEffect(() => {
     getVideoDetail(id);
   }, [id]);
-
 
   async function getVideoDetail(video_id: string | undefined) {
     try {
@@ -49,8 +47,13 @@ const VideoCheck = () => {
     }
   }
 
-  async function saveDescriptionResult(description: string|undefined,video_tabs:string|undefined,video_category:string, video_id: string | undefined) {
-    const data = { description, video_tabs, video_category,video_id };
+  async function saveDescriptionResult(
+    description: string | undefined,
+    video_tabs: string | undefined,
+    video_category: string,
+    video_id: string | undefined
+  ) {
+    const data = { description, video_tabs, video_category, video_id };
     try {
       const response = await axios.post('http://localhost:5000/api/curator/check/description', data, {
         headers: {
@@ -66,7 +69,7 @@ const VideoCheck = () => {
   }
 
   const onFinish = (values: any) => {
-    console.log(values, 'values');
+    // console.log(values, 'values');
     // if (values.check === true) console.log(values, 'values');
     saveDescriptionResult(values.description, values.video_tabs, values.video_category, id);
   };
@@ -93,7 +96,7 @@ const VideoCheck = () => {
             <Divider />
 
             <Row>
-              <Col span={9} style={{paddingRight: '40px', paddingLeft: '20px'}}>
+              <Col span={9} style={{ paddingRight: '40px', paddingLeft: '20px' }}>
                 <Card title="Video Detail" style={{ textAlign: 'left' }}>
                   <p>
                     <b>Video ID:</b> {videoDetail.key}
@@ -112,30 +115,21 @@ const VideoCheck = () => {
                     <b>Video Title:</b> {videoDetail.video_title}
                   </p>
                 </Card>
-                
+
                 <Form.Item<FieldType>
                   label="Description"
                   name="description"
-                  style={{marginTop: '30px', maxWidth:'100%'}}
+                  style={{ marginTop: '30px', maxWidth: '100%' }}
                 >
                   <TextArea rows={5} />
                 </Form.Item>
-                <Form.Item
-                  name="video_tabs"
-                  label="Select the tabs. If not, don't select."
-                >
-                  <Select mode="multiple" placeholder="Please select favourite colors">
-                    <Option value="Cruelty">Cruelty</Option>
-                    <Option value="porn">Porn</Option>
-                    <Option value="illegal">Illegal</Option>
-                    <Option value="fake">Fake</Option>
+                <Form.Item name="video_tabs" label="If this video was fake, check.">
+                  <Select placeholder="Please select favourite colors">
+                    <Option value="Toxic">Toxic</Option>
                   </Select>
                 </Form.Item>
-                <Form.Item
-                  name="video_category"
-                  label="A,B,C,D"
-                >
-                  <Select  placeholder="Please select favourite colors">
+                <Form.Item name="video_category" label="A,B,C,D">
+                  <Select placeholder="Please select favourite colors">
                     <Option value="A">A</Option>
                     <Option value="B">B</Option>
                     <Option value="C">C</Option>

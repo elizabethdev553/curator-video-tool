@@ -1,5 +1,5 @@
 import type { DatePickerProps } from 'antd';
-import { DatePicker, Divider, Pagination, Select, Table, Tag, Radio,Col, Row,Button } from 'antd';
+import { DatePicker, Divider, Pagination, Select, Table, Tag, Radio, Col, Row, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { RadioChangeEvent } from 'antd';
 import type { TableRowSelection } from 'antd/es/table/interface';
@@ -8,9 +8,12 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useVideoCounts, useVideos } from '@/hooks';
 import { connect, ConnectedProps } from 'react-redux';
+import moment from 'moment'
+import type { RangePickerProps } from 'antd/es/date-picker';
 
-import { getVideoList, setDate, getCuratorList, setFilter, sendVideoList } from '../../actions/admin';
+import {getVideoListRange, setDate, getCuratorList, setFilter, sendVideoList } from '../../actions/admin';
 import Spinner from '../../components/layout/Spinner';
+const { RangePicker } = DatePicker;
 interface Assignment {
   key: string;
   video_title: string;
@@ -21,10 +24,10 @@ interface Assignment {
   video_checkedAt: Date;
   video_yt_id: string;
   video_nft_id: string;
-  video_check_tag: string[];
+  video_check_tag: string;
   video_check_flag: boolean;
   video_check_description: string;
-  video_category:string
+  video_category: string;
 }
 
 interface CuratorList {
@@ -79,43 +82,35 @@ const columns: ColumnsType<Assignment> = [
   {
     title: 'CHECK TAG',
     dataIndex: 'video_check_tag',
-    render: (_, { video_check_tag, video_check_flag }) => (
-      <>
-        {video_check_tag &&
-          video_check_tag.map((tag) => {
-            if (tag[0] != '')
-              return (
-                <Tag color="red" key={tag}>
-                  {tag.toUpperCase()}
-                </Tag>
-              );
-          })}
-        {video_check_flag && (
-          <Tag color="green" key="checked">
-            {' '}
-            CHECKED
-          </Tag>
-        )}
-      </>
-    ),
+    render: (_, { video_check_tag, video_check_flag }) =>
+      video_check_tag ? (
+        <Tag color="volcano" key={video_check_tag}>
+          {video_check_tag}
+        </Tag>
+      ) : video_check_flag ? (
+        <Tag color="green">checked</Tag>
+      ) : (
+        ''
+      ),
   },
 ];
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 const tmp = 1;
 const VideoList = ({
-  getVideoList,
+  getVideoList,getVideoListRange,
   setDate,
   sendVideoList,
   getCuratorList,
   setFilter,
   curator: { curators },
-  admin: { all_num, ypp_num, nft_num, check_num, videos, loading, sel_date, filter_data },
+  admin: { all_num, ypp_num, nft_num, check_num, videos, loading, start, end, filter_data },
 }: any) => {
-
   const [value, setValue] = useState(tmp);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [curator, setCurator] = useState<CuratorList>();
+  const [start_date, setStart_date]= useState<any>();
+  const [end_date, setEnd_date]= useState<any>();
 
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
@@ -128,17 +123,11 @@ const VideoList = ({
   }, []);
 
   useEffect(() => {
-    getVideoList(sel_date);
-
-  }, [sel_date]);
-
-  const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
-    setDate(dateString);
-  };
+    getVideoListRange(start_date, end_date);
+  }, [start_date, end_date]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
-
   };
 
   const onCuratorChange = (value: CuratorList) => {
@@ -190,52 +179,72 @@ const VideoList = ({
     }
   };
   const exportData = () => {
-    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-      JSON.stringify(filter_data)
-    )}`;
-    const link = document.createElement("a");
+    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(JSON.stringify(filter_data))}`;
+    const link = document.createElement('a');
     link.href = jsonString;
-    link.download = "data.json";
+    link.download = 'data.json';
 
     link.click();
   };
 
-  const { data } = useVideoCounts(sel_date);
+  const onDateChange = (
+    value: RangePickerProps['value'],
+    dateString: [string, string] 
+  ) => {
+    // console.log('Selected Time: ', value);
+    console.log('Formatted Selected Time: ', dateString);
+    setStart_date(dateString[0])
+    setEnd_date(dateString[1])
+    getVideoListRange(dateString);
+  };
+
+  const onOk = (value:  RangePickerProps['value']) => {
+    console.log('onOk: ', value);
+  };
+  const { data } = useVideoCounts(start_date, end_date);
   return (
     <section className="container">
       <h1 className="large text-primary">Videos List</h1>
       <Divider />
-      
-      <Row>
 
-      <Col span={3}><DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} /></Col>
-      <Col span={3}>QN Size: {data}</Col>
-      <Col span={3}>All Data: {all_num}</Col>
-      <Col span={3}>Ypp Data: {ypp_num}</Col>
-      <Col span={3}>Nft Data: {nft_num}</Col>
-      <Col span={3}>Checked Data: {check_num}</Col>
-      <Col span={3}><Button onClick={exportData}  danger>Export Data</Button></Col>
+      <Row>
+       
+        <Col span={3}>QN Size: {data}</Col>
+        <Col span={3}>All Data: {all_num}</Col>
+        <Col span={3}>Ypp Data: {ypp_num}</Col>
+        <Col span={3}>Nft Data: {nft_num}</Col>
+        <Col span={3}>Checked Data: {check_num}</Col>
+        <Col span={3}>
+          <Button onClick={exportData} danger>
+            Export Data
+          </Button>
+        </Col>
       </Row>
       {/* <Col span={3}>  </Col> */}
       <Divider />
-      <Radio.Group onChange={onChange} value={value}>
-        <Radio value={1}>All</Radio>
-        <Radio value={2}>YPP</Radio>
-        <Radio value={5}>NON YPP</Radio>
-        <Radio value={3}>NFT</Radio>
-        <Radio value={6}>NON NFT</Radio>
-        <Radio value={4}>CHECKED</Radio>
-        <Radio value={7}>NOT CHECKED</Radio>
-      </Radio.Group>
-      <Divider />
-      {loading === true || videos == null || !data ? (
-        <Spinner />
-      ) : (
-        <Fragment>
+      <Row>
+        <Col span={8}>
+          <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onDateChange} onOk={onOk} />
+        </Col>
+        <Col span={8}>
+          <Radio.Group onChange={onChange} value={value}>
+            <Radio value={1}>All</Radio>
+            <Radio value={2}>YPP</Radio>
+            <Radio value={5}>NON YPP</Radio>
+            <Radio value={3}>NFT</Radio>
+            <Radio value={6}>NON NFT</Radio>
+            <Radio value={4}>CHECKED</Radio>
+            <Radio value={7}>NOT CHECKED</Radio>
+          </Radio.Group>
+        </Col>
+      </Row>
 
+      <Divider />
+      
+        <Fragment>
           <form className="form" onSubmit={onSubmit}>
-            {data > videos.length ? (
-              <Link to={`/from-qn/${sel_date}/${videos[0]?.video_createdAt}`} className="btn btn-primary">
+            {data!= null &&data > videos.length ? (
+              <Link to={`/from-qn/${moment.utc(start_date).toISOString()}/${moment.utc(end_date).toISOString()}`} className="btn btn-primary">
                 Refresh
               </Link>
             ) : (
@@ -253,7 +262,7 @@ const VideoList = ({
             <Table columns={columns} dataSource={filter_data} rowSelection={rowSelection} />
           </form>
         </Fragment>
-      )}
+
     </section>
   );
 };
@@ -264,6 +273,6 @@ const mapStateToProps = (state: any) => ({
   auth: state.auth,
 });
 
-const connector = connect(mapStateToProps, { getVideoList, sendVideoList, getCuratorList, setDate, setFilter });
+const connector = connect(mapStateToProps, { getVideoListRange, sendVideoList, getCuratorList, setDate, setFilter });
 
 export default connector(VideoList);

@@ -43,8 +43,6 @@ export const DELETE_CURATOR = 'DELETE_CURATOR';
 export const ADD_CURATOR = 'ADD_CURATOR';
 
 
-
-
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const SELECTED_DATE = 'SELECTED_DATE';

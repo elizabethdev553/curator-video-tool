@@ -3,24 +3,11 @@ import { Videos } from '@/components';
 import { useVideos } from '@/hooks';
 import Spinner from "../layout/Spinner"
 
-let createdAt:String=''
-
 const Home = () => {
-  const { date, time } = useParams();
-
-  if(date===undefined){
-    return <>loading...</>
-  }
-
-  if(time == "undefined" || time ===undefined){
-    createdAt = new Date(date).toISOString();
-  }
-  else{
-    createdAt = time
-  }
-
-const endedAt = new Date(date+ "T23:59:59.999Z").toISOString();
-  const { data, loading, error } = useVideos(createdAt, endedAt);
+  const { start, end } = useParams();
+  
+// console.log(start, end, "start, end")
+  const { data, loading, error } = useVideos(start, end);
   
   if (loading) {
     <Spinner />

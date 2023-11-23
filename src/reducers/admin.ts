@@ -37,7 +37,9 @@ const initialState = {
   all_num:null,
   ypp_num:null,
   nft_num:null,
-  check_num:null
+  check_num:null,
+  start:null,
+  end:null
 };
 
 function videoReducer(state = initialState, action:any) {
@@ -51,9 +53,11 @@ function videoReducer(state = initialState, action:any) {
         filter_data:payload,
         loading: false,
         all_num: payload.length,
-        ypp_num: payload.filter((item:any) => item.video_yt_id == null).length,
+        ypp_num: payload.filter((item:any) => item.video_yt_id !== null).length,
         nft_num: payload.filter((item:any) => item.video_nft_id != 'No'&& item.video_nft_id != null).length,
-        check_num:payload.filter((item:any) => item.video_check_flag !== false).length
+        check_num:payload.filter((item:any) => item.video_check_flag !== false).length,
+        start:payload[0],
+        end:payload[1]
         
       };
       case SET_DATE:

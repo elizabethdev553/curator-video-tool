@@ -40,7 +40,7 @@ const VideoSchema = new mongoose.Schema({
     default:''
   },
   video_check_tag:{
-    type: Array,
+    type: String,
   },
   video_category:{
     type: String,

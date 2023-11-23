@@ -46,7 +46,7 @@ const App = () => {
             {/* <Route path="/assignment" element={<PrivateRoute component={Assignment} />} /> */}
             <Route path="/assigned-list" element={<PrivateRoute component={AssignedList} />} />
             <Route path="/curator-panel/check/:id" element={<PrivateRoute component={VideoCheck} />} />
-            <Route path="/from-qn/:date/:time?" element={<PrivateRoute component={Home} />} />
+            <Route path="/from-qn/:start/:end?" element={<PrivateRoute component={Home} />} />
             <Route path="/video-list" element={<PrivateRoute component={VideoList} />} />
           </Routes>
         </Router>
