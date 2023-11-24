@@ -14,8 +14,6 @@ interface NavbarProps {
 let authLinks: any;
 
 const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout }) => {
-
-
   const admin = (
     <Fragment>
       <li>
@@ -28,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
           <i className="fas fa-user" /> <span className="hide-sm">Curators list</span>
         </Link>
       </li>
-      
+
       <li>
         <a onClick={logout} href="#">
           <i className="fas fa-sign-out-alt" /> <span className="hide-sm">Logout</span>
@@ -38,7 +36,7 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
   );
 
   const curator = (
-    <Fragment >
+    <Fragment>
       <li>
         <Link to="/assigned-list">
           <i className="fas fa-user" /> <span className="hide-sm">Curator Panel</span>
@@ -69,7 +67,17 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
           </Link>
         </h1>
         <ul>
-        <Fragment>{isAuthenticated ? authLinks : ''}</Fragment>
+          <li>
+            <Link to="/register">
+              <i className="fas fa-user" /> <span className="hide-sm">Register</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/">
+              <i className="fas fa-user" /> <span className="hide-sm">Login</span>
+            </Link>
+          </li>
+          <Fragment>{isAuthenticated ? authLinks : ''}</Fragment>
         </ul>
       </nav>
     </React.Fragment>

@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const MemberSchema = new mongoose.Schema({
-  memberId: {
-    type: String,
-    required: true
-  },
   handle: {
     type: String,
     required: true
@@ -18,8 +14,9 @@ const MemberSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  avatar: {
-    type: String
+  authority:{
+    type:Number,
+    default:0
   },
   date: {
     type: Date,

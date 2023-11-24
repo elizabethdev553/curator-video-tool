@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Divider, Table, Popconfirm, Button } from 'antd';
+import { Divider, Table, Popconfirm, Button,Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 
 
@@ -14,6 +14,7 @@ interface CuratorType {
   memberId: string;
   handle: string;
   email: string;
+  authority:number
 }
 
 const CuratorList = ({getCuratorList,delCurator, curator:{curators}}:any) => {
@@ -34,12 +35,12 @@ const CuratorList = ({getCuratorList,delCurator, curator:{curators}}:any) => {
       render: (text: string, record: any, index: number) => (page - 1) * paginationSize + index + 1,
     },
     {
-      title: 'memberId',
-      dataIndex: 'memberId',
-    },
-    {
       title: 'handle',
       dataIndex: 'handle',
+    },
+    {
+      title: 'authority',
+      dataIndex: 'authority',
     },
     {
       title: 'email',
@@ -65,7 +66,7 @@ const CuratorList = ({getCuratorList,delCurator, curator:{curators}}:any) => {
   return (
     <section className="container">
       <h1 className="large text-primary">Curators List</h1>
-      <Link to="/register" className="btn btn-primary">Add a Curator</Link>
+      
       <Divider />
       <Table
         rowKey={obj => obj.email}
@@ -78,6 +79,7 @@ const CuratorList = ({getCuratorList,delCurator, curator:{curators}}:any) => {
           hideOnSinglePage: true,
           showSizeChanger: true,
         }}
+        // rowSelection={rowSelection}
         columns={columns}
         dataSource={curators}
       />

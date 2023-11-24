@@ -53,9 +53,17 @@ router.post(
           .json({ errors: [{ msg: 'Invalid Password.' }] });
       }
 
+      console.log(member.authority,"authority")
+      if(member.authority==0){
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'The leader have to accept your request.' }] });
+      }
+      
       const payload = {
         member: {
-          id: member._id
+          id: member._id,
+          authority:member.authority
         }
       };
 

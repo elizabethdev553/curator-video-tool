@@ -13,14 +13,13 @@ type Props = PropsFromRedux & {
 const Register = ({ register, isAuthenticated }: Props) => {
   const navigator=useNavigate()
   const [formData, setFormData] = useState({
-    memberId: '',
     handle: '',
     email: '',
     password: '',
     password2: ''
   });
 
-  const { memberId, handle, email, password, password2 } = formData;
+  const { handle, email, password, password2 } = formData;
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,7 +29,7 @@ const Register = ({ register, isAuthenticated }: Props) => {
     if (password !== password2) {
       console.log('Passwords do not match', 'danger');
     } else {
-      register({ memberId, handle, email, password });
+      register({ handle, email, password });
       navigator("/curator-list")
     }
   };
@@ -40,15 +39,6 @@ const Register = ({ register, isAuthenticated }: Props) => {
       <h1 className="large text-primary">Create A New Curator</h1>
       
       <form className="form" onSubmit={onSubmit}>
-        <div className="form-group">
-          <input
-            type="text"
-            placeholder="MemberId"
-            name="memberId"
-            value={memberId}
-            onChange={onChange}
-          />
-        </div>
         <div className="form-group">
           <input
             type="text"

@@ -11,16 +11,16 @@ const checkObjectId = require('../../middleware/checkObjectId');
 const Member = require('../../models/Member');
 const Video = require('../../models/Video');
 
-router.get('/:handle/:dateString', async (req, res) => {
+router.get('/:handle', async (req, res) => {
   try {
     let handle = req.params.handle;
-    let dateString = req.params.dateString;
-    const dateGt = new Date(dateString);
-    const dateLt = new Date(dateString + 'T23:59:59.999Z');
+    // let dateString = req.params.dateString;
+    // const dateGt = new Date(dateString);
+    // const dateLt = new Date(dateString + 'T23:59:59.999Z');
 
     const video_lists = await Video.find({
       video_curator: handle,
-      video_createdAt: { $gte: dateGt, $lt: dateLt }
+      // video_createdAt: { $gte: dateGt, $lt: dateLt }
     }).sort({
       video_createdAt: -1
     });
