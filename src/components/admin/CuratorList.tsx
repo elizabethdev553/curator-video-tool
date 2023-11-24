@@ -14,7 +14,7 @@ interface CuratorType {
   memberId: string;
   handle: string;
   email: string;
-  authority:number
+  authority:string
 }
 
 const CuratorList = ({getCuratorList,delCurator, curator:{curators}}:any) => {
@@ -41,6 +41,7 @@ const CuratorList = ({getCuratorList,delCurator, curator:{curators}}:any) => {
     {
       title: 'authority',
       dataIndex: 'authority',
+      render:(authority)=><Tag color='red'>{authority.toUpperCase()}</Tag>
     },
     {
       title: 'email',

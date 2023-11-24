@@ -53,8 +53,7 @@ router.post(
           .json({ errors: [{ msg: 'Invalid Password.' }] });
       }
 
-      console.log(member.authority,"authority")
-      if(member.authority==0){
+      if(member.authority=='guest'){
         return res
           .status(400)
           .json({ errors: [{ msg: 'The leader have to accept your request.' }] });

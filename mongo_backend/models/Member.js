@@ -15,8 +15,8 @@ const MemberSchema = new mongoose.Schema({
     required: true
   },
   authority:{
-    type:Number,
-    default:0
+    type:String,
+    default:'guest'
   },
   date: {
     type: Date,

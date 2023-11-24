@@ -139,10 +139,10 @@ const VideoCheck = () => {
                     <Option value="D">D</Option>
                   </Select>
                 </Form.Item>
-                <Form.Item name="video_play" label="Entity Play:" hasFeedback
+                <Form.Item name="video_play" label="Entity Play:" hasFeedback initialValue="Yes"
                 rules={[{ required: true, message: 'Please select this!' }]}>
                   <Select placeholder="Please select favourite colors">
-                    <Option value="Yes">Yes</Option>
+                    <Option value="Yes" >Yes</Option>
                     <Option value="No">No</Option>
                   </Select>
                 </Form.Item>

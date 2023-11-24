@@ -14,7 +14,7 @@ interface NavbarProps {
 let authLinks: any;
 
 const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout }) => {
-  const admin = (
+  const authority_admin = (
     <Fragment>
       <li>
         <Link to="/video-list">
@@ -35,7 +35,27 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
     </Fragment>
   );
 
-  const curator = (
+  const authority_admin_curator = (
+    <Fragment>
+      <li>
+        <Link to="/video-list">
+          <i className="fas fa-user" /> <span className="hide-sm">Video List</span>
+        </Link>
+      </li>
+      <li>
+        <Link to="/assigned-list">
+          <i className="fas fa-user" /> <span className="hide-sm">Curator Panel</span>
+        </Link>
+      </li>
+      <li>
+        <a onClick={logout} href="#">
+          <i className="fas fa-sign-out-alt" /> <span className="hide-sm">Logout</span>
+        </a>
+      </li>
+    </Fragment>
+  );
+
+  const authority_curator = (
     <Fragment>
       <li>
         <Link to="/assigned-list">
@@ -51,11 +71,34 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
     </Fragment>
   );
 
+  const guest = (
+    <Fragment>
+      <li>
+        <Link to="/register">
+          <i className="fas fa-user" /> <span className="hide-sm">Register</span>
+        </Link>
+      </li>
+      <li>
+        <Link to="/">
+          <i className="fas fa-user" /> <span className="hide-sm">Login</span>
+        </Link>
+      </li>
+    </Fragment>
+  );
+
   if (user) {
-    if (user.email == 'goldwolf.dev@gmail.com') {
-      authLinks = admin;
-    } else {
-      authLinks = curator;
+    switch (user.authority) {
+      case 'leader':
+        authLinks = authority_admin;
+        break;
+      case 'admin':
+        authLinks = authority_admin_curator;
+        break;
+      case 'curator':
+        authLinks = authority_curator;
+        break;
+      default:
+        break;
     }
   }
   return (
@@ -67,17 +110,7 @@ const Navbar: React.FC<NavbarProps> = ({ auth: { isAuthenticated, user }, logout
           </Link>
         </h1>
         <ul>
-          <li>
-            <Link to="/register">
-              <i className="fas fa-user" /> <span className="hide-sm">Register</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <i className="fas fa-user" /> <span className="hide-sm">Login</span>
-            </Link>
-          </li>
-          <Fragment>{isAuthenticated ? authLinks : ''}</Fragment>
+          <Fragment>{isAuthenticated ? authLinks : guest}</Fragment>
         </ul>
       </nav>
     </React.Fragment>
