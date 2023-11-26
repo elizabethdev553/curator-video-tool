@@ -37,77 +37,6 @@ interface CuratorList {
   handle?: string;
 }
 
-const columns: ColumnsType<Assignment> = [
-  {
-    title: 'ID',
-    dataIndex: 'key',
-  },
-  {
-    title: 'TITLE',
-    dataIndex: 'video_title',
-  },
-  {
-    title: 'CHANNEL NAME',
-    dataIndex: 'video_channel_title',
-  },
-  {
-    title: 'OWNER',
-    dataIndex: 'video_owner_handle',
-  },
-  {
-    title: 'UPLOAD TIME',
-    dataIndex: 'video_createdAt',
-  },
-  {
-    title: 'YPP',
-    dataIndex: 'video_yt_id',
-  },
-  {
-    title: 'NFT',
-    dataIndex: 'video_nft_id',
-  },
-  {
-    title: 'CURATOR',
-    dataIndex: 'video_curator',
-  },
-  {
-    title: 'ENTITY PALYS',
-    dataIndex: 'video_play',
-  },
-  {
-    title: 'CATEGORY',
-    dataIndex: 'video_category',
-  },
-  {
-    title: 'TOXIC CONTENT',
-    dataIndex: 'video_check_tag',
-    render: (_, { video_check_tag, video_check_flag }) =>
-      video_check_tag ? (
-        <Tag color="volcano" key={video_check_tag}>
-          {video_check_tag}
-        </Tag>
-      ) : video_check_flag ? (
-        <Tag color="green">checked</Tag>
-      ) : (
-        ''
-      ),
-  },
-  {
-    title: 'DUPLICATE',
-    dataIndex: 'video_duplicate',
-  },
-
-  {
-    title: 'CHECKED TIME',
-    dataIndex: 'video_checkedAt',
-  },
-
-  {
-    title: 'COMMENT',
-    dataIndex: 'video_check_description',
-  },
-];
-
 type PropsFromRedux = ConnectedProps<typeof connector>;
 const tmp = 1;
 const VideoList = ({
@@ -141,12 +70,91 @@ const VideoList = ({
   const [curator, setCurator] = useState<CuratorList>();
   const [start_date, setStart_date] = useState<any>();
   const [end_date, setEnd_date] = useState<any>();
-
+  const [page, setPage] = useState(1);
+  const [paginationSize, setPaginationSize] = useState(25);
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
     const filtertmp = e.target.value;
     setFilter(filtertmp);
   };
+
+  const columns: ColumnsType<Assignment> = [
+    {
+      title: 'NO',
+      key: 'key',
+      width: '15px',
+      dataIndex: 'key',
+      render: (text: string, record: any, index: number) => (page - 1) * paginationSize + index + 1,
+    },
+    {
+      title: 'TITLE',
+      dataIndex: 'video_title',
+    },
+    {
+      title: 'ID',
+      dataIndex: 'key',
+    },
+    {
+      title: 'CHANNEL NAME',
+      dataIndex: 'video_channel_title',
+    },
+    {
+      title: 'OWNER',
+      dataIndex: 'video_owner_handle',
+    },
+    {
+      title: 'UPLOAD TIME',
+      dataIndex: 'video_createdAt',
+    },
+    {
+      title: 'YPP',
+      dataIndex: 'video_yt_id',
+    },
+    {
+      title: 'NFT',
+      dataIndex: 'video_nft_id',
+    },
+    {
+      title: 'CURATOR',
+      dataIndex: 'video_curator',
+    },
+    {
+      title: 'ENTITY PALYS',
+      dataIndex: 'video_play',
+    },
+    {
+      title: 'CATEGORY',
+      dataIndex: 'video_category',
+    },
+    {
+      title: 'TOXIC CONTENT',
+      dataIndex: 'video_check_tag',
+      render: (_, { video_check_tag, video_check_flag }) =>
+        video_check_tag ? (
+          <Tag color="volcano" key={video_check_tag}>
+            {video_check_tag}
+          </Tag>
+        ) : video_check_flag ? (
+          <Tag color="green">checked</Tag>
+        ) : (
+          ''
+        ),
+    },
+    {
+      title: 'DUPLICATE',
+      dataIndex: 'video_duplicate',
+    },
+
+    {
+      title: 'CHECKED TIME',
+      dataIndex: 'video_checkedAt',
+    },
+
+    {
+      title: 'COMMENT',
+      dataIndex: 'video_check_description',
+    },
+  ];
 
   useEffect(() => {
     getCuratorList();
@@ -301,25 +309,25 @@ const VideoList = ({
 
         <Col span={16}>
           <Row>
-      <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChange}>
-            <Col span={3}>
-              <Checkbox value="A">YPP</Checkbox>
-            </Col>
-            <Col span={3}>
-              <Checkbox value="B">Non YPP</Checkbox>
-            </Col>
-            <Col span={3}>
-              <Checkbox value="C">NFT</Checkbox>
-            </Col>
-            <Col span={3}>
-              <Checkbox value="D">Non NFT</Checkbox>
-            </Col>
-            <Col span={3}>
-              <Checkbox value="E">CHECKED</Checkbox>
-            </Col>
-            <Col span={3}>
-              <Checkbox value="F">Non CHECKED</Checkbox>
-            </Col>
+            <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChange}>
+              <Col span={3}>
+                <Checkbox value="A">YPP</Checkbox>
+              </Col>
+              <Col span={3}>
+                <Checkbox value="B">Non YPP</Checkbox>
+              </Col>
+              <Col span={3}>
+                <Checkbox value="C">NFT</Checkbox>
+              </Col>
+              <Col span={3}>
+                <Checkbox value="D">Non NFT</Checkbox>
+              </Col>
+              <Col span={3}>
+                <Checkbox value="E">CHECKED</Checkbox>
+              </Col>
+              <Col span={3}>
+                <Checkbox value="F">Non CHECKED</Checkbox>
+              </Col>
             </Checkbox.Group>
           </Row>
         </Col>
@@ -350,7 +358,21 @@ const VideoList = ({
             })}
           />
           <input type="submit" className="btn btn-primary" value="Assign" />
-          <Table columns={columns} dataSource={filter_data} rowSelection={rowSelection} />
+          <Table
+            columns={columns}
+            dataSource={filter_data}
+            rowKey={(obj) => obj.key}
+            pagination={{
+              onChange(current, pageSize) {
+                setPage(current);
+                setPaginationSize(pageSize);
+              },
+              defaultPageSize: 25,
+              hideOnSinglePage: true,
+              showSizeChanger: true,
+            }}
+            rowSelection={rowSelection}
+          />
         </form>
       </Fragment>
     </section>

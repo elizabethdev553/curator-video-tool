@@ -40,6 +40,7 @@ router.get('/video-list/date-range/:start/:end', async (req, res) => {
   try {
     const start = req.params.start;
     const end = req.params.end;
+    console.log(start. end, "STRart")
     const dateGt = moment.utc(start).toDate();
     const dateLt = moment.utc(end).toDate();
     

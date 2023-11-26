@@ -34,7 +34,8 @@ const VideoCheck = () => {
 
   async function getVideoDetail(video_id: string | undefined) {
     try {
-      const response = await api.get(`/curator/${video_id}`, {
+      console.log(video_id, "video")
+      const response = await api.get(`curator/detail/${video_id}`, {
         headers: {
           'Content-Type': 'application/json',
         },

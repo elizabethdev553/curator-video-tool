@@ -30,76 +30,7 @@ interface Assignment {
   video_duplicate:string;
 }
 
-const columns: ColumnsType<Assignment> = [
-  {
-    title: 'ID',
-    dataIndex: 'key',
-  },
-  {
-    title: 'TITLE',
-    dataIndex: 'video_title',
-  },
-  {
-    title: 'CHANNEL NAME',
-    dataIndex: 'video_channel_title',
-  },
-  {
-    title: 'OWNER',
-    dataIndex: 'video_owner_handle',
-  },
-  {
-    title: 'UPLOAD TIME',
-    dataIndex: 'video_createdAt',
-  },
-  {
-    title: 'YPP',
-    dataIndex: 'video_yt_id',
-  },
-  {
-    title: 'NFT',
-    dataIndex: 'video_nft_id',
-  },
-  {
-    title: 'CURATOR',
-    dataIndex: 'video_curator',
-  },
-  {
-    title: 'ENTITY PALYS',
-    dataIndex: 'video_play',
-  },
-  {
-    title: 'CATEGORY',
-    dataIndex: 'video_category',
-  },
-  {
-    title: 'TOXIC CONTENT',
-    dataIndex: 'video_check_tag',
-    render: (_, { video_check_tag, video_check_flag }) =>
-      video_check_tag ? (
-        <Tag color="volcano" key={video_check_tag}>
-          {video_check_tag}
-        </Tag>
-      ) : video_check_flag ? (
-        <Tag color="green">checked</Tag>
-      ) : (
-        ''
-      ),
-  },
-  {
-    title: 'DUPLICATE',
-    dataIndex: 'video_duplicate',
-  },
 
-  {
-    title: 'CHECKED TIME',
-    dataIndex: 'video_checkedAt',
-  },
-
-  {
-    title: 'COMMENT',
-    dataIndex: 'video_check_description',
-  },
-];
 
 
 // const today = new Date(); 
@@ -111,6 +42,86 @@ const columns: ColumnsType<Assignment> = [
 // const TODAY = `20${year}-${month}-${day}`; 
 
 const AssignedList = ({ auth: { user }, setDate }: any) => {
+  const [page, setPage] = useState(1);
+
+  const columns: ColumnsType<Assignment> = [
+    {
+      title: 'NO',
+      key: 'key',
+      width: '15px',
+      dataIndex:"key",
+      render: (text: string, record: any, index: number) => (page - 1) * paginationSize + index + 1,
+    },
+    {
+      title: 'TITLE',
+      dataIndex: 'video_title',
+    },
+    {
+      title: 'ID',
+      dataIndex: 'key',
+    },
+    {
+      title: 'CHANNEL NAME',
+      dataIndex: 'video_channel_title',
+    },
+    {
+      title: 'OWNER',
+      dataIndex: 'video_owner_handle',
+    },
+    {
+      title: 'UPLOAD TIME',
+      dataIndex: 'video_createdAt',
+    },
+    {
+      title: 'YPP',
+      dataIndex: 'video_yt_id',
+    },
+    {
+      title: 'NFT',
+      dataIndex: 'video_nft_id',
+    },
+    {
+      title: 'CURATOR',
+      dataIndex: 'video_curator',
+    },
+    {
+      title: 'ENTITY PALYS',
+      dataIndex: 'video_play',
+    },
+    {
+      title: 'CATEGORY',
+      dataIndex: 'video_category',
+    },
+    {
+      title: 'TOXIC CONTENT',
+      dataIndex: 'video_check_tag',
+      render: (_, { video_check_tag, video_check_flag }) =>
+        video_check_tag ? (
+          <Tag color="volcano" key={video_check_tag}>
+            {video_check_tag}
+          </Tag>
+        ) : video_check_flag ? (
+          <Tag color="green">checked</Tag>
+        ) : (
+          ''
+        ),
+    },
+    {
+      title: 'DUPLICATE',
+      dataIndex: 'video_duplicate',
+    },
+  
+    {
+      title: 'CHECKED TIME',
+      dataIndex: 'video_checkedAt',
+    },
+  
+    {
+      title: 'COMMENT',
+      dataIndex: 'video_check_description',
+    },
+  ];
+  const [paginationSize, setPaginationSize] = useState(25);
   const [assignment, setAssignment] = useState<Assignment[]>();
   const [selectList, setSelectList] = useState<Assignment>();
   const member_id: string = user.handle;
@@ -153,6 +164,16 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
           <Divider />
           {/* <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} /> */}
           <Table
+            rowKey={obj => obj.key}
+            pagination={{
+              onChange(current, pageSize) {
+                setPage(current);
+                setPaginationSize(pageSize);
+              },
+              defaultPageSize: 25,
+              hideOnSinglePage: true,
+              showSizeChanger: true,
+            }}
             rowSelection={{
               type: 'radio',
               ...rowSelection,

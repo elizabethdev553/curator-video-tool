@@ -38,10 +38,11 @@ router.get('/:handle', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/detail/:id', async (req, res) => {
   try {
-    let key = req.params.id;
+    let key = req.params.id
 
+    console.log(key, "key")
     let videoDetailTmp = await Video.findOne({ key });
 
     if (!videoDetailTmp) {
