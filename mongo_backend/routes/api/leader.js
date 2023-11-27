@@ -40,7 +40,7 @@ router.get('/video-list/date-range/:start/:end', async (req, res) => {
   try {
     const start = req.params.start;
     const end = req.params.end;
-    console.log(start. end, "STRart")
+    // console.log(start. end, "STRart")
     const dateGt = moment.utc(start).toDate();
     const dateLt = moment.utc(end).toDate();
     
@@ -54,6 +54,27 @@ router.get('/video-list/date-range/:start/:end', async (req, res) => {
     }
 
     res.json(video_lists);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.get('/video-list/last/video', async (req, res) => {
+  try {
+    
+    const video_lists = await Video.findOne()
+    .sort({
+      video_createdAt: -1
+    })
+    .limit(1)
+
+    // console.log(video_lists, "videolsit")
+    if (!video_lists) {
+      return res.status(400).json({ msg: 'There is no videos or you already assigned.' });
+    }
+
+    res.json(video_lists.video_createdAt);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -196,28 +217,6 @@ router.get('/members/members-list', async (req, res) => {
   }
 });
 
-router.delete('/:id', [auth, checkObjectId('id')], async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-
-    if (!post) {
-      return res.status(404).json({ msg: 'Post not found' });
-    }
-
-    // Check user
-    if (post.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: 'User not authorized' });
-    }
-
-    await post.remove();
-
-    res.json({ msg: 'Post removed' });
-  } catch (err) {
-    console.error(err.message);
-
-    res.status(500).send('Server Error');
-  }
-});
 
 router.delete('/curator-list/:id', async (req, res) => {
   try {
@@ -256,7 +255,7 @@ router.post('/assignment/send-video-list', async (req, res) => {
 
 router.post('/authority/set', async (req, res) => {
   try {
-    console.log(req.body, "req.body")
+    // console.log(req.body, "req.body")
         const filter = { email: req.body.email};
         const update = { $set: { authority: req.body.authority } };
         await Member.updateOne(filter, update);

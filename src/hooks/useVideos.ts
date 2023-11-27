@@ -9,7 +9,7 @@ export function useVideos(createdAt:string|undefined, endedAt:string|undefined) 
     where: { createdAt_gt: createdAt, createdAt_lt: endedAt },
     limit:50000
   };
-  console.log(variables, "varivoseikfj")
+  // console.log(variables, "varivoseikfj")
   const [getVideo, getVideoQuery]= useGetVideosLazyQuery({variables});
 
   useEffect(() => {

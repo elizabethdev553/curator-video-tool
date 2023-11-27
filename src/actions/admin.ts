@@ -2,6 +2,7 @@ import { Dispatch } from 'redux';
 import { Navigate } from 'react-router-dom';
 import api from '../utils/api';
 import {
+  SET__LATEST_VIDEO,
   AUTHORITY_SET,
   GET_VIDEOS,
   GET_CURATORS,
@@ -40,10 +41,9 @@ import {
   NEVER_FILTER,
 } from './types';
 
-export const getVideoListRange = (date: string) => async (dispatch: Dispatch) => {
+export const getVideoListRange = (start: string,end:string ) => async (dispatch: Dispatch) => {
   try {
-    const start = date[0];
-    const end = date[1];
+    const date = [start, end]
     const res = await api.get(`leader/video-list/date-range/${start}/${end}`, {
       headers: {
         'Content-Type': 'application/json',
@@ -51,11 +51,11 @@ export const getVideoListRange = (date: string) => async (dispatch: Dispatch) =>
     });
     dispatch({
       type: GET_VIDEOS,
-      payload: res.data,
+      payload: res.data
     });
     dispatch({
-      type: NUM_ALL_VIDEOS,
-      payload: date,
+      type: SET_DATE,
+      payload: date
     });
   } catch (error) {
     console.log(error, 'Fetch UnCheckedList Error');
@@ -80,7 +80,7 @@ export const setAuthority = (data: any, item:any) => async (dispatch: Dispatch) 
 
 export const setDate = (date: string) => async (dispatch: Dispatch) => {
   try {
-    console.log(date, 'datedffffff');
+    // console.log(date, 'datedffffff');
     dispatch({
       type: SET_DATE,
       payload: date,
@@ -258,6 +258,28 @@ export const sendVideoList = (selectList: any, curator: any) => async (dispatch:
   }
 };
 
+export const getVideoLatest = () => async (dispatch: Dispatch) => {
+  try {
+
+    const res = await api.get(`leader/video-list/last/video`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    // console.log(res.data, "res.data")
+    // dispatch({
+    //   type: GET_VIDEOS,
+    //   payload: res.data
+    // });
+    dispatch({
+      type: SET__LATEST_VIDEO,
+      payload: res.data
+    });
+  } catch (error) {
+    console.log(error, 'Fetch UnCheckedList Error');
+  }
+};
+
 export const getMemberList = () => async (dispatch: Dispatch) => {
   try {
     const res = await api.get('leader/members/members-list', {
@@ -292,7 +314,7 @@ export const getCuratorList = () => async (dispatch: Dispatch) => {
 
 export const delCurator = (email: any) => async (dispatch: Dispatch) => {
   try {
-    console.log(email, 'email');
+    // console.log(email, 'email');
     await api.delete(`/leader/curator-list/${email}`);
 
     dispatch({

@@ -2,10 +2,12 @@ import {
   GET_CURATORS,
   DELETE_CURATOR,
   ADD_CURATOR,
+  GET_CURATOR_VIDEOS,
   
   } from '../actions/types';
 
 const initialState = {
+  videos:[],
  curators:[],
   loading: true,
   error: {},
@@ -15,11 +17,18 @@ function curatorReducer(state = initialState, action:any) {
   const { type, payload } = action;
   switch (type) {
     case GET_CURATORS:
-      console.log(state, 'videos')
+      // console.log(state, 'videos')
       return {
         ...state,
         curators: payload,
         loading: false,
+        
+      };
+      case GET_CURATOR_VIDEOS:
+      return {
+        ...state,
+        videos: payload,
+        // loading: false,
         
       };
 

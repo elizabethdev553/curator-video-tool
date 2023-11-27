@@ -1,5 +1,5 @@
 import type { DatePickerProps } from 'antd';
-import { DatePicker, Divider, Switch, Select, Table, Tag, Radio, Col, Row, Button, Checkbox } from 'antd';
+import { DatePicker, Divider, Switch, Select, Table, Tag, Radio, Col, Row, Button, Checkbox, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { RadioChangeEvent } from 'antd';
 import type { TableRowSelection } from 'antd/es/table/interface';
@@ -12,8 +12,9 @@ import moment from 'moment';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 
-import { getVideoListRange, setDate, getCuratorList, setFilter, sendVideoList } from '../../actions/admin';
+import { getVideoListRange, setDate, getCuratorList, setFilter, sendVideoList, getVideoLatest } from '../../actions/admin';
 import Spinner from '../../components/layout/Spinner';
+import dayjs from 'dayjs';
 const { RangePicker } = DatePicker;
 interface Assignment {
   key: string;
@@ -41,6 +42,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 const tmp = 1;
 const VideoList = ({
   getVideoList,
+  // getVideoLatest,
   getVideoListRange,
   setDate,
   sendVideoList,
@@ -63,20 +65,16 @@ const VideoList = ({
     start,
     end,
     filter_data,
+    setlatest
   },
 }: any) => {
-  const [value, setValue] = useState(tmp);
+  // const [value, setValue] = useState(tmp);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [curator, setCurator] = useState<CuratorList>();
-  const [start_date, setStart_date] = useState<any>();
-  const [end_date, setEnd_date] = useState<any>();
+  const [start_date, setStart_date] = useState<any>(start.format('YYYY-MM-DD HH:mm'));
+  const [end_date, setEnd_date] = useState<any>(end.format('YYYY-MM-DD HH:mm'));
   const [page, setPage] = useState(1);
   const [paginationSize, setPaginationSize] = useState(10);
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
-    const filtertmp = e.target.value;
-    setFilter(filtertmp);
-  };
 
   const columns: ColumnsType<Assignment> = [
     {
@@ -158,11 +156,9 @@ const VideoList = ({
 
   useEffect(() => {
     getCuratorList();
-  }, []);
-
-  useEffect(() => {
+    // getVideoLatest();
     getVideoListRange(start_date, end_date);
-  }, [start_date, end_date]);
+  }, []);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -227,87 +223,64 @@ const VideoList = ({
 
   const onDateChange = (value: RangePickerProps['value'], dateString: [string, string]) => {
     // console.log('Selected Time: ', value);
-    console.log('Formatted Selected Time: ', dateString);
+    // console.log('Formatted Selected Time: ', dateString);
     setStart_date(dateString[0]);
     setEnd_date(dateString[1]);
-    getVideoListRange(dateString);
+    getVideoListRange(dateString[0], dateString[1]);
   };
 
   const onCheckChange = (checkedValues: CheckboxValueType[]) => {
     const sort = checkedValues?.sort();
     const result = sort?.join('');
-    console.log(result, 'result');
+    // console.log(result, 'result');
     setFilter(result);
   };
 
   const onOk = (value: RangePickerProps['value']) => {
-    console.log('onOk: ', value);
+    // console.log('onOk: ', value);
   };
   const { data } = useVideoCounts(start_date, end_date);
+
+  let table: any = '';
+  if (!videos.length) {
+    table = (<Spinner/>)
+  } else {
+    table = (
+      <Table
+        columns={columns}
+        dataSource={filter_data}
+        rowKey={(obj) => obj.key}
+        pagination={{
+          onChange(current, pageSize) {
+            setPage(current);
+            setPaginationSize(pageSize);
+          },
+          defaultPageSize: 10,
+          hideOnSinglePage: true,
+          showSizeChanger: true,
+        }}
+        rowSelection={rowSelection}
+      />
+    );
+  }
+
   return (
     <section className="container">
       <h1 className="large text-primary">Videos List</h1>
       <Divider />
 
       <Row>
-        <Col span={2}>
-          <Tag color="cyan">QN Size: </Tag>
-          {data}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">DB Size: </Tag>
-          {all_num}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">Ypp Videos: </Tag>
-          {ypp_num}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">Nft Videos: </Tag> {nft_num}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">UnChecked Videos: </Tag>
-          {uncheck_num}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">Category A: </Tag>
-          {cat_A}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">Category B: </Tag>
-          {cat_B}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">Category C: </Tag>
-          {cat_C}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">Category D: </Tag>
-          {cat_D}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">Toxic Contents: </Tag>
-          {toxic}
-        </Col>
-        <Col span={2}>
-          <Tag color="cyan">Duplicate Videos: </Tag>
-          {duplicate}
+        <Col span={6}>
+          <RangePicker
+            defaultValue={[start, end]}
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+            onChange={onDateChange}
+            onOk={onOk}
+          />
         </Col>
 
-        <Col span={2}>
-          <Button type="primary" onClick={exportData} shape="round" icon={<DownloadOutlined />} size="large">
-            Download
-          </Button>
-        </Col>
-      </Row>
-      {/* <Col span={3}>  </Col> */}
-      <Divider />
-      <Row>
-        <Col span={8}>
-          <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={onDateChange} onOk={onOk} />
-        </Col>
-
-        <Col span={16}>
+        <Col span={14}>
           <Row>
             <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChange}>
               <Col span={3}>
@@ -331,15 +304,72 @@ const VideoList = ({
             </Checkbox.Group>
           </Row>
         </Col>
+        <Col span={4}>
+          <Button type="primary" onClick={exportData} shape="round" icon={<DownloadOutlined />} size="large">
+            Download
+          </Button>
+        </Col>
       </Row>
 
+      <Divider />
+      <Row>
+        <Col span={4}>
+          <Tag color="cyan">QN Size: </Tag>
+          {data}
+        </Col>
+        <Col span={4}>
+          <Tag color="cyan">DB Size: </Tag>
+          {all_num}
+        </Col>
+        <Col span={4}>
+          <Tag color="cyan">Ypp Videos: </Tag>
+          {ypp_num}
+        </Col>
+        <Col span={4}>
+          <Tag color="cyan">Nft Videos: </Tag> {nft_num}
+        </Col>
+        <Col span={4}>
+          <Tag color="cyan">UnChecked Videos: </Tag>
+          {uncheck_num}
+        </Col>
+        <Col span={4}>
+          <Tag color="cyan">Category A: </Tag>
+          {cat_A}
+        </Col>
+      </Row>
+      <Divider />
+      <Row>
+        <Col span={4}>
+          <Tag color="cyan">Category B: </Tag>
+          {cat_B}
+        </Col>
+        <Col span={4}>
+          <Tag color="cyan">Category C: </Tag>
+          {cat_C}
+        </Col>
+        <Col span={4}>
+          <Tag color="cyan">Category D: </Tag>
+          {cat_D}
+        </Col>
+        <Col span={4}>
+          <Tag color="cyan">Toxic Contents: </Tag>
+          {toxic}
+        </Col>
+        <Col span={4}>
+          <Tag color="cyan">Duplicate Videos: </Tag>
+          {duplicate}
+        </Col>
+      </Row>
+      {/* <Col span={3}>  </Col> */}
       <Divider />
 
       <Fragment>
         <form className="form" onSubmit={onSubmit}>
           {data != null && data > videos.length ? (
             <Link
-              to={`/from-qn/${moment.utc(start_date).toISOString()}/${moment.utc(end_date).toISOString()}`}
+              to={`/from-qn/${moment
+                .utc(videos.length != 0 ? videos[0].video_createdAt : start_date)
+                .toISOString()}/${moment.utc(end_date).toISOString()}`}
               className="btn btn-primary"
             >
               Refresh
@@ -358,21 +388,7 @@ const VideoList = ({
             })}
           />
           <input type="submit" className="btn btn-primary" value="Assign" />
-          <Table
-            columns={columns}
-            dataSource={filter_data}
-            rowKey={(obj) => obj.key}
-            pagination={{
-              onChange(current, pageSize) {
-                setPage(current);
-                setPaginationSize(pageSize);
-              },
-              defaultPageSize: 10,
-              hideOnSinglePage: true,
-              showSizeChanger: true,
-            }}
-            rowSelection={rowSelection}
-          />
+          {table}
         </form>
       </Fragment>
     </section>
@@ -385,6 +401,6 @@ const mapStateToProps = (state: any) => ({
   auth: state.auth,
 });
 
-const connector = connect(mapStateToProps, { getVideoListRange, sendVideoList, getCuratorList, setDate, setFilter });
+const connector = connect(mapStateToProps, { getVideoListRange, sendVideoList, getCuratorList, setDate, setFilter, getVideoLatest });
 
 export default connector(VideoList);

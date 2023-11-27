@@ -9,7 +9,8 @@ import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 // import { setDate } from '@/actions/admin';
 import { connect, ConnectedProps } from 'react-redux';
-
+import { getUnCheckedList } from '@/actions/curator';
+import { Spinner } from 'react-bootstrap';
 const { Option } = Select;
 
 interface Assignment {
@@ -26,22 +27,19 @@ interface Assignment {
   video_check_description: string;
   video_checkedAt: string;
   video_category: string;
-  video_play:string;
-  video_duplicate:string;
+  video_play: string;
+  video_duplicate: string;
 }
 
-
-
-
-// const today = new Date(); 
+// const today = new Date();
 
 // const year = String(today.getFullYear()).slice(-2);
 // const month = String(today.getMonth() + 1).padStart(2, '0');
-// const day = String(today.getDate()).padStart(2, '0'); 
+// const day = String(today.getDate()).padStart(2, '0');
 
-// const TODAY = `20${year}-${month}-${day}`; 
+// const TODAY = `20${year}-${month}-${day}`;
 
-const AssignedList = ({ auth: { user }, setDate }: any) => {
+const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }: any) => {
   const [page, setPage] = useState(1);
   const [paginationSize, setPaginationSize] = useState(10);
   const columns: ColumnsType<Assignment> = [
@@ -49,7 +47,7 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
       title: 'NO',
       key: 'key',
       width: '15px',
-      dataIndex:"key",
+      dataIndex: 'key',
       render: (text: string, record: any, index: number) => (page - 1) * paginationSize + index + 1,
     },
     {
@@ -110,12 +108,12 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
       title: 'DUPLICATE',
       dataIndex: 'video_duplicate',
     },
-  
+
     {
       title: 'CHECKED TIME',
       dataIndex: 'video_checkedAt',
     },
-  
+
     {
       title: 'COMMENT',
       dataIndex: 'video_check_description',
@@ -129,19 +127,19 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
     getUnCheckedList(member_id);
   }, []);
 
-  async function getUnCheckedList(member_id: string) {
-    try {
-      const response = await api.get(`/curator/${member_id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const taskTmp = response.data;
-      setAssignment(taskTmp);
-    } catch (error) {
-      console.log(error, 'Fetch UnCheckedList Error');
-    }
-  }
+  // async function getUnCheckedList(member_id: string) {
+  //   try {
+  //     const response = await api.get(`/curator/${member_id}`, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //     const taskTmp = response.data;
+  //     setAssignment(taskTmp);
+  //   } catch (error) {
+  //     console.log(error, 'Fetch UnCheckedList Error');
+  //   }
+  // }
 
   // const onDatePickerChange: DatePickerProps['onChange'] = (date, dateString) => {
   //   setDate(dateString);
@@ -155,49 +153,55 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
     },
   };
 
-  console.log(assignment, 'assginment');
+  let tmp: any = '';
+  if (!videos.length) {
+    tmp = <Spinner />;
+  } else {
+    tmp = (
+      <Table
+        rowKey={(obj) => obj.key}
+        pagination={{
+          onChange(current, pageSize) {
+            setPage(current);
+            setPaginationSize(pageSize);
+          },
+          defaultPageSize: 10,
+          hideOnSinglePage: true,
+          showSizeChanger: true,
+        }}
+        rowSelection={{
+          type: 'radio',
+          ...rowSelection,
+        }}
+        columns={columns}
+        dataSource={videos}
+      />
+    );
+  }
   return (
     <section className="container">
-      
-        <Fragment>
-          <h1 className="large text-primary">Curator Panel</h1>
-          <Divider />
-          {/* <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} /> */}
-          <Table
-            rowKey={obj => obj.key}
-            pagination={{
-              onChange(current, pageSize) {
-                setPage(current);
-                setPaginationSize(pageSize);
-              },
-              defaultPageSize: 10,
-              hideOnSinglePage: true,
-              showSizeChanger: true,
-            }}
-            rowSelection={{
-              type: 'radio',
-              ...rowSelection,
-            }}
-            columns={columns}
-            dataSource={assignment}
-          />
-          {selectList ? (
-            <Link to={`/curator-panel/check/${selectList.key}`} className="btn btn-primary">
-              Check
-            </Link>
-          ) : (
-            ''
-          )}
-        </Fragment>
-
+      <Fragment>
+        <h1 className="large text-primary">Curator Panel</h1>
+        <Divider />
+        {/* <DatePicker onChange={onDatePickerChange} defaultValue={dayjs()} /> */}
+        {tmp}
+        {selectList ? (
+          <Link to={`/curator-panel/check/${selectList.key}`} className="btn btn-primary">
+            Check
+          </Link>
+        ) : (
+          ''
+        )}
+      </Fragment>
     </section>
   );
 };
 
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
+  curator: state.curator,
 });
 
-const connector = connect(mapStateToProps, {  });
+const connector = connect(mapStateToProps, { getUnCheckedList });
 
 export default connector(AssignedList);

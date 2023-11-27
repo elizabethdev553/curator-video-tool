@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {
   GET_VIDEOS,
   VIDEO_ERROR,
@@ -39,6 +40,7 @@ import {
   N_YPP_NFT_N_CHECK,
   N_YPP_N_NFT_CHECK,
   N_YPP_N_NFT_N_CHECK,
+  SET__LATEST_VIDEO
   
 } from '../actions/types';
 const today = new Date();
@@ -66,8 +68,9 @@ const initialState = {
   cat_D: null,
   toxic: null,
   duplicate: null,
-  start: null,
-  end: null,
+  start: dayjs(dayjs().format('YYYY-MM-DD 00:00')),
+  end: dayjs(),
+  latest:null
 };
 
 function videoReducer(state = initialState, action: any) {
@@ -76,7 +79,7 @@ function videoReducer(state = initialState, action: any) {
   let tmp1: any = null;
   switch (type) {
     case GET_VIDEOS:
-      console.log(state, 'videos');
+      // console.log(state, 'videos');
       return {
         ...state,
         videos: payload,
@@ -92,14 +95,21 @@ function videoReducer(state = initialState, action: any) {
         cat_D: payload.filter((item: any) => item.video_category == 'D').length,
         toxic: payload.filter((item: any) => item.video_check_tag != null).length,
         duplicate: payload.filter((item: any) => item.video_duplicate == 'Yes').length,
-        start: payload[0],
-        end: payload[1],
+        // start: payload[0],
+        // end: payload[1],
       };
     case SET_DATE:
+      // console.log(payload, "payloadddddddddddddddddddddddddddddddd")
       return {
         ...state,
-        sel_date: payload,
-        loading: true,
+        start: dayjs(payload[0]),
+        end: dayjs(payload[1]),
+        // loading: true,
+      };
+      case SET__LATEST_VIDEO:
+      return {
+        ...state,
+        latest: payload
       };
     case GET_CURATORS:
       return {
@@ -317,7 +327,7 @@ function videoReducer(state = initialState, action: any) {
         filter_data: state.videos.map((item: any) => {
           const tmp = payload.selectList.find((id: any) => id == item.key);
           if (tmp) {
-            console.log(tmp, 'item');
+            // console.log(tmp, 'item');
             // return item
             return { ...item, video_curator: payload.curator };
           }

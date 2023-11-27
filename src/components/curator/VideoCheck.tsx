@@ -3,6 +3,7 @@ import type { ColumnsType } from 'antd/es/table';
 import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, useParams, Navigate, useNavigate } from 'react-router-dom';
+import { connect, ConnectedProps } from 'react-redux';
 import Spinner from '../../components/layout/Spinner';
 import VideoPanel from './VideoPanel';
 import type { SelectProps } from 'antd';
@@ -16,32 +17,41 @@ interface Assignment {
   video_media_id: string;
   video_owner_handle: string;
   video_curator: string;
-  video_duplicate:string;
-  video_check_tag:string;
-  video_play:string;
-  video_category:string;
-  video_check_description: string
-
+  video_duplicate: string;
+  video_check_tag: string;
+  video_play: string;
+  video_category: string;
+  video_check_description: string;
 }
 
 type FieldType = {
   video_description?: string;
 };
 
-const VideoCheck = () => {
+const VideoCheck = ({ curator: { videos } }: any) => {
   const navigate = useNavigate();
   const [videoDetail, setVideoDetail] = useState<Assignment>();
   const [msg, setMsg] = useState('');
   const { id } = useParams();
 
-  console.log(videoDetail, "video_detail")
+  const temp: any = {};
+  if (videos.length) {
+    console.log(videos, 'video_detail');
+    videos.map((item: any, key: number) => {
+      if (item.key == id) {
+        temp.current = key;
+        temp.before = key >= 1 ? videos[key - 1].key : 0;
+        temp.next = key < videos.length - 1 ? videos[key + 1].key : 0;
+      }
+    });
+  }
   useEffect(() => {
     getVideoDetail(id);
   }, [id]);
 
   async function getVideoDetail(video_id: string | undefined) {
     try {
-      console.log(video_id, "video")
+      console.log(video_id, 'video');
       const response = await api.get(`curator/detail/${video_id}`, {
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +65,9 @@ const VideoCheck = () => {
     }
   }
 
-  async function saveDescriptionResult(value:any, id:any
+  async function saveDescriptionResult(
+    value: any,
+    id: any
     // description: string | undefined,
     // video_tabs: string | undefined,
     // video_category: string,
@@ -86,6 +98,9 @@ const VideoCheck = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+  let next: any = '';
+  let before: any = '';
+
   return (
     <section className="container">
       {videoDetail == undefined ? (
@@ -104,7 +119,7 @@ const VideoCheck = () => {
           >
             <Divider />
 
-            <Row>
+            <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col span={9} style={{ paddingRight: '40px', paddingLeft: '20px' }}>
                 <Card title="Video Detail" style={{ textAlign: 'left' }}>
                   <p>
@@ -140,7 +155,7 @@ const VideoCheck = () => {
                     <Option value="Illegal">Illegal</Option>
                   </Select>
                 </Form.Item>
-                <Form.Item name="video_category" label="Category Level:" >
+                <Form.Item name="video_category" label="Category Level:">
                   <Select defaultValue={videoDetail.video_category}>
                     <Option value="A">A</Option>
                     <Option value="B">B</Option>
@@ -148,14 +163,17 @@ const VideoCheck = () => {
                     <Option value="D">D</Option>
                   </Select>
                 </Form.Item>
-                <Form.Item name="video_play" label="Entity Play:"
-                rules={[{ required: true, message: 'Please select this!' }]} >
+                <Form.Item
+                  name="video_play"
+                  label="Entity Play:"
+                  rules={[{ required: true, message: 'Please select this!' }]}
+                >
                   <Select defaultValue={videoDetail.video_play}>
-                    <Option value="Yes" >Yes</Option>
+                    <Option value="Yes">Yes</Option>
                     <Option value="No">No</Option>
                   </Select>
                 </Form.Item>
-                
+
                 <Form.Item name="video_duplicate" label="Video Duplicate:">
                   <Select defaultValue={videoDetail.video_duplicate}>
                     <Option value="Yes">Yes</Option>
@@ -166,6 +184,20 @@ const VideoCheck = () => {
                   <Button size="large" htmlType="submit">
                     Save
                   </Button>
+                  {temp.next != 0 ? (
+                    <Link to={`/curator-panel/check/${temp?.next}`} className="btn btn-primary">
+                      Next
+                    </Link>
+                  ) : (
+                    ''
+                  )}
+                  {temp.before != 0 ? (
+                    <Link to={`/curator-panel/check/${temp?.before}`} className="btn btn-primary">
+                      Before
+                    </Link>
+                  ) : (
+                    ''
+                  )}
                 </Form.Item>
               </Col>
               <Col span={15}>
@@ -178,5 +210,12 @@ const VideoCheck = () => {
     </section>
   );
 };
+const mapStateToProps = (state: any) => ({
+  curator: state.curator,
+  // curator: state.curator,
+  // auth: state.auth,
+});
 
-export default VideoCheck;
+const connector = connect(mapStateToProps, {});
+
+export default connector(VideoCheck);

@@ -20,7 +20,7 @@ export function useVideoCounts(start_date:any, end_date:any) {
   
   const data = useMemo(() => getCountQuery.data?.videosConnection.totalCount, [getCountQuery.data]);
 
-  console.log(data, "data")
+  // console.log(data, "data")
   return {
     data,
     loading_qn: getCountQuery.loading,
