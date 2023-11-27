@@ -42,8 +42,8 @@ interface Assignment {
 // const TODAY = `20${year}-${month}-${day}`; 
 
 const AssignedList = ({ auth: { user }, setDate }: any) => {
-  const [page, setPage] = useState(10);
-
+  const [page, setPage] = useState(1);
+  const [paginationSize, setPaginationSize] = useState(10);
   const columns: ColumnsType<Assignment> = [
     {
       title: 'NO',
@@ -121,7 +121,7 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
       dataIndex: 'video_check_description',
     },
   ];
-  const [paginationSize, setPaginationSize] = useState(25);
+
   const [assignment, setAssignment] = useState<Assignment[]>();
   const [selectList, setSelectList] = useState<Assignment>();
   const member_id: string = user.handle;
