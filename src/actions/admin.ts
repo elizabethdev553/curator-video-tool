@@ -2,6 +2,7 @@ import { Dispatch } from 'redux';
 import { Navigate } from 'react-router-dom';
 import api from '../utils/api';
 import {
+  AUTHORITY_SET,
   GET_VIDEOS,
   GET_CURATORS,
   SET_DATE,
@@ -58,6 +59,22 @@ export const getVideoListRange = (date: string) => async (dispatch: Dispatch) =>
     });
   } catch (error) {
     console.log(error, 'Fetch UnCheckedList Error');
+  }
+};
+
+export const setAuthority = (data: any, item:any) => async (dispatch: Dispatch) => {
+  try {
+    const response = await api.post('leader/authority/set', item, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    dispatch({
+      type: GET_CURATORS,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error, 'Fetch CuratorList Error');
   }
 };
 
@@ -235,6 +252,22 @@ export const sendVideoList = (selectList: any, curator: any) => async (dispatch:
     dispatch({
       type: ASSIGNMENT_VIDEOS,
       payload: data,
+    });
+  } catch (error) {
+    console.log(error, 'Fetch CuratorList Error');
+  }
+};
+
+export const getMemberList = () => async (dispatch: Dispatch) => {
+  try {
+    const res = await api.get('leader/members/members-list', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    dispatch({
+      type: GET_CURATORS,
+      payload: res.data,
     });
   } catch (error) {
     console.log(error, 'Fetch CuratorList Error');

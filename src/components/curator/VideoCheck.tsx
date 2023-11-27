@@ -16,6 +16,12 @@ interface Assignment {
   video_media_id: string;
   video_owner_handle: string;
   video_curator: string;
+  video_duplicate:string;
+  video_check_tag:string;
+  video_play:string;
+  video_category:string;
+  video_check_description: string
+
 }
 
 type FieldType = {
@@ -28,6 +34,7 @@ const VideoCheck = () => {
   const [msg, setMsg] = useState('');
   const { id } = useParams();
 
+  console.log(videoDetail, "video_detail")
   useEffect(() => {
     getVideoDetail(id);
   }, [id]);
@@ -123,33 +130,34 @@ const VideoCheck = () => {
                   name="video_description"
                   style={{ marginTop: '30px', maxWidth: '100%' }}
                 >
-                  <TextArea rows={5} />
+                  <TextArea rows={5} defaultValue={videoDetail.video_check_description} />
                 </Form.Item>
                 <Form.Item name="video_tag" label="If this video was fake, check:">
-                  <Select placeholder="Select the list:">
+                  <Select placeholder="Select the list:" defaultValue={videoDetail.video_check_tag}>
+                    <Option value="None">None</Option>
                     <Option value="Violence">Violence</Option>
                     <Option value="Porn">Porn</Option>
                     <Option value="Illegal">Illegal</Option>
                   </Select>
                 </Form.Item>
-                <Form.Item name="video_category" label="Category Level:">
-                  <Select placeholder="Please select favourite colors">
+                <Form.Item name="video_category" label="Category Level:" >
+                  <Select defaultValue={videoDetail.video_category}>
                     <Option value="A">A</Option>
                     <Option value="B">B</Option>
                     <Option value="C">C</Option>
                     <Option value="D">D</Option>
                   </Select>
                 </Form.Item>
-                <Form.Item name="video_play" label="Entity Play:" hasFeedback initialValue="Yes"
-                rules={[{ required: true, message: 'Please select this!' }]}>
-                  <Select placeholder="Please select favourite colors">
+                <Form.Item name="video_play" label="Entity Play:"
+                rules={[{ required: true, message: 'Please select this!' }]} >
+                  <Select defaultValue={videoDetail.video_play}>
                     <Option value="Yes" >Yes</Option>
                     <Option value="No">No</Option>
                   </Select>
                 </Form.Item>
                 
                 <Form.Item name="video_duplicate" label="Video Duplicate:">
-                  <Select placeholder="Please select favourite colors">
+                  <Select defaultValue={videoDetail.video_duplicate}>
                     <Option value="Yes">Yes</Option>
                     <Option value="No">No</Option>
                   </Select>

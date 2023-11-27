@@ -3,9 +3,9 @@ import type { DatePickerProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 
-import Spinner from '../../components/layout/Spinner';
+// import Spinner from '../../components/layout/Spinner';
 import api from '../../utils/api';
 // import { setDate } from '@/actions/admin';
 import { connect, ConnectedProps } from 'react-redux';
@@ -42,7 +42,7 @@ interface Assignment {
 // const TODAY = `20${year}-${month}-${day}`; 
 
 const AssignedList = ({ auth: { user }, setDate }: any) => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(10);
 
   const columns: ColumnsType<Assignment> = [
     {
@@ -170,7 +170,7 @@ const AssignedList = ({ auth: { user }, setDate }: any) => {
                 setPage(current);
                 setPaginationSize(pageSize);
               },
-              defaultPageSize: 25,
+              defaultPageSize: 10,
               hideOnSinglePage: true,
               showSizeChanger: true,
             }}

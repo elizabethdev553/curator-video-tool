@@ -26,8 +26,6 @@ router.get('/', auth, async (req, res) => {
 // @access   Public
 router.post(
   '/',
-  check('email', 'Please include a valid email').isEmail(),
-  check('password', 'Password is required').exists(),
   async (req, res) => {
     const errors = validationResult(req.body);
     if (!errors.isEmpty()) {
@@ -42,7 +40,7 @@ router.post(
       if (!member) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'You were not registered by Leader.' }] });
+          .json({ errors:  'You were not registered by Leader.' });
       }
 
       const isMatch = await bcrypt.compare(password, member.password);
@@ -50,13 +48,13 @@ router.post(
       if (!isMatch) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'Invalid Password.' }] });
+          .json({ errors:  'Invalid Password.' });
       }
 
       if(member.authority=='guest'){
         return res
           .status(400)
-          .json({ errors: [{ msg: 'The leader have to accept your request.' }] });
+          .json({ errors: 'The leader have to accept your request.' });
       }
       
       const payload = {

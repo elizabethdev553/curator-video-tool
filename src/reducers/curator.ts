@@ -1,7 +1,8 @@
 import {
   GET_CURATORS,
   DELETE_CURATOR,
-  ADD_CURATOR
+  ADD_CURATOR,
+  
   } from '../actions/types';
 
 const initialState = {
@@ -21,6 +22,7 @@ function curatorReducer(state = initialState, action:any) {
         loading: false,
         
       };
+
       case DELETE_CURATOR:
       return {
         ...state,

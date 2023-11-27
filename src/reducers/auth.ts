@@ -2,7 +2,7 @@ import {
   ACCOUNT_DELETED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
-  //LOGIN_FAIL,
+  LOGIN_FAIL,
   LOGOUT,
   REGISTER_SUCCESS,
   //REGISTER_FAIL,
@@ -12,7 +12,8 @@ const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   loading: true,
-  user: null
+  user: null,
+  errors:null
 };
 
 function authReducer(state = initialState, action:any) {
@@ -44,6 +45,11 @@ function authReducer(state = initialState, action:any) {
         loading: false,
         user: null
       };
+      case LOGIN_FAIL:
+        return {
+          ...state,
+          errors:payload
+        }
     default:
       return state;
   }

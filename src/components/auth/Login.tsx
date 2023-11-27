@@ -2,22 +2,24 @@ import PropTypes from 'prop-types';
 import React, { ChangeEvent, FormEvent,useState} from 'react';
 import { connect } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
-
+import {Alert} from 'antd'
 import { login } from '../../actions/auth';
 
 interface LoginProps {
   login: (email: string, password: string) => void;
   isAuthenticated?: boolean;
-  user:any
+  user:any,
+  errors:any
 }
 
 
-const Login: React.FC<LoginProps> = ({ login, isAuthenticated, user }) => {
+const Login: React.FC<LoginProps> = ({ login, isAuthenticated, user, errors }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
+  
   const { email, password } = formData;
 
   const onChange = (e:ChangeEvent<HTMLInputElement>) =>
@@ -35,8 +37,19 @@ const Login: React.FC<LoginProps> = ({ login, isAuthenticated, user }) => {
     return  <Navigate to="/assigned-list" />;
   }
 
+ 
+    const errors_tmp = (
+      <Alert
+      message="Warning"
+      description={errors}
+      type="warning"
+      showIcon
+      closable
+    />
+    )
   return (
       <section className="container login">
+        {errors ? errors_tmp:''}
         <h1 className="large text-primary mb-5">Sign In</h1>
         <p className="lead mt-4 mb-4">
           Sign Into Your Account
@@ -79,6 +92,7 @@ Login.propTypes = {
 const mapStateToProps = (state:any) => ({
   isAuthenticated: state.auth.isAuthenticated,
   user:state.auth.user,
+  errors:state.auth.errors
 });
 
 export default connect(mapStateToProps, { login })(Login);

@@ -167,7 +167,23 @@ router.post(
 router.get('/curator-list', async (req, res) => {
   try {
     // console.log("WELBOME")
-    let memberListTmp = await Member.find({ handle: { $ne: 'goldwolf' } });
+    let memberListTmp = await Member.find({ authority: {$in: ["curator", "admin"]} });
+
+    if (!memberListTmp) {
+      return res.status(400).json({ msg: 'There is no member for this group' });
+    }
+
+    res.json(memberListTmp);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.get('/members/members-list', async (req, res) => {
+  try {
+    // console.log("WELBOME")
+    let memberListTmp = await Member.find({ authority: {$ne:"leader"} });
 
     if (!memberListTmp) {
       return res.status(400).json({ msg: 'There is no member for this group' });
@@ -237,5 +253,19 @@ router.post('/assignment/send-video-list', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+router.post('/authority/set', async (req, res) => {
+  try {
+    console.log(req.body, "req.body")
+        const filter = { email: req.body.email};
+        const update = { $set: { authority: req.body.authority } };
+        await Member.updateOne(filter, update);
+    res.json({ Success: 'Success' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 
 module.exports = router;

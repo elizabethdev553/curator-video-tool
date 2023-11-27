@@ -68,3 +68,5 @@ export const N_YPP_N_NFT_N_CHECK = 'N_YPP_N_NFT_N_CHECK';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const SELECTED_DATE = 'SELECTED_DATE';
+
+export const AUTHORITY_SET = 'AUTHORITY_SET';

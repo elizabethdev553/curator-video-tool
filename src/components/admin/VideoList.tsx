@@ -71,7 +71,7 @@ const VideoList = ({
   const [start_date, setStart_date] = useState<any>();
   const [end_date, setEnd_date] = useState<any>();
   const [page, setPage] = useState(1);
-  const [paginationSize, setPaginationSize] = useState(25);
+  const [paginationSize, setPaginationSize] = useState(10);
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
     const filtertmp = e.target.value;
@@ -367,7 +367,7 @@ const VideoList = ({
                 setPage(current);
                 setPaginationSize(pageSize);
               },
-              defaultPageSize: 25,
+              defaultPageSize: 10,
               hideOnSinglePage: true,
               showSizeChanger: true,
             }}

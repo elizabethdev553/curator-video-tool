@@ -72,12 +72,13 @@ export const login = (email:string, password:string) => async (dispatch: Dispatc
   } catch (err:any) {
     const errors = err.response.data.errors;
 
-    if (errors) {
+    // if (errors) {
       console.log(errors, "auth Action Error")
-    }
+    // }
 
     dispatch({
-      type: LOGIN_FAIL
+      type: LOGIN_FAIL,
+      payload: errors
     });
   }
 };
