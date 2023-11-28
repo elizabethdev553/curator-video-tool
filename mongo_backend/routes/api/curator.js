@@ -60,11 +60,12 @@ router.get('/detail/:id', async (req, res) => {
 
 router.post('/check/description', async (req, res) => {
   try {
+
     const filter = { key: req.body.video_id };
     const update = {
       $set: {
-        video_check_description: req.body.video_description,
-        video_check_tag: req.body.video_tag,
+        video_check_description: req.body.video_check_description,
+        video_check_tag: req.body.video_check_tag,
         video_category: req.body.video_category,
         video_check_flag: true,
         video_play:req.body.video_play,

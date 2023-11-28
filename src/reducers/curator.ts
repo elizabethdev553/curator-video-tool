@@ -3,6 +3,7 @@ import {
   DELETE_CURATOR,
   ADD_CURATOR,
   GET_CURATOR_VIDEOS,
+  GET_VIDEO_DETAIL,
   
   } from '../actions/types';
 
@@ -11,6 +12,7 @@ const initialState = {
  curators:[],
   loading: true,
   error: {},
+  video:{}
 };
 
 function curatorReducer(state = initialState, action:any) {
@@ -45,12 +47,12 @@ function curatorReducer(state = initialState, action:any) {
         curators: [payload, ...state.curators],
         loading: false
       };
-      // case GET_VIDEOS:
-      //   return {
-      //     ...state,
-      //     videos: payload,
-      //     loading: false
-      // };
+      case GET_VIDEO_DETAIL:
+        return {
+          ...state,
+          video: payload,
+          loading: false
+      };
 
     // case SET_LOADING:
     //   return {

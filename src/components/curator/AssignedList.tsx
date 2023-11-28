@@ -94,7 +94,7 @@ const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }:
       title: 'TOXIC CONTENT',
       dataIndex: 'video_check_tag',
       render: (_, { video_check_tag, video_check_flag }) =>
-        video_check_tag ? (
+        video_check_tag!='None' ? (
           <Tag color="volcano" key={video_check_tag}>
             {video_check_tag}
           </Tag>
@@ -148,7 +148,7 @@ const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }:
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       setSelectList(selectedRows[0]);
     },
   };
