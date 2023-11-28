@@ -119,8 +119,8 @@ const VideoCheck = ({ curator: { videos } }: any) => {
           >
             <Divider />
 
-            <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-              <Col span={9} style={{ paddingRight: '40px', paddingLeft: '20px' }}>
+            <Row >
+              <Col xs={24} xl={8} style={{ paddingRight: '40px', paddingLeft: '20px' }}>
                 <Card title="Video Detail" style={{ textAlign: 'left' }}>
                   <p>
                     <b>Video ID:</b> {videoDetail.key}
@@ -148,7 +148,7 @@ const VideoCheck = ({ curator: { videos } }: any) => {
                   <TextArea rows={5} defaultValue={videoDetail.video_check_description} />
                 </Form.Item>
                 <Form.Item name="video_tag" label="If this video was fake, check:">
-                  <Select placeholder="Select the list:" defaultValue={videoDetail.video_check_tag}>
+                  <Select placeholder="Select the list:" defaultValue={videoDetail.video_check_tag?videoDetail.video_check_tag:"None"}>
                     <Option value="None">None</Option>
                     <Option value="Violence">Violence</Option>
                     <Option value="Porn">Porn</Option>
@@ -156,7 +156,7 @@ const VideoCheck = ({ curator: { videos } }: any) => {
                   </Select>
                 </Form.Item>
                 <Form.Item name="video_category" label="Category Level:">
-                  <Select defaultValue={videoDetail.video_category}>
+                  <Select defaultValue={videoDetail.video_category?videoDetail.video_category:"D"}>
                     <Option value="A">A</Option>
                     <Option value="B">B</Option>
                     <Option value="C">C</Option>
@@ -166,31 +166,25 @@ const VideoCheck = ({ curator: { videos } }: any) => {
                 <Form.Item
                   name="video_play"
                   label="Entity Play:"
-                  rules={[{ required: true, message: 'Please select this!' }]}
+                  // rules={[{ required: true, message: 'Please select this!' }]}
                 >
-                  <Select defaultValue={videoDetail.video_play}>
+                  <Select defaultValue={videoDetail.video_play?videoDetail.video_play:"Yes"}>
                     <Option value="Yes">Yes</Option>
                     <Option value="No">No</Option>
                   </Select>
                 </Form.Item>
 
                 <Form.Item name="video_duplicate" label="Video Duplicate:">
-                  <Select defaultValue={videoDetail.video_duplicate}>
+                  <Select defaultValue={videoDetail.video_duplicate?videoDetail.video_duplicate:"No"}>
                     <Option value="Yes">Yes</Option>
                     <Option value="No">No</Option>
                   </Select>
                 </Form.Item>
                 <Form.Item>
-                  <Button size="large" htmlType="submit">
+                  <Button size="large" className="btn btn-primary" htmlType="submit">
                     Save
                   </Button>
-                  {temp.next != 0 ? (
-                    <Link to={`/curator-panel/check/${temp?.next}`} className="btn btn-primary">
-                      Next
-                    </Link>
-                  ) : (
-                    ''
-                  )}
+                 
                   {temp.before != 0 ? (
                     <Link to={`/curator-panel/check/${temp?.before}`} className="btn btn-primary">
                       Before
@@ -198,9 +192,16 @@ const VideoCheck = ({ curator: { videos } }: any) => {
                   ) : (
                     ''
                   )}
+                   {temp.next != 0 ? (
+                    <Link to={`/curator-panel/check/${temp?.next}`} className="btn btn-primary">
+                      Next
+                    </Link>
+                  ) : (
+                    ''
+                  )}
                 </Form.Item>
               </Col>
-              <Col span={15}>
+              <Col xs={24} xl={16}>
                 <VideoPanel results={videoDetail.video_media_id} />
               </Col>
             </Row>

@@ -83,7 +83,7 @@ const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }:
       dataIndex: 'video_curator',
     },
     {
-      title: 'ENTITY PALYS',
+      title: 'ENTITY PLAYS',
       dataIndex: 'video_play',
     },
     {
@@ -173,6 +173,7 @@ const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }:
           type: 'radio',
           ...rowSelection,
         }}
+        bordered
         columns={columns}
         dataSource={videos}
       />

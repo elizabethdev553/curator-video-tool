@@ -324,6 +324,15 @@ function videoReducer(state = initialState, action: any) {
     case ASSIGNMENT_VIDEOS:
       return {
         ...state,
+        videos: state.videos.map((item: any) => {
+          const tmp = payload.selectList.find((id: any) => id == item.key);
+          if (tmp) {
+            // console.log(tmp, 'item');
+            // return item
+            return { ...item, video_curator: payload.curator };
+          }
+          return item;
+        }),
         filter_data: state.videos.map((item: any) => {
           const tmp = payload.selectList.find((id: any) => id == item.key);
           if (tmp) {
@@ -333,7 +342,6 @@ function videoReducer(state = initialState, action: any) {
           }
           return item;
         }),
-        loading: false,
       };
 
     default:

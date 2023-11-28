@@ -76,6 +76,7 @@ const VideoList = ({
   const [page, setPage] = useState(1);
   const [paginationSize, setPaginationSize] = useState(10);
 
+  // console.log(videos, "videos")
   const columns: ColumnsType<Assignment> = [
     {
       title: 'NO',
@@ -117,7 +118,7 @@ const VideoList = ({
       dataIndex: 'video_curator',
     },
     {
-      title: 'ENTITY PALYS',
+      title: 'ENTITY PLAYS',
       dataIndex: 'video_play',
     },
     {
