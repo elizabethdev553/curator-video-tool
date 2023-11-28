@@ -27,7 +27,7 @@ type FieldType = {
   video_description?: string;
 };
 
-const initialState:any = {
+const initialState: any = {
   video_check_tag: 'None',
   video_category: 'D',
   video_play: 'Yes',
@@ -49,17 +49,13 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
     });
   }
 
-
-
   useEffect(() => {
     getVideoDetail(id);
   }, [id]);
 
   const [formData, setFormData] = useState(initialState);
 
-
   useEffect(() => {
-    
     if (video) {
       const videoData = { ...initialState };
       for (const key in video) {
@@ -109,48 +105,48 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
               </Card>
               <form className="form" onSubmit={onSubmit}>
                 <div className="form-group">
+                  <small className="form-text">Toxic Content:</small>
                   <select name="video_check_tag" value={video_check_tag} onChange={onChange}>
                     <option value="None">None</option>
                     <option value="Violence">Violence</option>
                     <option value="Porn">Porn</option>
                     <option value="Illegal">Illegal</option>
                   </select>
-                  <small className="form-text">Give us an idea of where you are at in your career</small>
                 </div>
 
                 <div className="form-group">
+                  <small className="form-text">Video Category:</small>
                   <select name="video_category" value={video_category} onChange={onChange}>
-                  <option value="D">D</option>
+                    <option value="D">D</option>
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
                   </select>
-                  <small className="form-text">Give us an idea of where you are at in your career</small>
                 </div>
 
                 <div className="form-group">
+                  <small className="form-text">Entity Plays:</small>
                   <select name="video_play" value={video_play} onChange={onChange}>
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                   </select>
-                  <small className="form-text">Give us an idea of where you are at in your career</small>
                 </div>
 
                 <div className="form-group">
+                  <small className="form-text">Duplicate:</small>
                   <select name="video_duplicate" value={video_duplicate} onChange={onChange}>
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
                   </select>
-                  <small className="form-text">Give us an idea of where you are at in your career</small>
                 </div>
                 <div className="form-group">
+                  <small className="form-text">Comment:</small>
                   <input
                     type="text"
                     name="video_check_description"
                     value={video_check_description}
                     onChange={onChange}
                   />
-                  <small className="form-text">Could be your own company or one you work for</small>
                 </div>
 
                 <input type="submit" className="btn btn-primary my-1" />
@@ -174,7 +170,6 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
               <VideoPanel results={video.video_media_id} />
             </Col>
           </Row>
-
         </Fragment>
       )}
     </section>
