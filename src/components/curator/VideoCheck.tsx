@@ -140,12 +140,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
                 </div>
                 <div className="form-group">
                   <small className="form-text">Comment:</small>
-                  <input
-                    type="text"
-                    name="video_check_description"
-                    value={video_check_description}
-                    onChange={onChange}
-                  />
+                  <textarea name="video_check_description" value={video_check_description} rows={3} onChange={onChange} />
                 </div>
 
                 <input type="submit" className="btn btn-primary my-1" />
