@@ -29,6 +29,7 @@ interface Assignment {
   video_category: string;
   video_play: string;
   video_duplicate: string;
+  video_check_comment:string
 }
 
 // const today = new Date();
@@ -117,6 +118,8 @@ const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }:
     {
       title: 'COMMENT',
       dataIndex: 'video_check_description',
+      render: (_, { video_check_description, video_check_comment }) =>
+      video_check_description!='other' ? video_check_description:video_check_comment
     },
   ];
 

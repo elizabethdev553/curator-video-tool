@@ -39,6 +39,9 @@ const VideoSchema = new mongoose.Schema({
     type: String,
     default:''
   },
+  video_check_comment:{
+    type: String,
+  },
   video_check_tag:{
     type: String,
   },

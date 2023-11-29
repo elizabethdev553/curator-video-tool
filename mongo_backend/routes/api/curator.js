@@ -65,6 +65,7 @@ router.post('/check/description', async (req, res) => {
     const update = {
       $set: {
         video_check_description: req.body.video_check_description,
+        video_check_comment: req.body.video_check_comment,
         video_check_tag: req.body.video_check_tag,
         video_category: req.body.video_category,
         video_check_flag: true,
