@@ -29,7 +29,7 @@ type FieldType = {
 
 const initialState: any = {
   video_check_tag: 'None',
-  video_category: 'D',
+  video_category: 'C',
   video_play: 'Yes',
   video_duplicate: 'No',
   video_check_description: '',
@@ -105,22 +105,21 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
               </Card>
               <form className="form" onSubmit={onSubmit}>
                 <div className="form-group">
+                  <small className="form-text">Video Category:</small>
+                  <select name="video_category" value={video_category} onChange={onChange}>
+                    <option value="C">C</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="Toxic">Toxic Content</option>
+                  </select>
+                </div>
+                <div className="form-group">
                   <small className="form-text">Toxic Content:</small>
                   <select name="video_check_tag" value={video_check_tag} onChange={onChange}>
                     <option value="None">None</option>
                     <option value="Violence">Violence</option>
                     <option value="Porn">Porn</option>
                     <option value="Illegal">Illegal</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <small className="form-text">Video Category:</small>
-                  <select name="video_category" value={video_category} onChange={onChange}>
-                    <option value="D">D</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
                   </select>
                 </div>
 

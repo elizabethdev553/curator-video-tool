@@ -2,5 +2,9 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "eslint.validate": ["typescript", "typescriptreact"]
+  "eslint.validate": [
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.inlineSuggest.showToolbar": "onHover"
 }
