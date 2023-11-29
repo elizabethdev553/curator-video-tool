@@ -179,6 +179,7 @@ const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }:
         bordered
         columns={columns}
         dataSource={videos}
+        scroll={{ x: 1700 }}
       />
     );
   }

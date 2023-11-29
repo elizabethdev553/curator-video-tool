@@ -39,7 +39,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
   }, [id]);
 
   const [formData, setFormData] = useState(initialState);
-  const [comment, setComment] = useState(false);
+  // const [comment, setComment] = useState(false);
   useEffect(() => {
     if (video) {
       const videoData = { ...initialState };
@@ -68,6 +68,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
   const onSubmit = (e: any) => {
     // const editing = video.video_check_flag ? true : false;
     e.preventDefault();
+    console.log(formData, "welcome")
      saveDescriptionResult(formData, id);
   };
   // let Temp:any=''
@@ -75,6 +76,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
   //   Temp = (<textarea name="video_check_comment" value={video_check_comment} onChange={onChange} />)
   // }
 
+  console.log(formData, "formdata")
   return (
     <section className="container">
       {video == undefined ? (
@@ -141,7 +143,8 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
                 <div className="form-group">
                   <small className="form-text">Comment:</small>
                   <select name="video_check_description" value={video_check_description} onChange={onChange}>
-                  <option value="Video is unavailable.">Video is unavailable.</option>
+                  
+                    <option >*Select the check description</option>
                     <option value="Copy music video.">Copy music video.</option>
                     <option value="Copy video from Animation/Cartoon movies.">Copy video from Animation/Cartoon movies.</option>
                     <option value="Copy video from Cinemas/Tv series.">Copy video from Cinemas/Tv series.</option>

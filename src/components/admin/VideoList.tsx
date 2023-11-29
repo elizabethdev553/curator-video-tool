@@ -261,6 +261,7 @@ const VideoList = ({
           showSizeChanger: true,
         }}
         rowSelection={rowSelection}
+        scroll={{ x: 1700 }}
         bordered
       />
     );
