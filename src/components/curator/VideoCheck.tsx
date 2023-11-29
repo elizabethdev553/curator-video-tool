@@ -16,7 +16,7 @@ const initialState: any = {
   video_category: 'C',
   video_play: 'Yes',
   video_duplicate: 'No',
-  video_check_description: '',
+  video_check_description: 'Video is unavailable.',
   video_check_comment: '',
 };
 
@@ -68,8 +68,6 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
   const onSubmit = (e: any) => {
     // const editing = video.video_check_flag ? true : false;
     e.preventDefault();
-
-    console.log(formData, "DDDDDDDDDDD")
      saveDescriptionResult(formData, id);
   };
   // let Temp:any=''
@@ -143,6 +141,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
                 <div className="form-group">
                   <small className="form-text">Comment:</small>
                   <select name="video_check_description" value={video_check_description} onChange={onChange}>
+                  <option value="Video is unavailable.">Video is unavailable.</option>
                     <option value="Copy music video.">Copy music video.</option>
                     <option value="Copy video from Animation/Cartoon movies.">Copy video from Animation/Cartoon movies.</option>
                     <option value="Copy video from Cinemas/Tv series.">Copy video from Cinemas/Tv series.</option>
