@@ -31,7 +31,7 @@ const Login: React.FC<LoginProps> = ({ login, isAuthenticated, user, errors }) =
   };
 
   if (isAuthenticated&&user) {
-    if(user.handle === 'goldwolf')
+    if(user.authority == 'admin' || user.authority == 'leader')
     return <Navigate to="/video-list" />;
     else
     return  <Navigate to="/assigned-list" />;
