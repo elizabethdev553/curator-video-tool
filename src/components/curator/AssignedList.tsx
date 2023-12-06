@@ -171,6 +171,7 @@ const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }:
           defaultPageSize: 10,
           hideOnSinglePage: true,
           showSizeChanger: true,
+          position: ['topRight', 'bottomRight']
         }}
         rowSelection={{
           type: 'radio',

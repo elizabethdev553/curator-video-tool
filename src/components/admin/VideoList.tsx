@@ -259,6 +259,8 @@ const VideoList = ({
           defaultPageSize: 10,
           hideOnSinglePage: true,
           showSizeChanger: true,
+          position: ['topRight', 'bottomRight']
+
         }}
         rowSelection={rowSelection}
         scroll={{ x: 1700 }}
