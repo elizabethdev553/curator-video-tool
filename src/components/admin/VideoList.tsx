@@ -159,7 +159,7 @@ const VideoList = ({
     getCuratorList();
     // getVideoLatest();
     getVideoListRange(start_date, end_date);
-  }, []);
+  }, [start_date, end_date]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[], selectedRows: Assignment[]) => {
     setSelectedRowKeys(newSelectedRowKeys);

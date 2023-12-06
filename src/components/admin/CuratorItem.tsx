@@ -65,12 +65,12 @@ const CuratorItem = ({ result,setAuthority,delCurator }: any) => {
   const [data, setData] = useState(result);
   const [editingKey, setEditingKey] = useState<any>('');
   
-console.log(result,"result")
-console.log(data,"data")
+// console.log(result,"result")
+// console.log(data,"data")
   const isEditing = (record: CuratorType) => record.email === editingKey;
 
   const edit = (record: Partial<CuratorType> & { key: React.Key }) => {
-    console.log(record, "record")
+    // console.log(record, "record")
     form.setFieldsValue({ ...record });
     setEditingKey(record.email);
   };
@@ -86,10 +86,10 @@ console.log(data,"data")
       const newData = data;
 
       const index = newData.findIndex((item:any) => key === item.email);
-      console.log(index, "index")
+      // console.log(index, "index")
       if (index > -1) {
         const item = newData[index];
-        console.log(item, "item", newData[0])
+        // console.log(item, "item", newData[0])
         newData.splice(index, 1, {
           ...item,
           ...row,

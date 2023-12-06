@@ -20,7 +20,6 @@ router.post(
     try {
       let member = await Member.findOne({ email });
       
-      console.log("member", member);
       if (member) {
         return res
           .status(400)

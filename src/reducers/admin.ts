@@ -57,7 +57,7 @@ const initialState = {
   loading: true,
   error: {},
   sel_date: TODAY,
-  filter_data: null,
+  filter_data: [],
   all_num: null,
   ypp_num: null,
   nft_num: null,
@@ -333,7 +333,7 @@ function videoReducer(state = initialState, action: any) {
           }
           return item;
         }),
-        filter_data: state.videos.map((item: any) => {
+        filter_data: state.filter_data.map((item: any) => {
           const tmp = payload.selectList.find((id: any) => id == item.key);
           if (tmp) {
             // console.log(tmp, 'item');
