@@ -1,8 +1,9 @@
+import {Alert} from 'antd'
 import PropTypes from 'prop-types';
 import React, { ChangeEvent, FormEvent,useState} from 'react';
 import { connect } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
-import {Alert} from 'antd'
+
 import { login } from '../../actions/auth';
 
 interface LoginProps {

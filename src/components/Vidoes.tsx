@@ -1,10 +1,11 @@
 import { Divider, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import Spinner from './layout/Spinner';
 import React, { Fragment, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import api from '../utils/api';
+import Spinner from './layout/Spinner';
+
 interface Assignment {
   key: string;
   video_title: string;
@@ -29,7 +30,7 @@ export interface VideosProps {
 }
 
 const Videos: React.FC<VideosProps> = ({ results }: VideosProps) => {
-  const [flag, setFlag] = useState<Boolean>(false);
+  const [flag, setFlag] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const [paginationSize, setPaginationSize] = useState(25);
   const navigate = useNavigate();

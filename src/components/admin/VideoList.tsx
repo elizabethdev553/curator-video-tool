@@ -1,20 +1,21 @@
-import type { DatePickerProps } from 'antd';
-import { DatePicker, Divider, Switch, Select, Table, Tag, Radio, Col, Row, Button, Checkbox, Space } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import type { RadioChangeEvent } from 'antd';
-import type { TableRowSelection } from 'antd/es/table/interface';
 import { DownloadOutlined } from '@ant-design/icons';
-import React, { Fragment, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useVideoCounts, useVideos } from '@/hooks';
-import { connect, ConnectedProps } from 'react-redux';
-import moment from 'moment';
-import type { RangePickerProps } from 'antd/es/date-picker';
+import type { DatePickerProps , RadioChangeEvent } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Divider, Radio, Row, Select, Space,Switch, Table, Tag } from 'antd';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
-
-import { getVideoListRange, setDate, getCuratorList, setFilter, sendVideoList, getVideoLatest } from '../../actions/admin';
-import Spinner from '../../components/layout/Spinner';
+import type { RangePickerProps } from 'antd/es/date-picker';
+import type { ColumnsType } from 'antd/es/table';
+import type { TableRowSelection } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
+import moment from 'moment';
+import React, { Fragment, useEffect, useState } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import { useVideoCounts, useVideos } from '@/hooks';
+
+import { getCuratorList, getVideoLatest,getVideoListRange, sendVideoList, setDate, setFilter } from '../../actions/admin';
+import Spinner from '../../components/layout/Spinner';
+
 const { RangePicker } = DatePicker;
 interface Assignment {
   key: string;
@@ -32,6 +33,8 @@ interface Assignment {
   video_category: string;
   video_play: string;
   video_duplicate: string;
+  video_check_comment: string;
+  video_check_comment1: string;
 }
 
 interface CuratorList {
@@ -129,14 +132,14 @@ const VideoList = ({
       title: 'TOXIC CONTENT',
       dataIndex: 'video_check_tag',
       render: (_, { video_check_tag, video_check_flag }) =>
-        video_check_tag ? (
+        video_check_tag!='' && null? (
           <Tag color="volcano" key={video_check_tag}>
             {video_check_tag}
           </Tag>
         ) : video_check_flag ? (
           <Tag color="green">checked</Tag>
         ) : (
-          ''
+          null
         ),
     },
     {
@@ -151,7 +154,15 @@ const VideoList = ({
 
     {
       title: 'COMMENT',
-      dataIndex: 'video_check_description',
+      dataIndex: 'video_check_comment1',
+      render: (_, { video_check_description, video_check_comment, video_check_comment1 }) =>{
+        if(video_check_comment){
+          video_check_comment1 = video_check_description.concat(" ", video_check_comment)
+          return video_check_comment1
+        }
+        return video_check_description
+      }
+     
     },
   ];
 

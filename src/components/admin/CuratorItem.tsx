@@ -1,11 +1,14 @@
-import { useEffect, useState,Fragment } from 'react';
-import { Divider, Table, Popconfirm, Button, Tag, Form, Select, Typography } from 'antd';
+import { Button, Divider, Form, Popconfirm, Select, Table, Tag, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useVideoCounts, useVideos } from '@/hooks';
+import { Fragment,useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { delCurator, setAuthority } from '@/actions/admin';
-import api from '../../utils/api';
 import { Link } from 'react-router-dom';
+
+import { delCurator, setAuthority } from '@/actions/admin';
+import { useVideoCounts, useVideos } from '@/hooks';
+
+import api from '../../utils/api';
+
 const { Option } = Select;
 type PropsFromRedux = ConnectedProps<typeof connector>;
 interface CuratorType {

@@ -1,16 +1,18 @@
-import { Divider, Select, Table, Tag, DatePicker } from 'antd';
 import type { DatePickerProps } from 'antd';
+import { DatePicker,Divider, Select, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-// import dayjs from 'dayjs';
-
-// import Spinner from '../../components/layout/Spinner';
-import api from '../../utils/api';
+import { Spinner } from 'react-bootstrap';
 // import { setDate } from '@/actions/admin';
 import { connect, ConnectedProps } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import { getUnCheckedList } from '@/actions/curator';
-import { Spinner } from 'react-bootstrap';
+
+// import dayjs from 'dayjs';
+// import Spinner from '../../components/layout/Spinner';
+import api from '../../utils/api';
+
 const { Option } = Select;
 
 interface Assignment {
@@ -29,7 +31,9 @@ interface Assignment {
   video_category: string;
   video_play: string;
   video_duplicate: string;
-  video_check_comment:string
+  video_check_comment:string;
+  video_check_comment1:string;
+
 }
 
 // const today = new Date();
@@ -95,14 +99,14 @@ const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }:
       title: 'TOXIC CONTENT',
       dataIndex: 'video_check_tag',
       render: (_, { video_check_tag, video_check_flag }) =>
-        video_check_tag!='None' ? (
+        video_check_tag!=''&&null ? (
           <Tag color="volcano" key={video_check_tag}>
             {video_check_tag}
           </Tag>
         ) : video_check_flag ? (
           <Tag color="green">checked</Tag>
         ) : (
-          ''
+          null
         ),
     },
     {
@@ -117,9 +121,15 @@ const AssignedList = ({ auth: { user }, getUnCheckedList, curator: { videos } }:
 
     {
       title: 'COMMENT',
-      dataIndex: 'video_check_description',
-      render: (_, { video_check_description, video_check_comment }) =>
-      video_check_description!='other' ? video_check_description:video_check_comment
+      dataIndex: 'video_check_comment1',
+      render: (_, { video_check_description, video_check_comment, video_check_comment1 }) =>{
+        if(video_check_comment){
+          video_check_comment1 = video_check_description.concat(" ", video_check_comment)
+          return video_check_comment1
+        }
+        return video_check_description
+      }
+     
     },
   ];
 

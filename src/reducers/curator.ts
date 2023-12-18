@@ -1,10 +1,9 @@
 import {
-  GET_CURATORS,
-  DELETE_CURATOR,
   ADD_CURATOR,
+  DELETE_CURATOR,
   GET_CURATOR_VIDEOS,
+  GET_CURATORS,
   GET_VIDEO_DETAIL,
-  
   } from '../actions/types';
 
 const initialState = {

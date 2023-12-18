@@ -1,8 +1,9 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import PropTypes from 'prop-types';
+import React, { ChangeEvent, FormEvent,useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+
 import { register } from '../../actions/auth';
-import PropTypes from 'prop-types';
 
 // Define prop types
 type PropsFromRedux = ConnectedProps<typeof connector>;

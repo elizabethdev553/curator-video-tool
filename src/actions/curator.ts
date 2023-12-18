@@ -1,7 +1,7 @@
-import { Dispatch } from 'redux';
 import { Navigate } from 'react-router-dom';
-import api from '../utils/api';
+import { Dispatch } from 'redux';
 
+import api from '../utils/api';
 import {
   GET_CURATOR_VIDEOS,
   GET_VIDEO_DETAIL

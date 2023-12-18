@@ -1,8 +1,9 @@
-import {useEffect, useState } from 'react';
 import { Divider, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import {useEffect, useState } from 'react';
 
 import api from '../../utils/api'
+
 interface VideoDetail {
 
   key: string;

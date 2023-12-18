@@ -1,22 +1,24 @@
-import { Button, Card, Col, Divider, Form, Input, Row, Select, Table, Checkbox, Space } from 'antd';
+import { Button, Card, Checkbox, Col, Divider, Form, Input, Row, Select, Space,Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link, useParams, Navigate, useNavigate } from 'react-router-dom';
 import { connect, ConnectedProps } from 'react-redux';
+import { Link, Navigate, useNavigate,useParams } from 'react-router-dom';
+
+import { getVideoDetail,saveDescriptionResult } from '../../actions/curator';
 import Spinner from '../../components/layout/Spinner';
+import api from '../../utils/api';
 import VideoPanel from './VideoPanel';
+
 const { Option } = Select;
 const { TextArea } = Input;
-import api from '../../utils/api';
-import { saveDescriptionResult, getVideoDetail } from '../../actions/curator';
 
 const initialState: any = {
-  video_check_tag: 'None',
+  video_check_tag: '',
   video_category: 'C',
   video_play: 'Yes',
   video_duplicate: 'No',
-  video_check_description: 'Video is unavailable.',
+  video_check_description: 'Looks good to me',
   video_check_comment: '',
 };
 
@@ -44,7 +46,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
     if (video) {
       const videoData = { ...initialState };
       for (const key in video) {
-        if (key in videoData) videoData[key] = video[key];
+        if (key in videoData && video[key]!='') videoData[key] = video[key];
       }
 
       setFormData(videoData);
@@ -68,6 +70,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
   const onSubmit = (e: any) => {
     // const editing = video.video_check_flag ? true : false;
     e.preventDefault();
+
     console.log(formData, "welcome")
      saveDescriptionResult(formData, id);
   };
@@ -76,7 +79,6 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
   //   Temp = (<textarea name="video_check_comment" value={video_check_comment} onChange={onChange} />)
   // }
 
-  console.log(formData, "formdata")
   return (
     <section className="container">
       {video == undefined ? (
@@ -117,7 +119,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
                 <div className="form-group">
                   <small className="form-text">Toxic Content:</small>
                   <select name="video_check_tag" value={video_check_tag} onChange={onChange}>
-                    <option value="None">None</option>
+                    <option value="">None</option>
                     <option value="Violence">Violence</option>
                     <option value="Porn">Porn</option>
                     <option value="Illegal">Illegal</option>
@@ -144,7 +146,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
                   <small className="form-text">Comment:</small>
                   <select name="video_check_description" value={video_check_description} onChange={onChange}>
                   
-                    <option >*Select the check description</option>
+                    <option value="Looks good to me">Looks good to me.</option>
                     <option value="Copy music video.">Copy music video.</option>
                     <option value="Copy video from Animation/Cartoon movies.">Copy video from Animation/Cartoon movies.</option>
                     <option value="Copy video from Cinemas/Tv series.">Copy video from Cinemas/Tv series.</option>
@@ -166,7 +168,7 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
                   </select>
                 </div>
                 <div className="form-group">
-                <small className="form-text">If comment: 'other', please insert the description.</small>
+                {/* <small className="form-text">If comment: 'other', please insert the description.</small> */}
                   <textarea name="video_check_comment" rows={3} value={video_check_comment} onChange={onChange} />
                 </div>
                 

@@ -1,6 +1,8 @@
 import {useParams} from 'react-router-dom'
+
 import { Videos } from '@/components';
 import { useVideos } from '@/hooks';
+
 import Spinner from "../layout/Spinner"
 
 const Home = () => {

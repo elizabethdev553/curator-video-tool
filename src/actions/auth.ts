@@ -1,5 +1,6 @@
-import { Dispatch } from 'redux';
 import {Navigate} from 'react-router-dom'
+import { Dispatch } from 'redux';
+
 import api from '../utils/api';
 import {
   AUTH_ERROR,
