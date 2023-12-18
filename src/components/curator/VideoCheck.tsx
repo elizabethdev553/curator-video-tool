@@ -95,16 +95,16 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
                 <p>
                   <b>Video Curator:</b> {video.video_curator}
                 </p>
-                <p>
+                {/* <p>
                   <b>Video Link:</b>
                   {video.video_media_id}
-                </p>
+                </p> */}
                 <p>
                   <b>Video Owner:</b> {video.video_owner_handle}
                 </p>
-                <p>
-                  <b>Video Title:</b> {video.video_title}
-                </p>
+                <h6>
+                  <b>Video Title:</b> <Link to={`https://gleev.xyz/video/${video.key}`} target='_blank'>{video.video_title}</Link>
+                </h6>
               </Card>
               <form className="form" onSubmit={onSubmit}>
                 <div className="form-group">
@@ -192,6 +192,10 @@ const VideoCheck = ({ saveDescriptionResult, getVideoDetail, curator: { videos, 
             </Col>
             <Col xs={24} xl={16}>
               <VideoPanel results={video.video_media_id} />
+            <Row className='justify-content-center'>
+
+              <Link to={`https://gleev.xyz/video/${video.key}`} target='_blank'><h4>{video.video_title}</h4></Link>
+            </Row>
             </Col>
           </Row>
         </Fragment>
