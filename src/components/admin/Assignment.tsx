@@ -126,7 +126,7 @@ const Assignment = () => {
 
   async function getUnCheckedList(date:string) {
     try {
-      const response = await axios.get(`http://localhost:5000/api/leader/assignment/${date}`, {
+      const response = await axios.get(`http://65.108.209.13:5000/api/leader/assignment/${date}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -141,7 +141,7 @@ const Assignment = () => {
 
   async function getCuratorList() {
     try {
-      const response = await axios.get('http://localhost:5000/api/leader/curator-list', {
+      const response = await axios.get('http://65.108.209.13:5000/api/leader/curator-list', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -211,7 +211,7 @@ const Assignment = () => {
   async function sendVideoList(selectList: Assignment[], curator: CuratorList) {
     try {
       const data = { selectList, curator };
-      const response = await axios.post('http://localhost:5000/api/leader/assignment/send-video-list', data, {
+      const response = await axios.post('http://65.108.209.13:5000/api/leader/assignment/send-video-list', data, {
         headers: {
           'Content-Type': 'application/json',
         },
